@@ -11,7 +11,7 @@ import SwiftUI
 struct SampaiTitikApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            StationSelectionView()
         }
     }
 }
