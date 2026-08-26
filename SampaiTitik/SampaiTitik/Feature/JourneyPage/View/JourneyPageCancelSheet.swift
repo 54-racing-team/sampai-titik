@@ -12,37 +12,37 @@ struct JourneyPageCancelSheet: View {
     
     var body: some View {
         VStack {
+            Spacer()
+            
             Image("CancelSheet")
             
-            VStack(spacing: 4) {
+            VStack(spacing: 6) {
                 Text("Akhiri perjalanan lebih awal?")
                     .font(.headline)
                 
                 Text("Perjalananmu saat ini akan berhenti dan pengingat tidak akan aktif lagi")
                     .font(.subheadline)
+                    .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
             }
-            .padding()
+            .padding(.horizontal)
             
-            HStack {
+            Spacer()
+            
+            HStack(spacing: 12) {
                 Button {
                     dismiss()
                 } label: {
                     Text("Tidak jadi")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(.red)
+                        .foregroundStyle(.white)
                         .padding(10)
                 }
                 .buttonStyle(.glassProminent)
-                .tint(.white)
-                .overlay{
-                    Capsule()
-                        .stroke(.red, lineWidth: 1)
-                }
+                .tint(.secondary)
                 
-                
-                Button{
+                Button {
                     
                 } label: {
                     Text("Ya, akhiri")
@@ -54,8 +54,10 @@ struct JourneyPageCancelSheet: View {
                 .buttonStyle(.glassProminent)
                 .tint(.red)
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom, 16)
         }
+        .padding(.top, 12)
     }
 }
 

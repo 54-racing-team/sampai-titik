@@ -50,7 +50,7 @@ struct JourneyCard: View {
                 .frame(height: 2)
             
             VStack(alignment: .leading, spacing: 0) {
-                HStack(alignment: .top, spacing: 14) {
+                HStack(alignment: .top, spacing: 16) {
                     JourneyTimelineIndicator(
                         type: .current,
                         isLast: false
@@ -68,7 +68,7 @@ struct JourneyCard: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
-                HStack(alignment: .top, spacing: 14) {
+                HStack(alignment: .top, spacing: 16) {
                     JourneyTimelineIndicator(
                         type: .next,
                         isLast: true
@@ -97,7 +97,6 @@ struct JourneyCard: View {
             } label: {
                 Text("Lihat detail")
             }
-            .tint(.black)
         }
         .padding()
         .background(.white)

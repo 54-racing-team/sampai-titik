@@ -27,7 +27,7 @@ struct JourneyTimelineIndicator: View {
         case .current:
             return Color.black
         case .next:
-            return Color("Primary100")
+            return Color("MainBlue")
         case .destination:
             return Color.red
         }
@@ -83,7 +83,7 @@ struct StationRow: View {
     }
     
     var body: some View {
-        HStack(alignment: .top, spacing: 12) {
+        HStack(alignment: .top, spacing: 16) {
             JourneyTimelineIndicator(
                 type: station.type,
                 isLast: isLast
@@ -95,7 +95,7 @@ struct StationRow: View {
                     .foregroundStyle(stationTextColor)
             }
             .padding(.top, 1)
-            .padding(.bottom, 24)
+            .padding(.bottom, isLast ? 0 : 40)
             .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
@@ -105,7 +105,7 @@ struct JourneyDetailCard: View {
     var viewModel: JourneyPageDetailVM
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(
                 Array(viewModel.stations.enumerated()),
                 id: \.element.id
@@ -116,7 +116,7 @@ struct JourneyDetailCard: View {
                 )
             }
         }
-        .padding()
+        .padding(28)
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(.white)
         .cornerRadius(20)

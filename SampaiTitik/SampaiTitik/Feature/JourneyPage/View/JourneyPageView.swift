@@ -47,7 +47,9 @@ struct JourneyPageView: View {
                 }
                 .sheet(isPresented: $isCancel) {
                     JourneyPageCancelSheet()
-                        .presentationDetents([.medium])
+                        .presentationDetents([.fraction(0.5)])
+                        .presentationBackground(.white)
+                        .presentationDragIndicator(.visible)
                 }
             }
         }
