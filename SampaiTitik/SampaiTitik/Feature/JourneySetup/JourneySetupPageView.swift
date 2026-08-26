@@ -49,6 +49,8 @@ struct JourneySetupPageView: View {
                     )
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationTitle("Atur Perjalanan")
         }
     }
 }

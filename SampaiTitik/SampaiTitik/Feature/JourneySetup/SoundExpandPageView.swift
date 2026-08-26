@@ -38,7 +38,7 @@ struct SoundExpandPageView: View {
             .background(.white)
             .clipShape(.capsule)
             .glassEffect()
-            .padding(.horizontal)
+            .padding()
             
             List(sounds, id: \.self) { sound in
                 Button {
@@ -61,7 +61,10 @@ struct SoundExpandPageView: View {
                 .buttonStyle(.plain)
             }
             .scrollContentBackground(.hidden)
+            .scrollDisabled(true)
+            .contentMargins(.top, 0)
         }
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Bunyi")
         .background(Color("Background"))
     }
