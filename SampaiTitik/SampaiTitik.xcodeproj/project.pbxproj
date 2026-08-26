@@ -71,9 +71,22 @@
 		3D3DFC39303879ED00B841E1 /* SampaiTitik Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SampaiTitik Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+		225B6FD9303C343B0089B8A7 /* Exceptions for "SampaiTitik" folder in "Compile Sources" phase from "SampaiTitik" target */ = {
+			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
+			buildPhase = 3D3DFBF9303879EB00B841E1 /* Sources */;
+			membershipExceptions = (
+				Resources/StationsData.json,
+			);
+		};
+/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3D3DFBFF303879EB00B841E1 /* SampaiTitik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				225B6FD9303C343B0089B8A7 /* Exceptions for "SampaiTitik" folder in "Compile Sources" phase from "SampaiTitik" target */,
+			);
 			path = SampaiTitik;
 			sourceTree = "<group>";
 		};
