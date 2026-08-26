@@ -72,7 +72,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		B6F0C307303A1E6600E8680D /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */ = {
+		3DDAEB26303C36CA000E4B40 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resource/AlarmSound/AS_01_HeartOfHope.mp3,
+			);
+			target = 3D3DFC1F303879EC00B841E1 /* SampaiTitik Watch App */;
+		};
+		3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
@@ -85,7 +92,8 @@
 		3D3DFBFF303879EB00B841E1 /* SampaiTitik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
-				B6F0C307303A1E6600E8680D /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
+				3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
+				3DDAEB26303C36CA000E4B40 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */,
 			);
 			path = SampaiTitik;
 			sourceTree = "<group>";

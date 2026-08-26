@@ -10,5 +10,7 @@
 	<array>
 		<string>location</string>
 	</array>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Alarm bangun</string>
 </dict>
 </plist>
