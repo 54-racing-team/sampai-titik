@@ -1,0 +1,102 @@
+//
+//  SplashScreen.swift
+//  SampaiTitik
+//
+//  Created by Ahmad Yasri Zaenuri on 26/08/26.
+//
+
+import SwiftUI
+
+extension Font {
+    static func montserrat(size: CGFloat, weight: Font.Weight = .medium) -> Font {
+        let name = "Montserrat-Medium"
+        if UIFont(name: name, size: size) != nil {
+            return Font.custom(name, size: size)
+        } else {
+            return Font.system(size: size, weight: weight, design: .rounded)
+        }
+    }
+}
+ 
+// MARK: - Splash Screen
+ 
+struct SplashScreen: View {
+    @State private var showHome = false
+    @State private var revealed = false
+    @Namespace private var logoAnimation
+ 
+    // Respects the user's iOS accessibility setting — if they've asked for
+    // reduced motion, skip straight to the final frame instead of animating.
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+ 
+    private let logoSize: CGFloat = 64
+    private let dotSize: CGFloat = 18
+ 
+    var body: some View {
+        if showHome {
+            ContentView()
+                .transition(.opacity)
+        } else {
+            ZStack {
+                Color(red: 0.129, green: 0.525, blue: 0.757).ignoresSafeArea()
+                logoLayout
+            }
+            .onAppear { runAnimation() }
+        }
+    }
+ 
+    // matchedGeometryEffect bridges the two automatically.
+    @ViewBuilder
+    private var logoLayout: some View {
+        HStack(spacing: 0) {
+            Text("S")
+                .font(.montserrat(size: logoSize))
+                .foregroundColor(.white)
+                .matchedGeometryEffect(id: "letterS", in: logoAnimation)
+ 
+            if revealed {
+                Text("ampai")
+                    .font(.montserrat(size: logoSize))
+                    .kerning(-3)
+                    .foregroundColor(.white)
+                    .transition(.opacity)
+                    .padding(.leading, 2)
+            }
+ 
+            Circle()
+                .fill(Color.white)
+                .frame(width: dotSize, height: dotSize)
+                .matchedGeometryEffect(id: "dot", in: logoAnimation)
+                .padding(.leading, revealed ? 6 : 6)
+                .alignmentGuide(VerticalAlignment.center) { d in d[.bottom] - 23 }
+        }
+    }
+ 
+    private func runAnimation() {
+        if reduceMotion {
+            revealed = true
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                showHome = true
+            }
+            return
+        }
+ 
+        // Step 1: hold on "S." briefly so it registers as its own moment.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.75)) {
+                revealed = true
+            }
+        }
+ 
+        // Step 2: after the reveal finishes, hand off to Home.
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
+            withAnimation(.easeInOut(duration: 0.4)) {
+                showHome = true
+            }
+        }
+    }
+}
+ 
+#Preview {
+    SplashScreen()
+}

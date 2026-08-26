@@ -71,6 +71,16 @@
 		3D3DFC39303879ED00B841E1 /* SampaiTitik Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SampaiTitik Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		858AD979303F713100FD9DEF /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 3D3DFBFC303879EB00B841E1 /* SampaiTitik */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 		225B6FD9303C343B0089B8A7 /* Exceptions for "SampaiTitik" folder in "Compile Sources" phase from "SampaiTitik" target */ = {
 			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
@@ -85,6 +95,7 @@
 		3D3DFBFF303879EB00B841E1 /* SampaiTitik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
+				858AD979303F713100FD9DEF /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
 				225B6FD9303C343B0089B8A7 /* Exceptions for "SampaiTitik" folder in "Compile Sources" phase from "SampaiTitik" target */,
 			);
 			path = SampaiTitik;
@@ -702,6 +713,7 @@
 				DEVELOPMENT_TEAM = CWXJ4ZG5J4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -741,6 +753,7 @@
 				DEVELOPMENT_TEAM = CWXJ4ZG5J4;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
