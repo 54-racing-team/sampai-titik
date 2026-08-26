@@ -7,25 +7,39 @@
 
 import Combine
 import SwiftUI
+import SwiftData
 
 class StationViewModel: ObservableObject {
-    @Published var stations: [StationModel] = []
+    @Published var stations: [StationModelDTO] = []
     
-    func getStations() -> [StationModel] {
+    func getStations(context: ModelContext) {
+        let descriptor = FetchDescriptor<StationModel>()
+        let existingCount = try? context.fetchCount(descriptor)
+        
+        if existingCount != 0 {
+            return
+        }
+        
         guard let url = Bundle.main.url(forResource: "StationsData", withExtension: "json"), let data = try? Data(contentsOf: url) else {
             print("Error loading JSON path")
-            return []
+            return
         }
         
         let decoder = JSONDecoder()
-        guard let stations = try? decoder.decode([StationModel].self, from: data) else {
+        guard let stations = try? decoder.decode(StationsDTO.self, from: data) else {
             print("Error parsing JSON file")
-            return []
+            return
         }
         
-        print(stations[0].id)
-        self.stations = stations
+        for station in stations.stations {
+            let stationModel = StationModel(from: station)
+            context.insert(stationModel)
+        }
         
-        return stations
+        guard let save = try? context.save() else {
+            print("Error saving data")
+            return
+        }
+        print("Data saved")
     }
 }

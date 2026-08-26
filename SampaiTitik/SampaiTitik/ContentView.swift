@@ -6,16 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
+    @Environment(\.modelContext) private var modelContext
     @ObservedObject var vm = StationViewModel()
+    @Query private var stations: [StationModel]
     
     var body: some View {
         VStack {
             Text("Sampai, Titik.")
             
             ScrollView {
-                ForEach(vm.stations) { station in
+                ForEach(stations) { station in
                     HStack {
                         Text(station.id)
                         Text(station.name)
@@ -25,7 +28,7 @@ struct ContentView: View {
         }
         .padding()
         .onAppear {
-            vm.getStations()
+            vm.getStations(context: modelContext)
         }
     }
 }

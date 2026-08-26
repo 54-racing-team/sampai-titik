@@ -1,4 +1,6 @@
-[
+{
+  "data_version": 1,
+  "stations": [
     {"id": "JAKK", "name": "Jakarta Kota", "latitude": -6.1375, "longitude": 106.8146, "lines": [{"line_name": "Bogor Line", "order": 1}, {"line_name": "Tanjung Priok Line", "order": 1}]},
     {"id": "JAY", "name": "Jayakarta", "latitude": -6.1415, "longitude": 106.8233, "lines": [{"line_name": "Bogor Line", "order": 2}]},
     {"id": "MGB", "name": "Mangga Besar", "latitude": -6.1497, "longitude": 106.8242, "lines": [{"line_name": "Bogor Line", "order": 3}]},
@@ -81,4 +83,5 @@
     {"id": "TNG", "name": "Tangerang", "latitude": -6.1767, "longitude": 106.6327, "lines": [{"line_name": "Tangerang Line", "order": 10}]},
     {"id": "AC", "name": "Ancol", "latitude": -6.1281, "longitude": 106.8450, "lines": [{"line_name": "Tanjung Priok Line", "order": 3}]},
     {"id": "TPK", "name": "Tanjung Priok", "latitude": -6.1107, "longitude": 106.8814, "lines": [{"line_name": "Tanjung Priok Line", "order": 4}]}
-]
+  ]
+}
