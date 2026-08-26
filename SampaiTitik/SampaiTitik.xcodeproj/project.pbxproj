@@ -7,10 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		228BBA2D303ED69800FB697B /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 228BBA2C303ED69800FB697B /* WidgetKit.framework */; };
+		228BBA2F303ED69800FB697B /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 228BBA2E303ED69800FB697B /* SwiftUI.framework */; };
 		3D3DFC21303879EC00B841E1 /* SampaiTitik Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 3D3DFC20303879EC00B841E1 /* SampaiTitik Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		228BBA3A303ED69800FB697B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3D3DFBF5303879EB00B841E1 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 228BBA29303ED69800FB697B;
+			remoteInfo = SampaiTitikWidgetExtension;
+		};
 		3D3DFC0B303879EC00B841E1 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3D3DFBF5303879EB00B841E1 /* Project object */;
@@ -49,6 +58,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		228BBA25303ED59300FB697B /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D3DFC46303879ED00B841E1 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -63,6 +82,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		228BBA2A303ED69800FB697B /* SampaiTitikWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = SampaiTitikWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		228BBA2C303ED69800FB697B /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		228BBA2E303ED69800FB697B /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
 		3D3DFBFD303879EB00B841E1 /* SampaiTitik.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SampaiTitik.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3DFC0A303879EC00B841E1 /* SampaiTitikTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampaiTitikTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D3DFC14303879EC00B841E1 /* SampaiTitikUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SampaiTitikUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -71,7 +93,33 @@
 		3D3DFC39303879ED00B841E1 /* SampaiTitik Watch AppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "SampaiTitik Watch AppUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		228BBA3C303ED69800FB697B /* Exceptions for "SampaiTitikWidget" folder in "SampaiTitikWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 228BBA29303ED69800FB697B /* SampaiTitikWidgetExtension */;
+		};
+		228BBA48303F1D4F00FB697B /* Exceptions for "SampaiTitikWidget" folder in "SampaiTitik" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				SampaiTitikWidgetAttributes.swift,
+			);
+			target = 3D3DFBFC303879EB00B841E1 /* SampaiTitik */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		228BBA30303ED69800FB697B /* SampaiTitikWidget */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				228BBA48303F1D4F00FB697B /* Exceptions for "SampaiTitikWidget" folder in "SampaiTitik" target */,
+				228BBA3C303ED69800FB697B /* Exceptions for "SampaiTitikWidget" folder in "SampaiTitikWidgetExtension" target */,
+			);
+			path = SampaiTitikWidget;
+			sourceTree = "<group>";
+		};
 		3D3DFBFF303879EB00B841E1 /* SampaiTitik */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = SampaiTitik;
@@ -105,6 +153,15 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		228BBA27303ED69800FB697B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				228BBA2F303ED69800FB697B /* SwiftUI.framework in Frameworks */,
+				228BBA2D303ED69800FB697B /* WidgetKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D3DFBFA303879EB00B841E1 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -150,6 +207,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		228BBA2B303ED69800FB697B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				228BBA2C303ED69800FB697B /* WidgetKit.framework */,
+				228BBA2E303ED69800FB697B /* SwiftUI.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		3D3DFBF4303879EB00B841E1 = {
 			isa = PBXGroup;
 			children = (
@@ -159,6 +225,8 @@
 				3D3DFC24303879EC00B841E1 /* SampaiTitik Watch App */,
 				3D3DFC32303879ED00B841E1 /* SampaiTitik Watch AppTests */,
 				3D3DFC3C303879ED00B841E1 /* SampaiTitik Watch AppUITests */,
+				228BBA30303ED69800FB697B /* SampaiTitikWidget */,
+				228BBA2B303ED69800FB697B /* Frameworks */,
 				3D3DFBFE303879EB00B841E1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -172,6 +240,7 @@
 				3D3DFC20303879EC00B841E1 /* SampaiTitik Watch App.app */,
 				3D3DFC2F303879ED00B841E1 /* SampaiTitik Watch AppTests.xctest */,
 				3D3DFC39303879ED00B841E1 /* SampaiTitik Watch AppUITests.xctest */,
+				228BBA2A303ED69800FB697B /* SampaiTitikWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -179,6 +248,28 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		228BBA29303ED69800FB697B /* SampaiTitikWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 228BBA3D303ED69800FB697B /* Build configuration list for PBXNativeTarget "SampaiTitikWidgetExtension" */;
+			buildPhases = (
+				228BBA26303ED69800FB697B /* Sources */,
+				228BBA27303ED69800FB697B /* Frameworks */,
+				228BBA28303ED69800FB697B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				228BBA30303ED69800FB697B /* SampaiTitikWidget */,
+			);
+			name = SampaiTitikWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = SampaiTitikWidgetExtension;
+			productReference = 228BBA2A303ED69800FB697B /* SampaiTitikWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		3D3DFBFC303879EB00B841E1 /* SampaiTitik */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3D3DFC47303879ED00B841E1 /* Build configuration list for PBXNativeTarget "SampaiTitik" */;
@@ -187,11 +278,13 @@
 				3D3DFBFA303879EB00B841E1 /* Frameworks */,
 				3D3DFBFB303879EB00B841E1 /* Resources */,
 				3D3DFC46303879ED00B841E1 /* Embed Watch Content */,
+				228BBA25303ED59300FB697B /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				3D3DFC23303879EC00B841E1 /* PBXTargetDependency */,
+				228BBA3B303ED69800FB697B /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				3D3DFBFF303879EB00B841E1 /* SampaiTitik */,
@@ -327,6 +420,9 @@
 				LastSwiftUpdateCheck = 2660;
 				LastUpgradeCheck = 2660;
 				TargetAttributes = {
+					228BBA29303ED69800FB697B = {
+						CreatedOnToolsVersion = 26.6;
+					};
 					3D3DFBFC303879EB00B841E1 = {
 						CreatedOnToolsVersion = 26.6;
 					};
@@ -371,11 +467,19 @@
 				3D3DFC1F303879EC00B841E1 /* SampaiTitik Watch App */,
 				3D3DFC2E303879ED00B841E1 /* SampaiTitik Watch AppTests */,
 				3D3DFC38303879ED00B841E1 /* SampaiTitik Watch AppUITests */,
+				228BBA29303ED69800FB697B /* SampaiTitikWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		228BBA28303ED69800FB697B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D3DFBFB303879EB00B841E1 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -421,6 +525,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		228BBA26303ED69800FB697B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		3D3DFBF9303879EB00B841E1 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -466,6 +577,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		228BBA3B303ED69800FB697B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 228BBA29303ED69800FB697B /* SampaiTitikWidgetExtension */;
+			targetProxy = 228BBA3A303ED69800FB697B /* PBXContainerItemProxy */;
+		};
 		3D3DFC0C303879EC00B841E1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 3D3DFBFC303879EB00B841E1 /* SampaiTitik */;
@@ -494,6 +610,71 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		228BBA3E303ED69800FB697B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7MXYL2ADGX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SampaiTitikWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitikWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.SampaiTitikWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		228BBA3F303ED69800FB697B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 7MXYL2ADGX;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = SampaiTitikWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitikWidget;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.SampaiTitikWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				STRING_CATALOG_GENERATE_SYMBOLS = YES;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		3D3DFC41303879ED00B841E1 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -686,10 +867,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CWXJ4ZG5J4;
+				DEVELOPMENT_TEAM = 7MXYL2ADGX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -725,10 +907,11 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = CWXJ4ZG5J4;
+				DEVELOPMENT_TEAM = 7MXYL2ADGX;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -945,6 +1128,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		228BBA3D303ED69800FB697B /* Build configuration list for PBXNativeTarget "SampaiTitikWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				228BBA3E303ED69800FB697B /* Debug */,
+				228BBA3F303ED69800FB697B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		3D3DFBF8303879EB00B841E1 /* Build configuration list for PBXProject "SampaiTitik" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
