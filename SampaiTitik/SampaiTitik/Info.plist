@@ -4,6 +4,10 @@
 <dict>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>Alarm bangun</string>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Montserrat-Medium.ttf</string>
+	</array>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>location</string>

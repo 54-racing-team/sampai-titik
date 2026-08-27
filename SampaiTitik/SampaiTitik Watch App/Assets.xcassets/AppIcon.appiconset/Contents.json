@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "SampaiWatch_Default.png",
+      "filename" : "IconWatch_Default.png",
       "idiom" : "universal",
       "platform" : "watchos",
       "size" : "1024x1024"
