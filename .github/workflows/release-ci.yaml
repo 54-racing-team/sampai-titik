@@ -1,0 +1,34 @@
+name: Release - TestFlight (major/minor)
+
+on:
+  release:
+    types: [ published ]
+
+jobs:
+  build:
+    runs-on: macos-26
+    if: ${{ !contains(github.event.release.tag_name, '-beta') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup Ruby & Bundler
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Decode App Store Connect API Key
+        run: echo "${{ secrets.ASC_KEY_CONTENT }}" > asc_api_key.p8
+
+      - name: Run Fastlane (release)
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          MATCH_PASSWORD: ${{ secrets.MATCH_PASSWORD }}
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+          GITHUB_RUN_NUMBER: ${{ github.run_number }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
+        run: bundle exec fastlane release
