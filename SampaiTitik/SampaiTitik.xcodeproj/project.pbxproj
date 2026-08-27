@@ -75,7 +75,7 @@
 		3DDAEB26303C36CA000E4B40 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Resource/AlarmSound/AS_01_HeartOfHope.mp3,
+				Resources/AlarmSound/AS_01_HeartOfHope.mp3,
 			);
 			target = 3D3DFC1F303879EC00B841E1 /* SampaiTitik Watch App */;
 		};
