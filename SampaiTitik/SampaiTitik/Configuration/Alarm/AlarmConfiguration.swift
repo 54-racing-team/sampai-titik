@@ -23,7 +23,7 @@ enum AlarmConfiguration {
         let stopButton = AlarmButton(
             text: "Saya akan lawan",
             textColor: .white,
-            systemImageName: "stop.fill"
+            systemImageName: "stop.fill",
         )
 
         let alert = AlarmPresentation.Alert(
@@ -42,16 +42,16 @@ enum AlarmConfiguration {
         let attributes = AlarmAttributes<MyAlarmMetadata>(
             presentation: presentation,
             metadata: MyAlarmMetadata(label: label),
-            tintColor: .red
+            tintColor: .red,
         )
 
         // Custom sound: sesuaikan case-nya dengan enum AlertConfiguration.AlertSound
-        // di SDK kamu (mis. .named("alarm_song") kalau file ada di bundle,
-        // atau .default kalau mau pakai suara sistem).
+        let alarmSound = AlertConfiguration.AlertSound.named("Chime")
+        
         return AlarmManager.AlarmConfiguration(
             countdownDuration: .init(preAlert: duration, postAlert: nil),
             attributes: attributes,
-            sound: .default
+            sound: alarmSound
         )
     }
 }
