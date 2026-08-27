@@ -46,10 +46,12 @@ struct JourneyPageView: View {
                     .padding(.horizontal)
                 }
                 .sheet(isPresented: $isCancel) {
-                    JourneyPageCancelSheet()
-                        .presentationDetents([.fraction(0.5)])
-                        .presentationBackground(.white)
-                        .presentationDragIndicator(.visible)
+                    JourneyPageCancelSheet {
+                        viewModel.stopJourneyTracking()
+                    }
+                    .presentationDetents([.fraction(0.5)])
+                    .presentationBackground(.white)
+                    .presentationDragIndicator(.visible)
                 }
             }
         }

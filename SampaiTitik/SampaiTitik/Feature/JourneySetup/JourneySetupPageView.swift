@@ -60,7 +60,7 @@ enum JourneySetupMockData {
         let stations = StationModelDTO.loadFromJSON()
         return (
             departureStation: station(withID: "SUD", in: stations),
-            destinationStation: station(withID: "PI", in: stations)
+            destinationStation: station(withID: "BKS", in: stations)
         )
     }
     

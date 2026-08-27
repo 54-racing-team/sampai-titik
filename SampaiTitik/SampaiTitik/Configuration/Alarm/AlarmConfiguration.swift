@@ -21,9 +21,9 @@ enum AlarmConfiguration {
     ) -> AlarmManager.AlarmConfiguration<MyAlarmMetadata> {
 
         let stopButton = AlarmButton(
-            text: "Saya akan lawan",
+            text: "Matikan Alarm",
             textColor: .white,
-            systemImageName: "stop.fill"
+            systemImageName: "bell.slash.fill"
         )
 
         let alert = AlarmPresentation.Alert(
@@ -31,13 +31,8 @@ enum AlarmConfiguration {
             secondaryButton: stopButton,
             secondaryButtonBehavior: .countdown
         )
-        
-        let countdown = AlarmPresentation.Countdown(title: "Eggs are cooking")
-        let paused = AlarmPresentation.Paused(
-            title: "Timer paused",
-            resumeButton: AlarmButton(text: "Resume", textColor: .blue, systemImageName: "play.circle"))
 
-        let presentation = AlarmPresentation(alert: alert, countdown: countdown, paused: paused)
+        let presentation = AlarmPresentation(alert: alert)
 
         let attributes = AlarmAttributes<MyAlarmMetadata>(
             presentation: presentation,

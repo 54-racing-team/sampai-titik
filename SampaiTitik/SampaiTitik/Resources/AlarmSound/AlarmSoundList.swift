@@ -30,4 +30,19 @@ enum SoundOption: String, CaseIterable, Identifiable {
     var fileName: String {
         return rawValue
     }
+
+    private static let storageKey = "selected_alarm_sound"
+
+    static var current: SoundOption {
+        get {
+            if let saved = UserDefaults.standard.string(forKey: storageKey),
+               let option = SoundOption(rawValue: saved) {
+                return option
+            }
+            return .heartOfHope
+        }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: storageKey)
+        }
+    }
 }

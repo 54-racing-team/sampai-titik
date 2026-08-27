@@ -7,21 +7,11 @@
 
 import SwiftUI
 
-let sounds = [
-    "Radial (Default)",
-    "Arpeggio",
-    "Breaking",
-    "Canopy",
-    "Chalet",
-    "Chirp",
-    "Daybreak",
-    "Departure",
-    "Dollop",
-    "Journey"
-]
+typealias SoundExpandListView = SoundExpandPageView
 
 struct SoundExpandPageView: View {
-    @Binding var selectedSound: String
+    @Binding var selectedSound: SoundOption
+    @State private var audioManager = AudioManager.shared
     
     var body: some View {
         VStack(spacing: 0) {
@@ -40,12 +30,14 @@ struct SoundExpandPageView: View {
             .glassEffect()
             .padding()
             
-            List(sounds, id: \.self) { sound in
+            List(SoundOption.allCases) { sound in
                 Button {
                     selectedSound = sound
+                    SoundOption.current = sound
+                    audioManager.playPreview(sound: sound)
                 } label: {
                     HStack {
-                        Text(sound)
+                        Text(sound.displayName)
                             .foregroundStyle(.primary)
                         
                         Spacer()
@@ -67,11 +59,14 @@ struct SoundExpandPageView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Bunyi")
         .background(Color("Background"))
+        .onDisappear {
+            audioManager.stop()
+        }
     }
 }
 
 #Preview {
     NavigationStack {
-        SoundExpandPageView(selectedSound: .constant("Radial (Default)"))
+        SoundExpandPageView(selectedSound: .constant(.heartOfHope))
     }
 }
