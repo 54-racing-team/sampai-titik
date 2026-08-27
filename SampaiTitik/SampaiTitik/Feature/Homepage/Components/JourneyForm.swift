@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct JourneyForm: View {
-    @State var vm: HomeViewModel
+    @State var vm = HomeViewModel()
 
     var body: some View {
         VStack {
@@ -22,7 +22,7 @@ struct JourneyForm: View {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationView(selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
+                    SearchStationSheet(selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
                 }
                 
                 ZStack {
@@ -48,7 +48,7 @@ struct JourneyForm: View {
                     vm.showDestination.toggle()
                 }
                 .sheet(isPresented: $vm.showDestination){
-                    SearchStationView(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
+                    SearchStationSheet(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
                 }
                 
                 Button{

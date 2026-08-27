@@ -6,27 +6,17 @@
 //
 
 import SwiftUI
+import SwiftData
 
-struct Station: Identifiable {
-    let id = UUID()
-    let name: String
-    let code: String
-}
-
-struct SearchStationView: View {
-    let stations: [Station] = [
-        Station(name: "Jakarta Kota", code: "JAKK"),
-        Station(name: "Manggarai", code: "MRI"),
-        Station(name: "Bojonggede", code: "BGD"),
-        Station(name: "Bogor", code: "BOO")
-    ]
+struct SearchStationSheet: View {
+    @Query var stations: [StationModel]
     
     @Binding var selectedStation: String
     @Binding var isPresented: Bool
     
     @State var searchStation: String = ""
     
-    var filteredStations: [Station] {
+    var filteredStations: [StationModel] {
         if searchStation.isEmpty {
             stations
         } else {
@@ -48,8 +38,9 @@ struct SearchStationView: View {
                         HStack{
                             Text(station.name)
                             Spacer()
-                            Text(station.code)
+                            Text(station.id)
                         }
+                        .foregroundColor(.black)
                     }
                 }
             }
@@ -59,5 +50,5 @@ struct SearchStationView: View {
 }
 
 #Preview {
-    SearchStationView(selectedStation: .constant(""), isPresented: .constant(false))
+    SearchStationSheet(selectedStation: .constant(""), isPresented: .constant(false))
 }

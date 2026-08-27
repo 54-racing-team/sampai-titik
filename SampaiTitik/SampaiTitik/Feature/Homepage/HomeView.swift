@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
-
-struct HomeView: View {    
+import SwiftData
+struct HomeView: View {
+    @State var stationVM = StationViewModel()
+    @Environment(\.modelContext) private var modelContext
+    
     var body: some View {
         ZStack {
             Color(Color("PrimaryColor"))
@@ -41,7 +44,7 @@ struct HomeView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
                 
-                JourneyForm(vm: HomeViewModel())
+                JourneyForm()
                 
                 Text("Pengingat tetap bekerja saat kamu tidak sedang melihat layar.")
                     .font(.caption)
@@ -66,6 +69,9 @@ struct HomeView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
+        }
+        .onAppear {
+            stationVM.getStations(context: modelContext)
         }
     }
 }
