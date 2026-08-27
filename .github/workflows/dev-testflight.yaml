@@ -38,6 +38,11 @@ jobs:
           ls -la
           ls -la asc_api_key.p8 || echo "FILE NOT FOUND"
 
+      - name: Debug - check auth secret length
+        run: echo "Length: ${#MATCH_GIT_BASIC_AUTHORIZATION}"
+        env:
+          MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
+
       - name: Run Fastlane and bump version (dev_patch)
         if: github.event_name == 'workflow_dispatch' && github.event.inputs.bump_patch_version == 'true'
         env:
