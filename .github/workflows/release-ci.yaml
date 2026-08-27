@@ -17,7 +17,9 @@ jobs:
       - name: Setup Ruby & Bundler
         uses: ruby/setup-ruby@v1
         with:
+          ruby-version: '3.3.0'
           bundler-cache: true
+          working-directory: SampaiTitik
 
       - name: Decode App Store Connect API Key
         run: echo "${{ secrets.ASC_KEY_CONTENT }}" > asc_api_key.p8
