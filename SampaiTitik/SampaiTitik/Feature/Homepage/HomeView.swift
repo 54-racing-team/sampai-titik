@@ -15,9 +15,7 @@ struct HomeView: View {
             
             VStack(spacing: 16) {
                 HStack{
-                    Text("Sampai.")
-                        .font(.title)
-                        .foregroundStyle(.blue)
+                    Image("AppLogo")
                     
                     Spacer()
                     
@@ -33,7 +31,7 @@ struct HomeView: View {
                 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Mau kemana, Salman?")
-                        .font(.title2.bold())
+                        .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
                 }
