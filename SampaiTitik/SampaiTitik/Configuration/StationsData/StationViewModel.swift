@@ -5,7 +5,7 @@
 //  Created by Salman on 24/08/26.
 //
 
-import Combine
+internal import Combine
 import SwiftUI
 import SwiftData
 
@@ -36,10 +36,8 @@ class StationViewModel: ObservableObject {
             context.insert(stationModel)
         }
         
-        guard let save = try? context.save() else {
-            print("Error saving data")
-            return
-        }
+        try? context.save()
+        
         print("Data saved")
     }
 }

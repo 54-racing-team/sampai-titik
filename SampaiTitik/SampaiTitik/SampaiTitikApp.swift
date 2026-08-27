@@ -12,7 +12,11 @@ import SwiftData
 struct SampaiTitikApp: App {
     var body: some Scene {
         WindowGroup {
+<<<<<<< HEAD
             SplashScreen()
+=======
+            AlarmSoundToggleView()
+>>>>>>> dev
         }
         .modelContainer(for: StationModel.self)
     }
