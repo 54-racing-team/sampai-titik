@@ -50,7 +50,7 @@ enum AlarmConfiguration {
         let attributes = AlarmAttributes<MyAlarmMetadata>(
             presentation: presentation,
             metadata: MyAlarmMetadata(label: label),
-            tintColor: Color.primary100,
+            tintColor: Color.mainBlue,
         )
 
         let alarmSound = AlertConfiguration.AlertSound.named(soundTitle)
