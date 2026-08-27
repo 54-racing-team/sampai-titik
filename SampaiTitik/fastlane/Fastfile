@@ -34,7 +34,14 @@ platform :ios do
   end
 
   private_lane :setup_signing do |options|
-    match(type: "appstore", readonly: true, api_key: options[:api_key])
+    match(
+      type: "appstore",
+      app_identifier: [
+        "com.54racing.SampaiTitik",
+        "com.54racing.SampaiTitik.watchkitapp"
+      ],
+      api_key: options[:api_key]
+    )
   end
 
   desc "Push to dev branch -> patch bump + TestFlight"
@@ -58,7 +65,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )
@@ -108,7 +116,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )
@@ -144,7 +153,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )
