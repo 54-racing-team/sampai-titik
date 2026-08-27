@@ -14,7 +14,7 @@ struct JourneyPageView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                Color("BackgroundColor").ignoresSafeArea()
+                Color("BackgroundBlue").ignoresSafeArea()
                 
                 VStack {
                     Text("Perjalanan")

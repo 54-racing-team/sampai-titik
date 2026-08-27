@@ -12,15 +12,13 @@ struct HomeView: View {
 
     var body: some View {
         ZStack {
-            Color(Color("PrimaryColor"))
+            Color(Color("BackgroundBlue"))
                 .ignoresSafeArea()
 
             VStack(spacing: 16) {
-                HStack {
-                    Text("Sampai.")
-                        .font(.title)
-                        .foregroundStyle(.blue)
-
+                HStack{
+                    Image("AppLogo")
+                    
                     Spacer()
 
                     Button {
@@ -35,11 +33,9 @@ struct HomeView: View {
 
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Mau kemana, Salman?")
-                        .font(.title2.bold())
-
-                    Text(
-                        "Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat."
-                    )
+                        .font(.title.bold())
+                    
+                    Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
                 }
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)

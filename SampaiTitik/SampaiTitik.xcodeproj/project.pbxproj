@@ -93,7 +93,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
-				3DDAEB26303C36CA000E4B40 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */,
 			);
 			path = SampaiTitik;
 			sourceTree = "<group>";
