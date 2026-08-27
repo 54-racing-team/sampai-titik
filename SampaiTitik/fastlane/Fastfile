@@ -40,8 +40,7 @@ platform :ios do
         "com.54racing.SampaiTitik",
         "com.54racing.SampaiTitik.watchkitapp"
       ],
-      readonly: true,
-      readonly: true, api_key: options[:api_key]
+      api_key: options[:api_key]
     )
   end
 
