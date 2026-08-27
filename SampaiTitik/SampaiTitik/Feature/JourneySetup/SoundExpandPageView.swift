@@ -14,51 +14,73 @@ struct SoundExpandPageView: View {
     @State private var audioManager = AudioManager.shared
     
     var body: some View {
-        VStack(spacing: 0) {
-            HStack {
-                Text("Getaran")
-                
-                Spacer()
-                
-                Text("Tersinkronisasi")
-                    .foregroundStyle(.secondary)
-            }
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(.white)
-            .clipShape(.capsule)
-            .glassEffect()
-            .padding()
+        ZStack {
+            Color("Background")
+                .ignoresSafeArea()
             
-            List(SoundOption.allCases) { sound in
-                Button {
-                    selectedSound = sound
-                    SoundOption.current = sound
-                    audioManager.playPreview(sound: sound)
-                } label: {
+            ScrollView {
+                VStack(spacing: 16) {
+                    // Card Getaran
                     HStack {
-                        Text(sound.displayName)
+                        Text("Getaran")
+                            .font(.body)
                             .foregroundStyle(.primary)
                         
                         Spacer()
                         
-                        if selectedSound == sound {
-                            Image(systemName: "checkmark")
-                                .font(.body.weight(.semibold))
-                                .foregroundStyle(Color("MainBlue"))
+                        Text("Tersinkronisasi")
+                            .font(.subheadline)
+                            .foregroundStyle(.secondary)
+                    }
+                    .padding(.horizontal, 20)
+                    .padding(.vertical, 16)
+                    .frame(maxWidth: .infinity)
+                    .background(Color.white)
+                    .clipShape(Capsule())
+                    .glassEffect()
+                    
+                    // Card Pilihan Bunyi
+                    VStack(spacing: 0) {
+                        ForEach(Array(SoundOption.allCases.enumerated()), id: \.element.id) { index, sound in
+                            Button {
+                                selectedSound = sound
+                                SoundOption.current = sound
+                                audioManager.playPreview(sound: sound)
+                            } label: {
+                                HStack {
+                                    Text(sound.displayName)
+                                        .font(.body)
+                                        .foregroundStyle(.primary)
+                                    
+                                    Spacer()
+                                    
+                                    if selectedSound == sound {
+                                        Image(systemName: "checkmark")
+                                            .font(.body.weight(.semibold))
+                                            .foregroundStyle(Color("MainBlue"))
+                                    }
+                                }
+                                .padding(.horizontal, 20)
+                                .padding(.vertical, 16)
+                                .contentShape(Rectangle())
+                            }
+                            .buttonStyle(.plain)
+                            
+                            if index < SoundOption.allCases.count - 1 {
+                                Divider()
+                                    .padding(.leading, 20)
+                            }
                         }
                     }
-                    .contentShape(Rectangle())
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .glassEffect()
                 }
-                .buttonStyle(.plain)
+                .padding(16)
             }
-            .scrollContentBackground(.hidden)
-            .scrollDisabled(true)
-            .contentMargins(.top, 0)
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Bunyi")
-        .background(Color("Background"))
         .onDisappear {
             audioManager.stop()
         }
