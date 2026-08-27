@@ -36,10 +36,8 @@ class StationViewModel: ObservableObject {
             context.insert(stationModel)
         }
         
-        guard let save = try? context.save() else {
-            print("Error saving data")
-            return
-        }
+        try? context.save()
+        
         print("Data saved")
     }
 }

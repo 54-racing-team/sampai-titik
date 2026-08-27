@@ -12,7 +12,7 @@ import SwiftData
 struct SampaiTitikApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AlarmSoundToggleView()
         }
         .modelContainer(for: StationModel.self)
     }
