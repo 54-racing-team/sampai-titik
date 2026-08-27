@@ -9,49 +9,48 @@ import SwiftUI
 
 struct JourneySetupPageView: View {
     @State private var locationManager = LocationManager()
+    @Environment(Router.self) private var router
     
     private let journey = JourneySetupMockData.makeJourney()
     
     var body: some View {
-        NavigationStack {
-            ZStack {
-                Color("BackgroundBlue").ignoresSafeArea()
+        ZStack {
+            Color("Background").ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                AlarmToogleCard()
                 
-                VStack(spacing: 20) {
-                    AlarmToogleCard()
-                    
-                    MapCard(
-                        locationManager: locationManager,
-                        departureStation: journey.departureStation,
-                        destinationStation: journey.destinationStation
-                    )
-                    
-                    Spacer()
-                }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-                .safeAreaInset(edge: .bottom) {
-                    Button {
-                        // Action
-                    } label: {
-                        Text("Mulai Perjalanan")
-                            .font(.headline)
-                            .frame(maxWidth: .infinity)
-                            .padding(10)
-                    }
-                    .buttonStyle(.glassProminent)
-                    .padding(.horizontal)
-                }
-                .onAppear {
-                    locationManager.setMockJourney(
-                        departureStation: journey.departureStation,
-                        destinationStation: journey.destinationStation
-                    )
-                }
+                MapCard(
+                    locationManager: locationManager,
+                    departureStation: journey.departureStation,
+                    destinationStation: journey.destinationStation
+                )
+                
+                Spacer()
             }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle("Atur Perjalanan")
+            .padding(.horizontal, 16)
+            .padding(.top, 16)
+            .safeAreaInset(edge: .bottom) {
+                Button {
+                    router.push(.journeyPage)
+                } label: {
+                    Text("Mulai Perjalanan")
+                        .font(.headline)
+                        .frame(maxWidth: .infinity)
+                        .padding(10)
+                }
+                .buttonStyle(.glassProminent)
+                .padding(.horizontal)
+            }
+            .onAppear {
+                locationManager.setMockJourney(
+                    departureStation: journey.departureStation,
+                    destinationStation: journey.destinationStation
+                )
+            }
         }
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle("Atur Perjalanan")
     }
 }
 
@@ -60,7 +59,7 @@ enum JourneySetupMockData {
         let stations = StationModelDTO.loadFromJSON()
         return (
             departureStation: station(withID: "SUD", in: stations),
-            destinationStation: station(withID: "PI", in: stations)
+            destinationStation: station(withID: "BKS", in: stations)
         )
     }
     
@@ -80,5 +79,5 @@ enum JourneySetupMockData {
 }
 
 #Preview {
-    JourneySetupPageView()
+    JourneySetupPageView().environment(Router())
 }

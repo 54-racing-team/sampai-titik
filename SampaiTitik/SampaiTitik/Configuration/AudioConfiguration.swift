@@ -11,6 +11,8 @@ internal import Combine
 
 @Observable
 class AudioManager {
+    static let shared = AudioManager()
+
     private var audioPlayer: AVAudioPlayer?
     private(set) var isPlaying: Bool = false
     private(set) var currentFileName: String?
@@ -20,12 +22,12 @@ class AudioManager {
         setupAudioSession()
     }
 
-    private func setupAudioSession() {
+    func setupAudioSession() {
         do {
             try AVAudioSession.sharedInstance().setCategory(
                 .playback,
                 mode: .default,
-                options: [.mixWithOthers]
+                options: []
             )
             try AVAudioSession.sharedInstance().setActive(true)
             isAudioSessionConfigured = true
@@ -33,6 +35,57 @@ class AudioManager {
             print("Audio session setup failed: \(error.localizedDescription)")
             isAudioSessionConfigured = false
         }
+    }
+
+    /// Memulai suara alarm dengan looping tanpa henti sampai dihentikan (tetap berbunyi saat silent)
+    func startAlarm(sound: SoundOption = SoundOption.current) {
+        setupAudioSession()
+        guard let audioUrl = Bundle.main.url(forResource: sound.fileName, withExtension: "mp3") else {
+            print("Audio file not found: \(sound.fileName).mp3")
+            return
+        }
+
+        do {
+            audioPlayer?.stop()
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+            audioPlayer?.numberOfLoops = -1 // Looping terus-menerus
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            currentFileName = sound.fileName
+            DispatchQueue.main.async {
+                self.isPlaying = true
+            }
+        } catch {
+            print("Failed to play alarm: \(error.localizedDescription)")
+        }
+    }
+
+    /// Memutar preview suara alarm 1 kali (tidak looping)
+    func playPreview(sound: SoundOption) {
+        setupAudioSession()
+        guard let audioUrl = Bundle.main.url(forResource: sound.fileName, withExtension: "mp3") else {
+            print("Audio file not found: \(sound.fileName).mp3")
+            return
+        }
+
+        do {
+            audioPlayer?.stop()
+            audioPlayer = try AVAudioPlayer(contentsOf: audioUrl)
+            audioPlayer?.numberOfLoops = 0
+            audioPlayer?.prepareToPlay()
+            audioPlayer?.play()
+            currentFileName = sound.fileName
+            DispatchQueue.main.async {
+                self.isPlaying = true
+            }
+        } catch {
+            print("Failed to preview sound: \(error.localizedDescription)")
+        }
+    }
+
+    /// Menghentikan suara alarm
+    func stopAlarm() {
+        stop()
     }
 
     /// Loads and prepares an audio file for playback

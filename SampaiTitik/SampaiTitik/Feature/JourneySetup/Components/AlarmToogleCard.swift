@@ -9,7 +9,7 @@ import SwiftUI
 
 struct AlarmToogleCard: View {
     @State private var isSoundEnabled = true
-    @State private var selectedSound = "Radial (Default)"
+    @State private var selectedSound: SoundOption = SoundOption.current
     
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
@@ -21,7 +21,7 @@ struct AlarmToogleCard: View {
                     SoundExpandPageView(selectedSound: $selectedSound)
                 } label: {
                     HStack {
-                        Text(selectedSound)
+                        Text(selectedSound.displayName)
                             .font(.subheadline)
                             .foregroundStyle(.primary)
                         

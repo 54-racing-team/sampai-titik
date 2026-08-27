@@ -71,12 +71,14 @@ final class AlarmSchedulerManager: ObservableObject {
     }
 
     func cancelActiveAlarm() {
+        AudioManager.shared.stopAlarm()
         guard let id = activeAlarmID else { return }
         try? manager.cancel(id: id)
         activeAlarmID = nil
     }
 
     func stopActiveAlarm() {
+        AudioManager.shared.stopAlarm()
         guard let id = activeAlarmID else { return }
         try? manager.stop(id: id)
         activeAlarmID = nil
@@ -87,7 +89,6 @@ final class AlarmSchedulerManager: ObservableObject {
     private func observeAlarmUpdates() {
         updatesTask = Task {
             for await alarms in manager.alarmUpdates {
-                // alarms: [Alarm] — cek state masing-masing kalau perlu
                 if let current = alarms.first(where: { $0.id == activeAlarmID }) {
                     print("Alarm state berubah: \(current.state)")
                 }

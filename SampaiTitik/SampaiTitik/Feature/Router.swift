@@ -11,6 +11,7 @@ import SwiftUI
 enum Route: Hashable {
     case home
     case journeySetup(data: String)
+    case journeyPage
     case profile
     case detail(id: String)
 }
@@ -44,6 +45,7 @@ struct RouterView: View {
                     switch route {
                     case .home: HomeView()
                     case .journeySetup(let id): JourneySetupPageView()
+                    case .journeyPage: JourneyPageView()
                     default: EmptyView()
                     }
                 }
