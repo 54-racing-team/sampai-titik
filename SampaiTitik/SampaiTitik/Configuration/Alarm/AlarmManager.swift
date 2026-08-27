@@ -47,7 +47,7 @@ final class AlarmSchedulerManager: ObservableObject {
 
     // MARK: - Scheduling
 
-    func scheduleAlarm(after seconds: TimeInterval, label: String) async {
+    func scheduleAlarm(after seconds: TimeInterval, label: String, soundTitle: String) async {
         guard isAuthorized else {
             print("Belum diizinkan — panggil requestAuthorizationIfNeeded() dulu")
             return
@@ -56,7 +56,8 @@ final class AlarmSchedulerManager: ObservableObject {
         let id = UUID()
         let configuration = AlarmConfiguration.makeCountdownConfiguration(
             duration: seconds,
-            label: label
+            label: label,
+            soundTitle: soundTitle
         )
 
         do {
