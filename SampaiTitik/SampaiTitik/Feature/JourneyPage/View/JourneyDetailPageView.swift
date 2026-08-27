@@ -12,7 +12,7 @@ struct JourneyDetailPageView: View {
     
     var body: some View {
         ZStack {
-            Color("BackgroundColor").ignoresSafeArea()
+            Color("BackgroundBlue").ignoresSafeArea()
             
             ScrollView {
                 JourneyDetailCard(viewModel: viewModel)

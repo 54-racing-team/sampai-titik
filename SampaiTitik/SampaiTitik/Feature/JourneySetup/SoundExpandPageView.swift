@@ -66,7 +66,7 @@ struct SoundExpandPageView: View {
         }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle("Bunyi")
-        .background(Color("Background"))
+        .background(Color("BackgroundBlue"))
     }
 }
 
