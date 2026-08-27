@@ -7,16 +7,16 @@
 
 import SwiftUI
 
-struct HomeView: View {    
+struct HomeView: View {
     var body: some View {
         ZStack {
             Color(Color("PrimaryColor"))
                 .ignoresSafeArea()
             
-            VStack(spacing: 16) {
+            VStack(alignment: .leading, spacing: 16) {
                 HStack{
                     Text("Sampai.")
-                        .font(.title)
+                        .font(.title.bold())
                         .foregroundStyle(.blue)
                     
                     Spacer()
@@ -27,6 +27,7 @@ struct HomeView: View {
                         Image(systemName: "person.fill")
                     }
                     .padding()
+                    .glassEffect()
                     .background(Color.white)
                     .clipShape(Circle())
                 }
@@ -36,54 +37,23 @@ struct HomeView: View {
                         .font(.title2.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
+                        .lineLimit(nil)
+                        .fixedSize(horizontal: false, vertical: true)
                 }
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
-//                .background(.black)
                 
-                JourneyForm()
+                JourneyForm(vm: HomeViewModel())
                 
                 Text("Pengingat tetap bekerja saat kamu tidak sedang melihat layar.")
                     .font(.caption)
                 
-                VStack(alignment: .leading) {
-                    Text("Rute Terakhir")
-                        .font(.body.bold())
-                        .foregroundStyle(Color.blue)
-                    
-                    VStack(alignment: .leading) {
-                        Text("Kemarin . 22.15")
-                            .foregroundStyle(.gray)
-                            .font(.caption)
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Pasar Minggu Baru")
-                                Text("Metland Telaga Murni")
-                            }
-                            .font(.subheadline.bold())
-                            
-                            Spacer()
-                            
-                            Button {
-                                
-                            } label: {
-                                Text("Pakai lagi")
-                                    .padding(.horizontal, 4)
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.white)
-                    .cornerRadius(20)
-
-                    
-                }
-                .frame(maxWidth: .infinity, alignment: .leading)
-
+                Text("Rute Terakhir")
+                    .font(.body.bold())
+                    .foregroundStyle(Color.blue)
+                
+                LastRouteCard()
                 
                 Spacer()
             }

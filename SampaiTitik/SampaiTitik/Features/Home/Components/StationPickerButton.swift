@@ -33,3 +33,9 @@ struct StationPickerButton: View {
         .tint(.blue.opacity(0.1))
     }
 }
+
+#Preview{
+    StationPickerButton(iconName: "train.side.front.car", selection:  ""){
+        
+    }
+}

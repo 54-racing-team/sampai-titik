@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct JourneyForm: View {
-    @State var vm = HomeViewModel()
+    @State var vm: HomeViewModel
 
     var body: some View {
         VStack {

@@ -23,7 +23,6 @@ struct SearchStationView: View {
     
     @Binding var selectedStation: String
     @Binding var isPresented: Bool
-    
     @State var searchStation: String = ""
     
     var filteredStations: [Station] {
