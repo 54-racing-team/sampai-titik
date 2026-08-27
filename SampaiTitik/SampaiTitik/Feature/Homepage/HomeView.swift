@@ -7,20 +7,22 @@
 
 import SwiftUI
 
-struct HomeView: View {    
+struct HomeView: View {
+    @StateObject private var scheduler = AlarmSchedulerManager.shared
+
     var body: some View {
         ZStack {
             Color(Color("BackgroundBlue"))
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 16) {
                 HStack{
                     Image("AppLogo")
                     
                     Spacer()
-                    
-                    Button{
-                        
+
+                    Button {
+
                     } label: {
                         Image(systemName: "person.fill")
                     }
@@ -28,7 +30,7 @@ struct HomeView: View {
                     .background(Color.white)
                     .clipShape(Circle())
                 }
-                
+
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Mau kemana, Salman?")
                         .font(.title.bold())
@@ -38,34 +40,36 @@ struct HomeView: View {
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
-//                .background(.black)
-                
+                //                .background(.black)
+
                 JourneyForm()
-                
-                Text("Pengingat tetap bekerja saat kamu tidak sedang melihat layar.")
-                    .font(.caption)
-                
+
+                Text(
+                    "Pengingat tetap bekerja saat kamu tidak sedang melihat layar."
+                )
+                .font(.caption)
+
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
                         .foregroundStyle(Color.blue)
-                    
+
                     VStack(alignment: .leading) {
                         Text("Kemarin . 22.15")
                             .foregroundStyle(.gray)
                             .font(.caption)
-                        
+
                         HStack {
                             VStack(alignment: .leading, spacing: 12) {
                                 Text("Pasar Minggu Baru")
                                 Text("Metland Telaga Murni")
                             }
                             .font(.subheadline.bold())
-                            
+
                             Spacer()
-                            
+
                             Button {
-                                
+
                             } label: {
                                 Text("Pakai lagi")
                                     .padding(.horizontal, 4)
@@ -78,11 +82,9 @@ struct HomeView: View {
                     .background(.white)
                     .cornerRadius(20)
 
-                    
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                
                 Spacer()
             }
             .padding(.horizontal, 16)
@@ -92,4 +94,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Router())
 }
