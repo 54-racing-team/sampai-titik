@@ -5,7 +5,7 @@
 //  Created by Salman on 24/08/26.
 //
 
-import Combine
+internal import Combine
 import Observation
 
 @Observable
