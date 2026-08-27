@@ -77,7 +77,7 @@ class HapticManager {
         // Just ensure it's in a good state for when we return
         if isPlaying {
             do {
-                hapticEngine!.stop()
+                hapticEngine?.stop()
                 print("Haptic engine stopped for backgrounding")
             } catch {
                 print("Error stopping engine for background: \(error.localizedDescription)")
@@ -176,7 +176,7 @@ class HapticManager {
         // If engine exists but is stopped, try to restart it
         if !isPlaying {
             do {
-                try hapticEngine!.start()
+                try hapticEngine?.start()
                 print("Haptic engine restarted successfully")
             } catch {
                 print("Failed to restart engine: \(error.localizedDescription)")
