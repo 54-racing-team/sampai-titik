@@ -66,7 +66,8 @@ final class JourneyTrackingVM {
         await alarmScheduler.requestAuthorizationIfNeeded()
         await alarmScheduler.scheduleAlarm(
             after: 1,
-            label: "Kamu sudah hampir sampai di \(destinationStation.name)!"
+            label: "Kamu sudah hampir sampai di \(destinationStation.name)!",
+            soundTitle: SoundOption.current.displayName
         )
     }
 }
