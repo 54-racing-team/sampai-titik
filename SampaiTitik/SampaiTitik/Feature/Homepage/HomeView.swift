@@ -40,9 +40,8 @@ struct HomeView: View {
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
-//                .background(.black)
                 
-                JourneyForm()
+                JourneyForm(vm: HomeViewModel())
                 
                 Text("Pengingat tetap bekerja saat kamu tidak sedang melihat layar.")
                     .font(.caption)
@@ -52,36 +51,15 @@ struct HomeView: View {
                         .font(.body.bold())
                         .foregroundStyle(Color.blue)
                     
-                    VStack(alignment: .leading) {
-                        Text("Kemarin . 22.15")
-                            .foregroundStyle(.gray)
-                            .font(.caption)
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Pasar Minggu Baru")
-                                Text("Metland Telaga Murni")
-                            }
-                            .font(.subheadline.bold())
-                            
-                            Spacer()
-                            
-                            Button {
-                                
-                            } label: {
-                                Text("Pakai lagi")
-                                    .padding(.horizontal, 4)
-                            }
-                            .buttonStyle(.borderedProminent)
+                    RecentJourneyCard(
+                        origin: "Pasar Minggu Baru",
+                        destination: "Metland Telaga Murni",
+                        date: "Kemarin",
+                        time: "22.15",
+                        onReuse: {
+                            print("Reuse Metland Telaga Murni")
                         }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.white)
-                    .cornerRadius(20)
-
-                    
-                }
+                    )                }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 

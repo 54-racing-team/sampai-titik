@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct JourneyForm: View {
-    @State var vm = HomeViewModel()
+    @State var vm: HomeViewModel
 
     var body: some View {
         VStack {
@@ -25,13 +25,20 @@ struct JourneyForm: View {
                     SearchStationView(selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
                 }
                 
-                Button{
-                    vm.swapStations()
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.headline)
-                        .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                ZStack {
+                    Divider()
+                    Button{
+                        vm.swapStations()
+                    } label: {
+                        Image(systemName: "arrow.up.arrow.down")
+                            .font(.headline)
+                            .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                    }
+                    .padding()
+                    .background(Color.white)
+                    .clipShape(Circle())
                 }
+                .padding(.vertical, -16)
                 
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.black)
@@ -64,4 +71,8 @@ struct JourneyForm: View {
             .cornerRadius(20)
         }
     }
+}
+
+#Preview {
+    JourneyForm(vm: HomeViewModel())
 }

@@ -9,30 +9,11 @@ import SwiftUI
 
 struct RecentJourneySymbol: View {
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                Circle()
-                    .fill(.black)
-                    .frame(width: 18, height: 18)
-                
-                Circle()
-                    .fill(.white)
-                    .frame(width: 6, height: 6)
-            }
-            .frame(width: 20, height: 20)
-            
+        VStack(spacing: 0) {            
+            Image(systemName: "record.circle.fill")
             dashedLine()
-            
-            ZStack {
-                Circle()
-                    .fill(Color("MainBlue"))
-                    .frame(width: 18, height: 18)
-                
-                Circle()
-                    .fill(.white)
-                    .frame(width: 6, height: 6)
-            }
-            .frame(width: 20, height: 20)
+            Image(systemName: "record.circle.fill")
+                .foregroundStyle(Color("MainBlue"))
         }
         .frame(width: 20)
     }
@@ -105,7 +86,7 @@ struct RecentJourneyCard: View {
         .background(.white)
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
-        .padding(.horizontal)
+//        .padding(.horizontal)
     }
 }
 
