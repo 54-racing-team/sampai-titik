@@ -17,7 +17,7 @@ struct PrimaryButton: View {
         } label: {
             Text(title)
                 .frame(width: 310)
-                .frame(height: 48)
+                .padding(.vertical, 12)
                 .font(.headline)
                 .fontWeight(.semibold)
         }
@@ -36,7 +36,7 @@ struct DestructiveButton: View {
         } label: {
             Text(title)
                 .frame(width: 310)
-                .frame(height: 48)
+                .padding(.vertical, 12)
                 .font(.headline)
                 .fontWeight(.semibold)
                 .foregroundStyle(.red)
@@ -55,8 +55,8 @@ struct CardButton: View {
             action()
         } label: {
             Text(title)
-                .frame(width: 342)
-                .frame(height: 52)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
                 .font(.headline)
                 .fontWeight(.semibold)
         }
@@ -66,7 +66,7 @@ struct CardButton: View {
 }
 
 #Preview {
-    PrimaryButton(title: "Mulai Perjalanan") {
+    CardButton(title: "Mulai Perjalanan") {
         print("Button tapped")
     }
     .padding()

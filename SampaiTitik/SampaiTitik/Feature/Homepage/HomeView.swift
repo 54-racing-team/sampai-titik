@@ -25,6 +25,7 @@ struct HomeView: View {
 
                     } label: {
                         Image(systemName: "person.fill")
+                        .foregroundStyle(.mainBlue)
                     }
                     .padding()
                     .background(Color(.systemBackground))
@@ -36,9 +37,10 @@ struct HomeView: View {
                         .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
+                        .font(.body)
                     
                 }
-                .padding(.bottom, 16)
+                .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.mainBlue)
                 .fixedSize(horizontal: false, vertical: true)

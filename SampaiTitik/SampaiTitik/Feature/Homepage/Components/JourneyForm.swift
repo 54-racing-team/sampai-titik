@@ -15,13 +15,13 @@ struct JourneyForm: View {
 
     var body: some View {
         VStack {
-            VStack(spacing: 16){
+            VStack(spacing: 12){
                 Text("Stasiun Asal")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.body)
+                    .font(.subheadline)
                 
-                StationPickerButton(iconName: "train.side.front.car", selection:  vm.departStation){
+                StationPickerButton(iconName: "tram.fill", selection:  vm.departStation){
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
@@ -34,36 +34,30 @@ struct JourneyForm: View {
                     Image(systemName: "arrow.up.arrow.down")
                         .font(.headline)
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                        .foregroundStyle(.mainBlue)
                 }
                 
                 Text("Stasiun Tujuan")
-                    .foregroundStyle(.black)
+                    .background(Color(.systemBackground))
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.subheadline)
                                 
-                StationPickerButton(iconName: "paperplane.fill", selection: vm.destStation){
+                StationPickerButton(iconName: "location.fill", selection: vm.destStation){
                     vm.showDestination.toggle()
                 }
                 .sheet(isPresented: $vm.showDestination){
                     SearchStationView(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
                 }
                 
-                Button{
+                CardButton(title: "Selanjutnya") {
                     router.push(.journeySetup(data: "abc"))
-                } label: {
-                    Text("Selanjutnya")
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 48)
-                        .font(.headline)
-
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue.opacity(0.8))
-                .padding(.top, 32)
+                .padding(.top, 12)
 
             }
             .frame(maxWidth: .infinity)
             .padding(16)
-            .background(.white)
+            .background(Color(.systemBackground))
             .cornerRadius(20)
         }
     }
