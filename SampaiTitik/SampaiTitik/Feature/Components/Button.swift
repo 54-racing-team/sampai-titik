@@ -1,5 +1,5 @@
 //
-//  PrimaryButton.swift
+//  Button.swift
 //  SampaiTitik
 //
 //  Created by Rizki Fitriani on 27/08/26.
