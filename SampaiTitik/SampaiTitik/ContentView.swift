@@ -10,7 +10,7 @@ import SwiftData
 
 struct ContentView: View {
     @Environment(\.modelContext) private var modelContext
-    @ObservedObject var vm = StationViewModel()
+    @State var vm = StationViewModel()
     @Query private var stations: [StationModel]
     
     var body: some View {
