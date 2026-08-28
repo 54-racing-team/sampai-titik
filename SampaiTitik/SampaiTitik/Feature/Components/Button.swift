@@ -35,7 +35,7 @@ struct DestructiveButton: View {
             action()
         } label: {
             Text(title)
-                .frame(width: 342)
+                .frame(width: 310)
                 .frame(height: 48)
                 .font(.headline)
                 .fontWeight(.semibold)
