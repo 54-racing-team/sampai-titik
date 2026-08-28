@@ -13,18 +13,18 @@ struct JourneyPageView: View {
     
     var body: some View {
         ZStack {
-            Color("BackgroundColor").ignoresSafeArea()
+            Color.backgroundBlue
+                .ignoresSafeArea()
             
             VStack {
                 Text("Perjalanan")
-                    .font(.title)
-                    .fontWeight(.semibold)
+                    .font(.title.bold())
                 
                 JourneyCard(viewModel: viewModel)
                 
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
-                    Text("Kamu bisa mengunci layar")
+//                    Text("Kamu bisa keluar dari aplikasi.")
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -35,7 +35,7 @@ struct JourneyPageView: View {
                 Button{
                     isCancel = true
                 } label: {
-                    Text("Akhiri Perjalanan")
+                    Text("Batalkan Perjalanan")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
                         .padding(10)
@@ -49,7 +49,7 @@ struct JourneyPageView: View {
                     viewModel.stopJourneyTracking()
                 }
                 .presentationDetents([.fraction(0.5)])
-                .presentationBackground(.white)
+                .presentationBackground(Color(.secondarySystemBackground))
                 .presentationDragIndicator(.visible)
             }
         }

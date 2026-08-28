@@ -44,9 +44,7 @@ struct JourneyPageCancelSheet: View {
                 .tint(.secondary)
                 
                 Button {
-                    AudioManager.shared.stopAlarm()
-                    onConfirm?()
-                    dismiss()
+                    // Cancel the trip
                 } label: {
                     Text("Ya, akhiri")
                         .font(.headline)
