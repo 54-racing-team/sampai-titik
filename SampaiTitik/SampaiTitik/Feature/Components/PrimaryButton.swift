@@ -26,6 +26,26 @@ struct PrimaryButton: View {
     }
 }
 
+struct DestructiveButton: View {
+    let title: String
+    let action: () -> Void
+
+    var body: some View {
+        Button {
+            action()
+        } label: {
+            Text(title)
+                .frame(width: 342)
+                .frame(height: 48)
+                .font(.headline)
+                .fontWeight(.semibold)
+                .foregroundStyle(.red)
+        }
+        .buttonStyle(.borderedProminent)
+        .tint(Color(.white))
+    }
+}
+
 struct CardButton: View {
     let title: String
     let action: () -> Void
