@@ -20,7 +20,9 @@ struct RootView: View {
     @Query private var stations: [StationModel]
     
     var body: some View {
-        RouterView()
+        SplashScreen {
+            RouterView()
+        }
     }
 }
 

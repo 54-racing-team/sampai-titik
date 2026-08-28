@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct JourneyPageCancelSheet: View {
+    var onConfirm: (() -> Void)? = nil
     @Environment(\.dismiss) private var dismiss
     
     var body: some View {
@@ -43,7 +44,9 @@ struct JourneyPageCancelSheet: View {
                 .tint(.secondary)
                 
                 Button {
-                    
+                    AudioManager.shared.stopAlarm()
+                    onConfirm?()
+                    dismiss()
                 } label: {
                     Text("Ya, akhiri")
                         .font(.headline)

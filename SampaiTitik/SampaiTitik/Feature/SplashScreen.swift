@@ -7,34 +7,30 @@
 
 import SwiftUI
 
-extension Font {
-    static func montserrat(size: CGFloat, weight: Font.Weight = .medium) -> Font {
-        let name = "Montserrat-Medium"
-        if UIFont(name: name, size: size) != nil {
-            return Font.custom(name, size: size)
-        } else {
-            return Font.system(size: size, weight: weight, design: .rounded)
-        }
-    }
-}
- 
 // MARK: - Splash Screen
- 
-struct SplashScreen: View {
+
+struct SplashScreen<Content: View>: View {
     @State private var showHome = false
     @State private var revealed = false
     @Namespace private var logoAnimation
- 
+
+    // Child view of splash screen
+    let content: Content
+
     // Respects the user's iOS accessibility setting — if they've asked for
     // reduced motion, skip straight to the final frame instead of animating.
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
- 
+
     private let logoSize: CGFloat = 64
     private let dotSize: CGFloat = 18
- 
+    
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
     var body: some View {
         if showHome {
-            RootView()
+            content
                 .transition(.opacity)
         } else {
             ZStack {
@@ -44,7 +40,7 @@ struct SplashScreen: View {
             .onAppear { runAnimation() }
         }
     }
- 
+
     // matchedGeometryEffect bridges the two automatically.
     @ViewBuilder
     private var logoLayout: some View {
@@ -53,7 +49,7 @@ struct SplashScreen: View {
                 .font(.montserrat(size: logoSize))
                 .foregroundColor(.white)
                 .matchedGeometryEffect(id: "letterS", in: logoAnimation)
- 
+
             if revealed {
                 Text("ampai")
                     .font(.montserrat(size: logoSize))
@@ -62,16 +58,17 @@ struct SplashScreen: View {
                     .transition(.opacity)
                     .padding(.leading, 2)
             }
- 
+
             Circle()
                 .fill(Color.white)
                 .frame(width: dotSize, height: dotSize)
                 .matchedGeometryEffect(id: "dot", in: logoAnimation)
                 .padding(.leading, revealed ? 6 : 6)
-                .alignmentGuide(VerticalAlignment.center) { d in d[.bottom] - 23 }
+                .alignmentGuide(VerticalAlignment.center) { d in d[.bottom] - 23
+                }
         }
     }
- 
+
     private func runAnimation() {
         if reduceMotion {
             revealed = true
@@ -80,14 +77,14 @@ struct SplashScreen: View {
             }
             return
         }
- 
+
         // Step 1: hold on "S." briefly so it registers as its own moment.
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.7) {
             withAnimation(.spring(response: 0.7, dampingFraction: 0.75)) {
                 revealed = true
             }
         }
- 
+
         // Step 2: after the reveal finishes, hand off to Home.
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             withAnimation(.easeInOut(duration: 0.4)) {
@@ -96,7 +93,9 @@ struct SplashScreen: View {
         }
     }
 }
- 
+
 #Preview {
-    SplashScreen()
+    SplashScreen {
+        RootView()
+    }
 }
