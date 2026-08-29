@@ -9,8 +9,9 @@ internal import Combine
 import SwiftUI
 import SwiftData
 
-class StationViewModel: ObservableObject {
-    @Published var stations: [StationModelDTO] = []
+@Observable
+class StationViewModel {
+    var stations: [StationModelDTO] = []
     
     func getStations(context: ModelContext) {
         let descriptor = FetchDescriptor<StationModel>()

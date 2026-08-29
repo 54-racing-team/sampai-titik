@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @StateObject private var scheduler = AlarmSchedulerManager.shared
+
+    @State var stationVM = StationViewModel()
+    @Environment(\.modelContext) private var modelContext
+    
 
     var body: some View {
         ZStack {
@@ -40,7 +45,6 @@ struct HomeView: View {
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
-                //                .background(.black)
 
                 JourneyForm()
 
@@ -53,41 +57,25 @@ struct HomeView: View {
                     Text("Rute Terakhir")
                         .font(.body.bold())
                         .foregroundStyle(Color.blue)
-
-                    VStack(alignment: .leading) {
-                        Text("Kemarin . 22.15")
-                            .foregroundStyle(.gray)
-                            .font(.caption)
-
-                        HStack {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Pasar Minggu Baru")
-                                Text("Metland Telaga Murni")
-                            }
-                            .font(.subheadline.bold())
-
-                            Spacer()
-
-                            Button {
-
-                            } label: {
-                                Text("Pakai lagi")
-                                    .padding(.horizontal, 4)
-                            }
-                            .buttonStyle(.borderedProminent)
+                    
+                    RecentJourneyCard(
+                        origin: "Pasar Minggu Baru",
+                        destination: "Metland Telaga Murni",
+                        date: "Kemarin",
+                        time: "22.15",
+                        onReuse: {
+                            print("Reuse Metland Telaga Murni")
                         }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.white)
-                    .cornerRadius(20)
-
+                    )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
                 Spacer()
             }
             .padding(.horizontal, 16)
+        }
+        .onAppear {
+            stationVM.getStations(context: modelContext)
         }
     }
 }

@@ -13,7 +13,7 @@ struct RootView: View {
     @Environment(\.modelContext) private var modelContext
     
     // State
-    @ObservedObject var vm = StationViewModel()
+    @State var vm = StationViewModel()
     @State private var router: Router = .init()
     
     // Swift data
