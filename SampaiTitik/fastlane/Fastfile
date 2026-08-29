@@ -1,15 +1,3 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
@@ -17,7 +5,6 @@ default_platform(:ios)
 
 platform :ios do
   before_all do
-    setup_ci if ENV["CI"]
     setup_ci if ENV["CI"]
     sh("git config user.name 'CI Bot'")
     sh("git config user.email 'ci-bot@54racing.com'")
@@ -34,7 +21,14 @@ platform :ios do
   end
 
   private_lane :setup_signing do |options|
-    match(type: "appstore", readonly: true, api_key: options[:api_key])
+    match(
+      type: "appstore",
+      app_identifier: [
+        "com.54racing.SampaiTitik",
+        "com.54racing.SampaiTitik.watchkitapp"
+      ],
+      api_key: options[:api_key]
+    )
   end
 
   desc "Push to dev branch -> patch bump + TestFlight"
@@ -58,7 +52,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )
@@ -69,7 +64,7 @@ platform :ios do
     )
 
     # Github pre-release
-    ipa_path = "/Users/runner/work/mobile/mobile/build/SampaiTitik.ipa"
+    ipa_path = File.join(Dir.pwd, "build", "SampaiTitik.ipa")
     tag_name = "v#{new_version}-beta"
 
     set_github_release(
@@ -108,7 +103,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )
@@ -135,7 +131,7 @@ platform :ios do
     increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
 
     build_app(
-      scheme: "WorkspacyAR",
+      scheme: "SampaiTitik",
       clean: true,
       export_method: "app-store",
       output_directory: "./build",
@@ -144,7 +140,8 @@ platform :ios do
         method: "app-store",
         signingStyle: "manual",
         provisioningProfiles: {
-            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"]
+            "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
         }
       }
     )

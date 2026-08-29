@@ -89,7 +89,8 @@ struct AlarmView: View {
                     await scheduler.requestAuthorizationIfNeeded()
                     await scheduler.scheduleAlarm(
                         after: 3,
-                        label: "Waktunya Bangun!"
+                        label: "Waktunya Bangun!",
+                        soundTitle: "01_AS_HeartOfHope"
                     )
                 }
             }

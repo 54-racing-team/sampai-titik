@@ -9,24 +9,25 @@ import SwiftUI
 import SwiftData
 
 struct HomeView: View {
+    @StateObject private var scheduler = AlarmSchedulerManager.shared
+
     @State var stationVM = StationViewModel()
     @Environment(\.modelContext) private var modelContext
     
+
     var body: some View {
         ZStack {
-            Color(Color("PrimaryColor"))
+            Color(Color("BackgroundBlue"))
                 .ignoresSafeArea()
-            
+
             VStack(spacing: 16) {
                 HStack{
-                    Text("Sampai.")
-                        .font(.title)
-                        .foregroundStyle(.blue)
+                    Image("AppLogo")
                     
                     Spacer()
-                    
-                    Button{
-                        
+
+                    Button {
+
                     } label: {
                         Image(systemName: "person.fill")
                     }
@@ -34,22 +35,24 @@ struct HomeView: View {
                     .background(Color.white)
                     .clipShape(Circle())
                 }
-                
+
                 VStack(alignment: .leading, spacing: 16) {
                     Text("Mau kemana, Salman?")
-                        .font(.title2.bold())
+                        .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
                 }
                 .padding(.bottom, 16)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .foregroundStyle(Color.blue)
-                
+
                 JourneyForm()
-                
-                Text("Pengingat tetap bekerja saat kamu tidak sedang melihat layar.")
-                    .font(.caption)
-                
+
+                Text(
+                    "Pengingat tetap bekerja saat kamu tidak sedang melihat layar."
+                )
+                .font(.caption)
+
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
@@ -63,10 +66,10 @@ struct HomeView: View {
                         onReuse: {
                             print("Reuse Metland Telaga Murni")
                         }
-                    )                }
+                    )
+                }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
-                
                 Spacer()
             }
             .padding(.horizontal, 16)
@@ -79,4 +82,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Router())
 }

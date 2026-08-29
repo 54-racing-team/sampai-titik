@@ -47,7 +47,7 @@ final class AlarmSchedulerManager: ObservableObject {
 
     // MARK: - Scheduling
 
-    func scheduleAlarm(after seconds: TimeInterval, label: String) async {
+    func scheduleAlarm(after seconds: TimeInterval, label: String, soundTitle: String) async {
         guard isAuthorized else {
             print("Belum diizinkan — panggil requestAuthorizationIfNeeded() dulu")
             return
@@ -56,7 +56,8 @@ final class AlarmSchedulerManager: ObservableObject {
         let id = UUID()
         let configuration = AlarmConfiguration.makeCountdownConfiguration(
             duration: seconds,
-            label: label
+            label: label,
+            soundTitle: soundTitle
         )
 
         do {
@@ -70,12 +71,14 @@ final class AlarmSchedulerManager: ObservableObject {
     }
 
     func cancelActiveAlarm() {
+        AudioManager.shared.stopAlarm()
         guard let id = activeAlarmID else { return }
         try? manager.cancel(id: id)
         activeAlarmID = nil
     }
 
     func stopActiveAlarm() {
+        AudioManager.shared.stopAlarm()
         guard let id = activeAlarmID else { return }
         try? manager.stop(id: id)
         activeAlarmID = nil
@@ -86,7 +89,6 @@ final class AlarmSchedulerManager: ObservableObject {
     private func observeAlarmUpdates() {
         updatesTask = Task {
             for await alarms in manager.alarmUpdates {
-                // alarms: [Alarm] — cek state masing-masing kalau perlu
                 if let current = alarms.first(where: { $0.id == activeAlarmID }) {
                     print("Alarm state berubah: \(current.state)")
                 }

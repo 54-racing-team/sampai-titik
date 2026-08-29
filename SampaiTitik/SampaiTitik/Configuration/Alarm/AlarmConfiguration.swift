@@ -17,24 +17,32 @@ enum AlarmConfiguration {
     /// Bikin konfigurasi alarm dengan countdown (misal 3 detik) + custom sound.
     static func makeCountdownConfiguration(
         duration: TimeInterval,
-        label: String
+        label: String,
+        soundTitle: String,
     ) -> AlarmManager.AlarmConfiguration<MyAlarmMetadata> {
 
-        let stopButton = AlarmButton(
-            text: "Saya akan lawan",
+        let snoozButton = AlarmButton(
+            text: "Nanti dulu deh",
             textColor: .white,
-            systemImageName: "stop.fill"
+            systemImageName: "pause.circle",
+        )
+        
+        let stopButton = AlarmButton(
+            text: "Stop",
+            textColor: .yellow,
+            systemImageName: "play.circle",
         )
 
         let alert = AlarmPresentation.Alert(
             title: LocalizedStringResource(stringLiteral: label),
-            secondaryButton: stopButton,
+            stopButton: stopButton,
+            secondaryButton: snoozButton,
             secondaryButtonBehavior: .countdown
         )
         
-        let countdown = AlarmPresentation.Countdown(title: "Eggs are cooking")
+        let countdown = AlarmPresentation.Countdown(title: "Lanjutin Perjalanan")
         let paused = AlarmPresentation.Paused(
-            title: "Timer paused",
+            title: "Perjalanan tertunda",
             resumeButton: AlarmButton(text: "Resume", textColor: .blue, systemImageName: "play.circle"))
 
         let presentation = AlarmPresentation(alert: alert, countdown: countdown, paused: paused)
@@ -42,16 +50,15 @@ enum AlarmConfiguration {
         let attributes = AlarmAttributes<MyAlarmMetadata>(
             presentation: presentation,
             metadata: MyAlarmMetadata(label: label),
-            tintColor: .red
+            tintColor: Color.mainBlue,
         )
 
-        // Custom sound: sesuaikan case-nya dengan enum AlertConfiguration.AlertSound
-        // di SDK kamu (mis. .named("alarm_song") kalau file ada di bundle,
-        // atau .default kalau mau pakai suara sistem).
+        let alarmSound = AlertConfiguration.AlertSound.named(soundTitle)
+        
         return AlarmManager.AlarmConfiguration(
-            countdownDuration: .init(preAlert: duration, postAlert: nil),
+            countdownDuration: .init(preAlert: duration, postAlert: duration),
             attributes: attributes,
-            sound: .default
+            sound: alarmSound
         )
     }
 }

@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct JourneyForm: View {
+    @Environment(Router.self) private var router
+    
     @State var vm = HomeViewModel()
+    
 
     var body: some View {
         VStack {
@@ -52,7 +55,7 @@ struct JourneyForm: View {
                 }
                 
                 Button{
-                    
+                    router.push(.journeySetup(data: "abc"))
                 } label: {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
