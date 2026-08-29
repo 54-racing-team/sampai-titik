@@ -37,11 +37,12 @@ struct JourneyPageView: View {
                 } label: {
                     Text("Batalkan Perjalanan")
                         .font(.headline)
+                        .foregroundStyle(.red)
                         .frame(maxWidth: .infinity)
                         .padding(10)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(.red)
+                .buttonStyle(.glass)
+                .tint(Color(.systemBackground))
                 .padding(.horizontal)
             }
             .sheet(isPresented: $isCancel) {
