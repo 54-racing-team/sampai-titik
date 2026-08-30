@@ -10,8 +10,8 @@ import SwiftUI
 
 enum Route: Hashable {
     case home
-    case journeySetup(data: String)
-    case journeyPage
+    case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
+    case journeyPage(stations: [JourneyStation])
     case profile
     case detail(id: String)
 }
@@ -26,7 +26,6 @@ class Router {
 
     func pop() {
         guard !path.isEmpty else { return }
-
         path.removeLast()
     }
 
@@ -43,10 +42,17 @@ struct RouterView: View {
             HomeView()
                 .navigationDestination(for: Route.self) { route in
                     switch route {
-                    case .home: HomeView()
-                    case .journeySetup(let id): JourneySetupPageView()
-                    case .journeyPage: JourneyPageView()
-                    default: EmptyView()
+                    case .home:
+                        HomeView()
+                    case .journeySetup(let departure, let destination):
+                        JourneySetupPageView(
+                            departure: departure,
+                            destination: destination
+                        )
+                    case .journeyPage(let stations):
+                        JourneyPageView(stations: stations)
+                    default:
+                        EmptyView()
                     }
                 }
         }

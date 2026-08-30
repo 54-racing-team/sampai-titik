@@ -12,43 +12,71 @@ struct MapCard: View {
     @Bindable var locationManager: LocationManager
     var departureStation: StationModelDTO?
     var destinationStation: StationModelDTO?
-    
+    /// Estimasi durasi perjalanan (dalam detik) dari JourneyRouteService.
+    /// Bila nil, ditampilkan sebagai "--".
+    var estimatedDuration: TimeInterval?
+
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var hasInitializedCamera: Bool = false
-    
-    init(locationManager: LocationManager, departureStation: StationModelDTO? = nil, destinationStation: StationModelDTO? = nil) {
+
+    init(
+        locationManager: LocationManager,
+        departureStation: StationModelDTO? = nil,
+        destinationStation: StationModelDTO? = nil,
+        estimatedDuration: TimeInterval? = nil
+    ) {
         self.locationManager = locationManager
         self.departureStation = departureStation
         self.destinationStation = destinationStation
+        self.estimatedDuration = estimatedDuration
     }
-    
-    init(departureStation: StationModelDTO? = nil, destinationStation: StationModelDTO? = nil) {
+
+    init(
+        departureStation: StationModelDTO? = nil,
+        destinationStation: StationModelDTO? = nil,
+        estimatedDuration: TimeInterval? = nil
+    ) {
         self._locationManager = Bindable(wrappedValue: LocationManager())
         self.departureStation = departureStation
         self.destinationStation = destinationStation
+        self.estimatedDuration = estimatedDuration
     }
-    
+
     private var activeStation: StationModelDTO? {
         destinationStation ?? locationManager.destinationStation
     }
-    
+
     private var activeCoordinate: CLLocationCoordinate2D? {
         activeStation?.coordinate ?? locationManager.destinationCoordinate ?? locationManager.selectedCoordinate
     }
-    
+
+    private var formattedDuration: String {
+        guard let duration = estimatedDuration else { return "-- menit" }
+        let minutes = Int(ceil(duration / 60.0))
+        if minutes < 1 {
+            return "< 1 menit"
+        } else if minutes >= 60 {
+            let hours = minutes / 60
+            let remaining = minutes % 60
+            return remaining == 0 ? "\(hours) jam" : "\(hours) jam \(remaining) menit"
+        } else {
+            return "\(minutes) menit"
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // MARK: - Map Section (Card Top)
             ZStack(alignment: .topTrailing) {
                 Map(position: $cameraPosition) {
                     UserAnnotation()
-                    
+
                     if let coord = activeCoordinate {
                         Marker(
                             activeStation?.name ?? "Stasiun Tujuan",
                             coordinate: coord
                         )
-                        
+
                         MapCircle(center: coord, radius: locationManager.targetRadius)
                             .foregroundStyle(Color.red.opacity(0.2))
                             .stroke(Color.red, lineWidth: 1)
@@ -65,7 +93,7 @@ struct MapCard: View {
                         style: .continuous
                     )
                 )
-                
+
                 // Recenter / Focus Button
                 Button {
                     focusOnDestination()
@@ -80,14 +108,14 @@ struct MapCard: View {
                 }
                 .padding(12)
             }
-            
+
             // MARK: - Route Indicator & Slider Section (Card Bottom)
             VStack(alignment: .leading, spacing: 14) {
                 VStack(spacing: 4) {
-                    Text("\(locationManager.formattedEstimatedDuration ?? "-- menit")")
+                    Text(formattedDuration)
                         .font(.caption2)
                         .multilineTextAlignment(.center)
-                    
+
                     routeIndicator
 
                     HStack(alignment: .top, spacing: 0) {
@@ -112,9 +140,9 @@ struct MapCard: View {
                             .frame(width: 80)
                     }
                 }
-                
+
                 Divider()
-                
+
                 // Radius Adjustment Slider
                 VStack(alignment: .leading, spacing: 8) {
                     HStack {
@@ -122,17 +150,17 @@ struct MapCard: View {
                             .font(.subheadline)
                             .fontWeight(.medium)
                             .foregroundColor(.secondary)
-                        
+
                         Spacer()
-                        
+
                         Text("\(Int(locationManager.targetRadius)) meter")
                             .font(.subheadline)
                             .fontWeight(.semibold)
                     }
-                    
+
                     Slider(value: $locationManager.targetRadius, in: 50...1000, step: 25)
                         .tint(.blue)
-                    
+
                     HStack {
                         Text("50 m")
                             .font(.caption2)
@@ -178,7 +206,7 @@ struct MapCard: View {
             }
         }
     }
-    
+
     private var routeIndicator: some View {
         GeometryReader { proxy in
             let markerWidth: CGFloat = 80
@@ -227,7 +255,7 @@ struct MapCard: View {
             hasInitializedCamera = true
         }
     }
-    
+
     private func focusOnDestination() {
         guard let coord = activeCoordinate else { return }
         let spanMeters = max(locationManager.targetRadius * 3.5, 1200)
@@ -244,23 +272,23 @@ struct MapCard: View {
 }
 
 #Preview {
-    let journey = JourneySetupMockData.makeJourney()
+    let stations = StationModelDTO.loadFromJSON()
+    let dep = stations.first { $0.id == "SUD" } ?? stations[0]
+    let dst = stations.first { $0.id == "BKS" } ?? stations[1]
     let locationManager = LocationManager()
-    locationManager.setMockJourney(
-        departureStation: journey.departureStation,
-        destinationStation: journey.destinationStation
-    )
+    locationManager.setMockJourney(departureStation: dep, destinationStation: dst)
+    let route = JourneyRouteService(stations: stations).createRoute(from: dep, to: dst)
 
     return ScrollView {
         VStack(spacing: 20) {
             MapCard(
                 locationManager: locationManager,
-                departureStation: journey.departureStation,
-                destinationStation: journey.destinationStation
+                departureStation: dep,
+                destinationStation: dst,
+                estimatedDuration: route?.estimatedDuration
             )
         }
         .padding()
     }
     .background(Color(uiColor: .systemGroupedBackground))
 }
-

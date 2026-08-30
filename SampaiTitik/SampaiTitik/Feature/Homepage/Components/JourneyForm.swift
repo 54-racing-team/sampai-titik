@@ -9,57 +9,65 @@ import SwiftUI
 
 struct JourneyForm: View {
     @Environment(Router.self) private var router
-    
+
     @State var vm = HomeViewModel()
-    
 
     var body: some View {
         VStack {
-            VStack(spacing: 16){
+            VStack(spacing: 16) {
                 Text("Stasiun Asal")
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.body)
-                
-                StationPickerButton(iconName: "train.side.front.car", selection:  vm.departStation){
+
+                StationPickerButton(iconName: "train.side.front.car", selection: vm.departStation) {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationView(selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
+                    SearchStationView(
+                        stations: vm.allStations,
+                        selectedStation: $vm.departStation,
+                        isPresented: $vm.showDeparture
+                    )
                 }
-                
-                Button{
+
+                Button {
                     vm.swapStations()
                 } label: {
                     Image(systemName: "arrow.up.arrow.down")
                         .font(.headline)
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
                 }
-                
+
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.black)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                                
-                StationPickerButton(iconName: "paperplane.fill", selection: vm.destStation){
+
+                StationPickerButton(iconName: "paperplane.fill", selection: vm.destStation) {
                     vm.showDestination.toggle()
                 }
-                .sheet(isPresented: $vm.showDestination){
-                    SearchStationView(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
+                .sheet(isPresented: $vm.showDestination) {
+                    SearchStationView(
+                        stations: vm.allStations,
+                        selectedStation: $vm.destStation,
+                        isPresented: $vm.showDestination
+                    )
                 }
-                
-                Button{
-                    router.push(.journeySetup(data: "abc"))
+
+                Button {
+                    guard let departure = vm.departStation,
+                          let destination = vm.destStation else { return }
+                    router.push(.journeySetup(departure: departure, destination: destination))
                 } label: {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
                         .frame(height: 48)
                         .font(.headline)
-
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.blue.opacity(0.8))
                 .padding(.top, 32)
-
+                .disabled(!vm.isReadyToProceed)
             }
             .frame(maxWidth: .infinity)
             .padding(16)

@@ -9,17 +9,17 @@ import SwiftUI
 
 struct StationPickerButton: View {
     var iconName: String
-    var selection: String
+    var selection: StationModelDTO?
     var action: () -> Void
-    
+
     var body: some View {
-        Button{
+        Button {
             action()
         } label: {
-            HStack{
+            HStack {
                 Image(systemName: iconName)
-                Text(selection.isEmpty ? "Pilih Stasiun" : selection)
-                    .opacity(selection.isEmpty ? 0.5 : 1)
+                Text(selection?.name ?? "Pilih Stasiun")
+                    .opacity(selection == nil ? 0.5 : 1)
                 Spacer()
                 Image(systemName: "chevron.right")
             }
