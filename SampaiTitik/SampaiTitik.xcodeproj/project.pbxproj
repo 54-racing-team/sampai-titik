@@ -92,36 +92,26 @@
 		};
 		3D3DFC0D303879EC00B841E1 /* SampaiTitikTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikTests;
 			sourceTree = "<group>";
 		};
 		3D3DFC17303879EC00B841E1 /* SampaiTitikUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikUITests;
 			sourceTree = "<group>";
 		};
 		3D3DFC24303879EC00B841E1 /* SampaiTitik Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch App";
 			sourceTree = "<group>";
 		};
 		3D3DFC32303879ED00B841E1 /* SampaiTitik Watch AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppTests";
 			sourceTree = "<group>";
 		};
 		3D3DFC3C303879ED00B841E1 /* SampaiTitik Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppUITests";
 			sourceTree = "<group>";
 		};
