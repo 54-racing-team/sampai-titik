@@ -36,7 +36,7 @@ struct MapCard: View {
         destinationStation: StationModelDTO? = nil,
         estimatedDuration: TimeInterval? = nil
     ) {
-        self._locationManager = Bindable(wrappedValue: LocationManager())
+        self._locationManager = Bindable(wrappedValue: LocationManager.shared)
         self.departureStation = departureStation
         self.destinationStation = destinationStation
         self.estimatedDuration = estimatedDuration
@@ -82,7 +82,7 @@ struct MapCard: View {
                             .stroke(Color.red, lineWidth: 1)
                     }
                 }
-                .mapStyle(.standard(elevation: .realistic))
+                .mapStyle(.standard(elevation: .flat))
                 .frame(height: 250)
                 .clipShape(
                     UnevenRoundedRectangle(

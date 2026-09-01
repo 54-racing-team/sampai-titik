@@ -92,36 +92,26 @@
 		};
 		3D3DFC0D303879EC00B841E1 /* SampaiTitikTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikTests;
 			sourceTree = "<group>";
 		};
 		3D3DFC17303879EC00B841E1 /* SampaiTitikUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikUITests;
 			sourceTree = "<group>";
 		};
 		3D3DFC24303879EC00B841E1 /* SampaiTitik Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch App";
 			sourceTree = "<group>";
 		};
 		3D3DFC32303879ED00B841E1 /* SampaiTitik Watch AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppTests";
 			sourceTree = "<group>";
 		};
 		3D3DFC3C303879ED00B841E1 /* SampaiTitik Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppUITests";
 			sourceTree = "<group>";
 		};
@@ -666,11 +656,9 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Distribution";
-				CODE_SIGN_STYLE = Manual;
+				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 4;
-				DEVELOPMENT_TEAM = "";
-				"DEVELOPMENT_TEAM[sdk=watchos*]" = CWXJ4ZG5J4;
+				DEVELOPMENT_TEAM = 2W6LDU8MK9;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
@@ -682,10 +670,9 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.1.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.54racingSampaiTitik.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match AppStore com.54racing.SampaiTitik.watchkitapp";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -705,6 +692,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 4;
@@ -715,8 +703,7 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi di latar belakang agar dapat membunyikan alarm saat Anda sampai di tujuan.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi untuk menampilkan rute dan lokasi tujuan Anda di peta.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi agar dapat membunyikan alarm saat Anda sampai di tujuan.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -752,6 +739,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 4;
@@ -762,8 +750,7 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi di latar belakang agar dapat membunyikan alarm saat Anda sampai di tujuan.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi untuk menampilkan rute dan lokasi tujuan Anda di peta.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi agar dapat membunyikan alarm saat Anda sampai di tujuan.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

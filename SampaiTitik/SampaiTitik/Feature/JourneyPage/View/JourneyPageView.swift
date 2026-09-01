@@ -57,6 +57,9 @@ struct JourneyPageView: View {
                 .presentationDragIndicator(.visible)
             }
         }
+        .onAppear {
+            viewModel.startTrackingIfPossible()
+        }
 //        .navigationBarBackButtonHidden(true)
     }
 }

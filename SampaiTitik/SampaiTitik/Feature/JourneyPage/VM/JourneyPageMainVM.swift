@@ -15,6 +15,8 @@ public final class JourneyPageMainVM {
     public var isReminderActive: Bool
     private let trackingViewModel: JourneyTrackingVM
 
+    private var isTrackingStarted = false
+
     /// Initializer utama — menerima urutan stasiun dari JourneyRouteService via Router.
     public init(
         stations: [JourneyStation],
@@ -23,7 +25,6 @@ public final class JourneyPageMainVM {
         self.stations = stations
         self.isReminderActive = isReminderActive
         self.trackingViewModel = JourneyTrackingVM()
-        startTrackingIfPossible()
     }
 
     // MARK: - Computed Properties
@@ -84,13 +85,15 @@ public final class JourneyPageMainVM {
         trackingViewModel.stopTracking()
     }
 
-    // MARK: - Private
+    // MARK: - Tracking Control
 
-    private func startTrackingIfPossible() {
-        guard isReminderActive,
+    public func startTrackingIfPossible() {
+        guard !isTrackingStarted,
+              isReminderActive,
               let departure = stationDTO(named: currentStationName),
               let destination = stationDTO(named: destinationName) else { return }
 
+        isTrackingStarted = true
         trackingViewModel.startTracking(
             departureStation: departure,
             destinationStation: destination

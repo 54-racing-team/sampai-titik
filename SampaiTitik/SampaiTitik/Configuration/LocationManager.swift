@@ -11,18 +11,22 @@ import UserNotifications
 
 // MARK: - LocationManager
 //
-// Tanggung jawab: HANYA mengelola Core Location.
-// Tidak menangani: route, ETA KRL, stasiun, alarm business logic.
+// Tanggung jawab: HANYA mengelola Core Location dengan profil daya adaptif.
 //
-// Lifecycle background location:
-//   - Idle: allowsBackgroundLocationUpdates = false
-//   - Journey aktif: allowsBackgroundLocationUpdates = true
-//   - Journey selesai: allowsBackgroundLocationUpdates = false
+// Power-saving strategy:
+//   1. Idle: allowsBackgroundLocationUpdates = false, stopUpdatingLocation()
+//   2. Journey Aktif: allowsBackgroundLocationUpdates = true
+//   3. Adaptive Distance Filter & Accuracy:
+//      - Jarak > 3 km: distanceFilter = 500m, accuracy = kilometer (Daya sangat hemat di kereta)
+//      - Jarak 1 km - 3 km: distanceFilter = 250m, accuracy = hundredMeters
+//      - Jarak 300m - 1 km: distanceFilter = 50m, accuracy = nearestTenMeters
+//      - Jarak < 300m: distanceFilter = 15m, accuracy = best (presisi untuk alarm arrival)
 
 @Observable
 class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
+    static let shared = LocationManager()
+
     private let manager = CLLocationManager()
-    private let destinationRegionIdentifier = "DestinationArrivalRegion"
 
     // MARK: - Published State
     var userLocation: CLLocation?
@@ -47,22 +51,19 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         super.init()
         self.availableStations = StationModelDTO.loadFromJSON()
         manager.delegate = self
-        // Power-saving baseline configuration
-        manager.activityType = .otherNavigation
-        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-        manager.distanceFilter = 100
+        // Power-saving baseline configuration saat idle
+        manager.activityType = .other
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.distanceFilter = 500
         manager.pausesLocationUpdatesAutomatically = true
         manager.allowsBackgroundLocationUpdates = false
         UNUserNotificationCenter.current().delegate = self
     }
 
     // MARK: - Permission
-    //
-    // Permission lifecycle dipisahkan dari journey lifecycle.
-    // Panggil saat pertama kali fitur lokasi dibutuhkan (bukan setiap start journey).
 
     func requestPermission() {
-        manager.requestAlwaysAuthorization()
+        manager.requestWhenInUseAuthorization()
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
@@ -71,31 +72,30 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
     func startJourneyTracking(
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
-        targetRadius: CLLocationDistance = 200
+        targetRadius: CLLocationDistance = 500
     ) {
         self.departureStation = departureStation
         self.targetRadius = targetRadius
         isJourneyTrackingActive = true
         hasTriggeredAlarm = false
 
-        // Background tracking hanya aktif selama journey
+        setDestination(station: destinationStation)
+
         let status = manager.authorizationStatus
         if status == .authorizedAlways || status == .authorizedWhenInUse {
+            manager.pausesLocationUpdatesAutomatically = false
             manager.allowsBackgroundLocationUpdates = true
             manager.showsBackgroundLocationIndicator = true
             manager.startUpdatingLocation()
         }
-
-        setDestination(station: destinationStation)
-        startMonitoringDestinationRegion()
     }
 
     func stopJourneyTracking() {
         isJourneyTrackingActive = false
-        stopMonitoringDestinationRegion()
         manager.stopUpdatingLocation()
-        // Kembalikan ke idle state
         manager.allowsBackgroundLocationUpdates = false
+        manager.showsBackgroundLocationIndicator = false
+        manager.pausesLocationUpdatesAutomatically = true
         AudioManager.shared.stopAlarm()
         clearDestination()
     }
@@ -146,7 +146,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         guard let selected = selectedCoordinate else { return }
         destinationCoordinate = selected
         hasTriggeredAlarm = false
-        startMonitoringDestinationRegion()
         checkArrival()
     }
 
@@ -157,43 +156,66 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         destinationCoordinate = nil
         distanceToDestination = nil
         isWithinTargetRadius = false
-        hasTriggeredAlarm = false
     }
 
-    // MARK: - Distance & Arrival (Lightweight)
+    // MARK: - Adaptive Power Profile & Distance Calculation
 
     private func updateDistance() {
         guard let userLoc = userLocation,
               let activeCoord = destinationCoordinate ?? selectedCoordinate else { return }
         let destLoc = CLLocation(latitude: activeCoord.latitude, longitude: activeCoord.longitude)
-        distanceToDestination = userLoc.distance(from: destLoc)
+        let dist = userLoc.distance(from: destLoc)
+        distanceToDestination = dist
+
+        // Terapkan profil daya adaptif berdasarkan jarak ke stasiun tujuan
+        applyAdaptivePowerProfile(distance: dist)
     }
 
-    private func checkArrival() {
-        guard let userLoc = userLocation, let destCoord = destinationCoordinate else { return }
-        let destLoc = CLLocation(latitude: destCoord.latitude, longitude: destCoord.longitude)
-        let distance = userLoc.distance(from: destLoc)
-        distanceToDestination = distance
+    /// Menyesuaikan akurasi dan frekuensi update lokasi berdasarkan jarak ke stasiun tujuan
+    /// Berdasarkan rekomendasi Apple Core Location Power Management Guide.
+    private func applyAdaptivePowerProfile(distance: CLLocationDistance) {
+        guard isJourneyTrackingActive else { return }
 
-        if distance <= targetRadius {
-            isWithinTargetRadius = true
-            if !hasTriggeredAlarm {
-                hasTriggeredAlarm = true
-                triggerArrivalAlarm()
+        if distance > 3000 {
+            // > 3 km: Hemat daya maksimal
+            if manager.distanceFilter != 500 {
+                manager.distanceFilter = 500
+                manager.desiredAccuracy = kCLLocationAccuracyKilometer
+            }
+        } else if distance > 1000 {
+            // 1 km - 3 km
+            if manager.distanceFilter != 200 {
+                manager.distanceFilter = 200
+                manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             }
         } else {
-            isWithinTargetRadius = false
-            if distance > targetRadius + 50 { hasTriggeredAlarm = false }
+            // < 1 km: Mendekati stasiun
+            if manager.distanceFilter != 50 {
+                manager.distanceFilter = 50
+                manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            }
         }
     }
 
-    // MARK: - Alarm & Notification
+    private func checkArrival() {
+        guard isJourneyTrackingActive, !hasTriggeredAlarm, let dist = distanceToDestination else { return }
 
-    private func triggerArrivalAlarm() {
-        AudioManager.shared.startAlarm(sound: SoundOption.current)
-        triggerAlarmNotification()
-        onArriveAtDestination?()
+        if dist <= targetRadius {
+            hasTriggeredAlarm = true
+            isJourneyTrackingActive = false
+            isWithinTargetRadius = true
+            manager.stopUpdatingLocation()
+            manager.allowsBackgroundLocationUpdates = false
+            manager.showsBackgroundLocationIndicator = false
+            manager.pausesLocationUpdatesAutomatically = true
+            triggerAlarmNotification()
+            onArriveAtDestination?()
+        } else {
+            isWithinTargetRadius = false
+        }
     }
+
+    // MARK: - Notification
 
     private func triggerAlarmNotification() {
         let content = UNMutableNotificationContent()
@@ -210,45 +232,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         UNUserNotificationCenter.current().add(request)
     }
 
-    // MARK: - Region Monitoring
-
-    private func startMonitoringDestinationRegion() {
-        guard isJourneyTrackingActive,
-              let destinationCoordinate,
-              CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else { return }
-
-        stopMonitoringDestinationRegion()
-
-        let radius = min(max(targetRadius, 100), manager.maximumRegionMonitoringDistance)
-        let region = CLCircularRegion(
-            center: destinationCoordinate,
-            radius: radius,
-            identifier: destinationRegionIdentifier
-        )
-        region.notifyOnEntry = true
-        region.notifyOnExit = false
-
-        manager.startMonitoring(for: region)
-        manager.requestState(for: region)
-    }
-
-    private func stopMonitoringDestinationRegion() {
-        for region in manager.monitoredRegions where region.identifier == destinationRegionIdentifier {
-            manager.stopMonitoring(for: region)
-        }
-    }
-
-    private func handleDestinationRegionReached() {
-        if let latestLocation = manager.location {
-            userLocation = latestLocation
-            updateDistance()
-        }
-        isWithinTargetRadius = true
-        guard !hasTriggeredAlarm else { return }
-        hasTriggeredAlarm = true
-        triggerArrivalAlarm()
-    }
-
     // MARK: - CLLocationManagerDelegate
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -258,28 +241,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
                 manager.allowsBackgroundLocationUpdates = true
                 manager.showsBackgroundLocationIndicator = true
                 manager.startUpdatingLocation()
-                startMonitoringDestinationRegion()
             }
         }
     }
 
-    /// Location update dibuat ringan: hanya update state dan forward ke ViewModel.
-    /// Tidak ada route calculation, MKDirections, atau pekerjaan berat di sini.
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let location = locations.last else { return }
         userLocation = location
-        updateDistance()   // O(1) — hanya CLLocation.distance
-        checkArrival()     // O(1) — hanya bandingkan jarak
-    }
-
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        guard region.identifier == destinationRegionIdentifier else { return }
-        handleDestinationRegionReached()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-        guard region.identifier == destinationRegionIdentifier, state == .inside else { return }
-        handleDestinationRegionReached()
+        updateDistance()
+        checkArrival()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
