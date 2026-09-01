@@ -19,8 +19,7 @@ import UserNotifications
 //   3. Adaptive Distance Filter & Accuracy:
 //      - Jarak > 3 km: distanceFilter = 500m, accuracy = kilometer (Daya sangat hemat di kereta)
 //      - Jarak 1 km - 3 km: distanceFilter = 250m, accuracy = hundredMeters
-//      - Jarak 300m - 1 km: distanceFilter = 50m, accuracy = nearestTenMeters
-//      - Jarak < 300m: distanceFilter = 15m, accuracy = best (presisi untuk alarm arrival)
+//      - Jarak < 1 km: distanceFilter = 50m, accuracy = nearestTenMeters
 
 @Observable
 class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
