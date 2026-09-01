@@ -25,9 +25,10 @@ struct HomeView: View {
 
                     } label: {
                         Image(systemName: "person.fill")
+                        .foregroundStyle(.mainBlue)
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(Color(.systemBackground))
                     .clipShape(Circle())
                 }
 
@@ -36,11 +37,13 @@ struct HomeView: View {
                         .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
+                        .font(.body)
+                    
                 }
-                .padding(.bottom, 16)
+                .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(Color.blue)
-                //                .background(.black)
+                .foregroundStyle(Color.mainBlue)
+                .fixedSize(horizontal: false, vertical: true)
 
                 JourneyForm()
 
@@ -48,39 +51,17 @@ struct HomeView: View {
                     "Pengingat tetap bekerja saat kamu tidak sedang melihat layar."
                 )
                 .font(.caption)
-
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
-                        .foregroundStyle(Color.blue)
-
-                    VStack(alignment: .leading) {
-                        Text("Kemarin . 22.15")
-                            .foregroundStyle(.gray)
-                            .font(.caption)
-
-                        HStack {
-                            VStack(alignment: .leading, spacing: 12) {
-                                Text("Pasar Minggu Baru")
-                                Text("Metland Telaga Murni")
-                            }
-                            .font(.subheadline.bold())
-
-                            Spacer()
-
-                            Button {
-
-                            } label: {
-                                Text("Pakai lagi")
-                                    .padding(.horizontal, 4)
-                            }
-                            .buttonStyle(.borderedProminent)
-                        }
-                    }
-                    .padding()
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                    .background(.white)
-                    .cornerRadius(20)
+                        .foregroundStyle(Color.mainBlue)
+                    
+                    RecentJourneyCard(
+                        origin: "Pasar Minggu Baru", destination: "Metland Telaga Murni", date: "Kemarin", time: "22.15", onReuse: {print("Reuse Metland Telaga Murni")}
+                    )
 
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
