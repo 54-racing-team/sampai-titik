@@ -118,7 +118,7 @@ struct JourneyDetailCard: View {
         }
         .padding(28)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(.white)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
         .padding()

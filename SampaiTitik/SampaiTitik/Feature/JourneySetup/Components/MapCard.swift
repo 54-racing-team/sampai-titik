@@ -149,24 +149,11 @@ struct MapCard: View {
                 }
             }
             .padding(16)
-            .background(Color(uiColor: .secondarySystemGroupedBackground))
-            .clipShape(
-                UnevenRoundedRectangle(
-                    topLeadingRadius: 0,
-                    bottomLeadingRadius: 20,
-                    bottomTrailingRadius: 20,
-                    topTrailingRadius: 0,
-                    style: .continuous
-                )
-            )
+            .background(Color(uiColor: .secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 20))
         }
-        .background(Color(uiColor: .secondarySystemGroupedBackground))
-        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-        .overlay(
-            RoundedRectangle(cornerRadius: 20, style: .continuous)
-                .stroke(Color.gray.opacity(0.18), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.08), radius: 10, x: 0, y: 4)
+        .glassEffect(in: .rect(cornerRadius: 20))
+        
         .onAppear {
             locationManager.requestPermission()
             setupDestination()

@@ -45,7 +45,7 @@ struct AlarmSoundToggleView: View {
                         .contentShape(Rectangle())
                         .padding(.vertical, 8)
                         .padding(.horizontal, 16)
-                        .background(Color(.systemBackground))
+                        .background(Color(.secondarySystemBackground))
                         .padding(.leading, 30)
                     }
                     .buttonStyle(.plain)
