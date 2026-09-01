@@ -22,14 +22,16 @@ struct StationPickerButton: View {
                     .opacity(selection == nil ? 0.5 : 1)
                 Spacer()
                 Image(systemName: "chevron.right")
+                .font(.body)
+                .foregroundStyle(.secondary)
             }
-            .foregroundStyle(.blue)
             .frame(maxWidth: .infinity)
             .frame(height: 48)
             .padding(.horizontal, 16)
             .font(.headline)
+            .background(Color("BackgroundBlue"))
+            .clipShape(Capsule())
         }
-        .buttonStyle(.borderedProminent)
-        .tint(.blue.opacity(0.1))
+        .buttonStyle(.plain)
     }
 }

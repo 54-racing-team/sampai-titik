@@ -16,11 +16,11 @@ struct JourneyForm: View {
         VStack {
             VStack(spacing: 16) {
                 Text("Stasiun Asal")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.body)
-
-                StationPickerButton(iconName: "train.side.front.car", selection: vm.departStation) {
+                    .font(.subheadline)
+                
+                StationPickerButton(iconName: "tram.fill", selection:  vm.departStation){
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
@@ -37,13 +37,15 @@ struct JourneyForm: View {
                     Image(systemName: "arrow.up.arrow.down")
                         .font(.headline)
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                        .foregroundStyle(.mainBlue)
                 }
 
                 Text("Stasiun Tujuan")
-                    .foregroundStyle(.black)
+                    .background(Color(.systemBackground))
                     .frame(maxWidth: .infinity, alignment: .leading)
-
-                StationPickerButton(iconName: "paperplane.fill", selection: vm.destStation) {
+                    .font(.subheadline)
+                                
+                StationPickerButton(iconName: "location.fill", selection: vm.destStation){
                     vm.showDestination.toggle()
                 }
                 .sheet(isPresented: $vm.showDestination) {
@@ -71,7 +73,7 @@ struct JourneyForm: View {
             }
             .frame(maxWidth: .infinity)
             .padding(16)
-            .background(.white)
+            .background(Color(.systemBackground))
             .cornerRadius(20)
         }
     }

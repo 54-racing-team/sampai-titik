@@ -19,8 +19,9 @@ struct JourneySetupPageView: View {
 
     var body: some View {
         ZStack {
-            Color("Background").ignoresSafeArea()
-
+            Color.backgroundBlue
+                .ignoresSafeArea()
+            
             VStack(spacing: 20) {
                 AlarmToogleCard()
 
