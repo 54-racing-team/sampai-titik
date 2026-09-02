@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct SearchStationView: View {
     let stations: [StationModelDTO]
