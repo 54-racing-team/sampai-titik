@@ -108,6 +108,6 @@ struct JourneyCard: View {
 
 #Preview {
     NavigationStack {
-        JourneyCard(viewModel: JourneyPageMainVM())
+        JourneyCard(viewModel: JourneyPageMainVM(stations: JourneyStation.sampleStations))
     }
 }

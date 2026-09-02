@@ -7,57 +7,50 @@
 
 import SwiftUI
 
-struct Station: Identifiable {
-    let id = UUID()
-    let name: String
-    let code: String
-}
-
 struct SearchStationView: View {
-    let stations: [Station] = [
-        Station(name: "Jakarta Kota", code: "JAKK"),
-        Station(name: "Manggarai", code: "MRI"),
-        Station(name: "Bojonggede", code: "BGD"),
-        Station(name: "Bogor", code: "BOO")
-    ]
-    
-    @Binding var selectedStation: String
+    let stations: [StationModelDTO]
+    @Binding var selectedStation: StationModelDTO?
     @Binding var isPresented: Bool
-    
+
     @State var searchStation: String = ""
-    
-    var filteredStations: [Station] {
-        if searchStation.isEmpty {
-            stations
-        } else {
-            stations.filter { station in
-                station.name.localizedStandardContains(searchStation)
-            }
+
+    var filteredStations: [StationModelDTO] {
+        let list = searchStation.isEmpty ? stations : stations.filter { station in
+            station.name.localizedStandardContains(searchStation)
+        }
+        return list.sorted {
+            $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
     }
-    
+
     var body: some View {
-        NavigationStack{
-            VStack{
-                List(filteredStations){ station in
-                    Button{
-                        selectedStation = station.name
-                        isPresented.toggle()
-                        
-                    } label: {
-                        HStack{
-                            Text(station.name)
-                            Spacer()
-                            Text(station.code)
-                        }
+        NavigationStack {
+            List(filteredStations) { station in
+                Button {
+                    selectedStation = station
+                    isPresented = false
+                } label: {
+                    HStack {
+                        Text(station.name)
+                        Spacer()
+                        Text(station.id)
+                            .foregroundStyle(.secondary)
+                            .font(.caption)
                     }
                 }
+                .foregroundStyle(.primary)
             }
-            .searchable(text: $searchStation, prompt: "Cari stasiun asal...")
+            .searchable(text: $searchStation, prompt: "Cari stasiun...")
+            .navigationTitle("Pilih Stasiun")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
 
 #Preview {
-    SearchStationView(selectedStation: .constant(""), isPresented: .constant(false))
+    SearchStationView(
+        stations: StationModelDTO.loadFromJSON(),
+        selectedStation: .constant(nil),
+        isPresented: .constant(false)
+    )
 }

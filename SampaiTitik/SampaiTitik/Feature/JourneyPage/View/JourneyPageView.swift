@@ -8,20 +8,21 @@
 import SwiftUI
 
 struct JourneyPageView: View {
-    @State var viewModel = JourneyPageMainVM()
+    @State var viewModel: JourneyPageMainVM
     @State private var isCancel: Bool = false
-    
+
+    init(stations: [JourneyStation] = JourneyStation.sampleStations) {
+        self._viewModel = State(wrappedValue: JourneyPageMainVM(stations: stations))
+    }
+
     var body: some View {
         ZStack {
             Color.backgroundBlue
                 .ignoresSafeArea()
             
             VStack {
-                Text("Perjalanan")
-                    .font(.title.bold())
-                
                 JourneyCard(viewModel: viewModel)
-                
+
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
 //                    Text("Kamu bisa keluar dari aplikasi.")
@@ -29,10 +30,11 @@ struct JourneyPageView: View {
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
-                
+                .foregroundStyle(Color.secondary)
+
                 Spacer()
-                
-                Button{
+
+                Button {
                     isCancel = true
                 } label: {
                     Text("Batalkan Perjalanan")
@@ -53,11 +55,17 @@ struct JourneyPageView: View {
                 .presentationBackground(Color(.secondarySystemBackground))
                 .presentationDragIndicator(.visible)
             }
+            .navigationTitle("Perjalanan")
+        }
+        .onAppear {
+            viewModel.startTrackingIfPossible()
         }
 //        .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
-    JourneyPageView()
+    NavigationStack {
+        JourneyPageView()
+    }
 }
