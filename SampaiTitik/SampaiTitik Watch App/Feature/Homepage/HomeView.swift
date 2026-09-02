@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct HomeView: View {
+    @Environment(Router.self) var route
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Rute Terakhir")
@@ -23,6 +25,7 @@ struct HomeView: View {
                         time: "22.15",
                         onReuse: {
                             print("Reuse Metland Telaga Murni")
+                            route.push(.journeySetup)
                         }
                     )
                     
@@ -44,4 +47,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
+        .environment(Router())
 }
