@@ -41,6 +41,7 @@ struct JourneyForm: View {
                 }
 
                 Text("Stasiun Tujuan")
+                    .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.subheadline)
                                 
@@ -72,7 +73,7 @@ struct JourneyForm: View {
             }
             .frame(maxWidth: .infinity)
             .padding(16)
-            .background(Color(.systemBackground))
+            .background(Color("BackgroundCard"))
             .cornerRadius(20)
         }
     }

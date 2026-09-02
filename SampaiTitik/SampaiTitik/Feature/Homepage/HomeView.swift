@@ -28,7 +28,7 @@ struct HomeView: View {
                         .foregroundStyle(.mainBlue)
                     }
                     .padding()
-                    .background(Color(.systemBackground))
+                    .background(Color("BackgroundCard"))
                     .clipShape(Circle())
                 }
 

@@ -89,7 +89,7 @@ struct RecentJourneyCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color(.systemBackground))
+        .background(Color("BackgroundCard"))
         .cornerRadius(20)
     }
 }
