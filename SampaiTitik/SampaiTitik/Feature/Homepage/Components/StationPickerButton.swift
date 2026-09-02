@@ -31,7 +31,7 @@ struct StationPickerButton: View {
             .frame(height: 48)
             .padding(.horizontal, 16)
             .font(.headline)
-            .background(Color("BackgroundBlue"))
+            .background(Color(.systemGray6))
             .clipShape(Capsule())
         }
         .buttonStyle(.plain)

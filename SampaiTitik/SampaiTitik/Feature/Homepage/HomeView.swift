@@ -28,7 +28,7 @@ struct HomeView: View {
                         .foregroundStyle(.mainBlue)
                     }
                     .padding()
-                    .background(Color(.systemBackground))
+                    .background(Color("BackgroundCard"))
                     .clipShape(Circle())
                 }
 
@@ -42,7 +42,7 @@ struct HomeView: View {
                 }
                 .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .foregroundStyle(Color.mainBlue)
+                .foregroundStyle(Color.primary)
                 .fixedSize(horizontal: false, vertical: true)
 
                 JourneyForm()
@@ -57,7 +57,7 @@ struct HomeView: View {
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
-                        .foregroundStyle(Color.mainBlue)
+                        .foregroundStyle(Color.primary)
                     
                     RecentJourneyCard(
                         origin: "Pasar Minggu Baru", destination: "Metland Telaga Murni", date: "Kemarin", time: "22.15", onReuse: {print("Reuse Metland Telaga Murni")}
