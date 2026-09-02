@@ -26,7 +26,7 @@ final class JourneyTrackingVM {
         locationManager: LocationManager? = nil,
         alarmScheduler: AlarmSchedulerManager? = nil
     ) {
-        self.locationManager = locationManager ?? LocationManager()
+        self.locationManager = locationManager ?? LocationManager.shared
         self.alarmScheduler = alarmScheduler ?? .shared
     }
 
@@ -39,7 +39,7 @@ final class JourneyTrackingVM {
         isTrackingActive = true
         locationManager.onArriveAtDestination = { [weak self] in
             Task { @MainActor in
-                await self?.triggerArrivalAlarm(for: destinationStation)
+                self?.isTrackingActive = false
             }
         }
         locationManager.startJourneyTracking(
@@ -55,19 +55,5 @@ final class JourneyTrackingVM {
         locationManager.stopJourneyTracking()
         alarmScheduler.cancelActiveAlarm()
         AudioManager.shared.stopAlarm()
-    }
-
-    private func triggerArrivalAlarm(for destinationStation: StationModelDTO) async {
-        guard !hasTriggeredArrivalAlarm else { return }
-        hasTriggeredArrivalAlarm = true
-
-        AudioManager.shared.startAlarm(sound: SoundOption.current)
-
-        await alarmScheduler.requestAuthorizationIfNeeded()
-        await alarmScheduler.scheduleAlarm(
-            after: 1,
-            label: "Kamu sudah hampir sampai di \(destinationStation.name)!",
-            soundTitle: SoundOption.current.displayName
-        )
     }
 }

@@ -12,7 +12,7 @@ struct StationsDTO: Codable {
     var stations: [StationModelDTO]
 }
 
-struct StationModelDTO: Identifiable, Codable {
+struct StationModelDTO: Identifiable, Codable, Hashable, Equatable {
     var id: String
     let name : String
     let latitude : Double
@@ -20,7 +20,7 @@ struct StationModelDTO: Identifiable, Codable {
     let lines : [KRLLineDTO]
 }
 
-struct KRLLineDTO: Codable {
+struct KRLLineDTO: Codable, Hashable, Equatable {
     let line_name: String
     let order: Int
 }

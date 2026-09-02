@@ -25,9 +25,9 @@ struct JourneyTimelineIndicator: View {
         case .past:
             return Color.gray
         case .current:
-            return Color.black
+            return Color.primary
         case .next:
-            return Color("MainBlue")
+            return Color(.mainBlue)
         case .destination:
             return Color.red
         }

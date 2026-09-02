@@ -736,6 +736,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -746,8 +747,7 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi di latar belakang agar dapat membunyikan alarm saat Anda sampai di tujuan.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi untuk menampilkan rute dan lokasi tujuan Anda di peta.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi agar dapat membunyikan alarm saat Anda sampai di tujuan.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -783,6 +783,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
@@ -793,8 +794,7 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationAlwaysAndWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi di latar belakang agar dapat membunyikan alarm saat Anda sampai di tujuan.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi untuk menampilkan rute dan lokasi tujuan Anda di peta.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan akses lokasi agar dapat membunyikan alarm saat Anda sampai di tujuan.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
