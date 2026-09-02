@@ -9,7 +9,8 @@ import SwiftUI
 
 struct CancelJourneyPopUp: View {
     @Environment(\.dismiss) private var dismiss
-    
+    @Environment(Router.self) var route
+
     var body: some View {
         ScrollView {
             VStack(spacing: 16) {
@@ -21,6 +22,7 @@ struct CancelJourneyPopUp: View {
                 VStack(spacing: 8) {
                     Button{
                         // Action
+                        route.popToRoot()
                     } label: {
                         Text("Ya, batalkan")
                             .font(.caption)
@@ -44,4 +46,5 @@ struct CancelJourneyPopUp: View {
 
 #Preview {
     CancelJourneyPopUp()
+        .environment(Router())
 }

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct InformationJourneyPage: View {
+    @Environment(Router.self) var route
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
@@ -61,4 +63,5 @@ struct InformationJourneyPage: View {
 
 #Preview {
     InformationJourneyPage()
+        .environment(Router())
 }
