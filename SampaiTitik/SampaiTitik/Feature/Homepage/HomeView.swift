@@ -6,9 +6,14 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     @StateObject private var scheduler = AlarmSchedulerManager.shared
+
+    @State var stationVM = StationViewModel()
+    @Environment(\.modelContext) private var modelContext
+    
 
     var body: some View {
         ZStack {
@@ -68,6 +73,9 @@ struct HomeView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
+        }
+        .onAppear {
+            stationVM.getStations(context: modelContext)
         }
     }
 }
