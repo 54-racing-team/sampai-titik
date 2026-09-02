@@ -1,6 +1,29 @@
 # Uncomment the line if you want fastlane to automatically update itself
 # update_fastlane
 
+lane :sync_certs do
+        app_store_connect_api_key(
+          key_id: "49HJ924HSG",
+          issuer_id: "c12cad5d-903a-4151-a441-fd33f87b6271",
+          key_filepath: "./fastlane/AuthKey_49HJ924HSG.p8",
+          duration: 1200,
+          in_house: false
+        )
+
+app_identifiers = [
+    "com.54racing.SampaiTitik",
+    "com.54racing.SampaiTitik.watchkitapp"
+  ]
+
+  app_identifiers.each do |identifier|
+    match(
+      type: "development",
+      app_identifier: identifier
+    )
+
+end
+end
+
 default_platform(:ios)
 
 platform :ios do

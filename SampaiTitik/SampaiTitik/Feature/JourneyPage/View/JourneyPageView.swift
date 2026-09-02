@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct JourneyPageView: View {
+    @Environment(WatchManager.self) var watchManager
+    
     @State var viewModel = JourneyPageMainVM()
     @State private var isCancel: Bool = false
     
@@ -16,10 +18,6 @@ struct JourneyPageView: View {
             Color("BackgroundColor").ignoresSafeArea()
             
             VStack {
-                Text("Perjalanan")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                
                 JourneyCard(viewModel: viewModel)
                 
                 VStack(alignment: .leading) {
@@ -52,8 +50,9 @@ struct JourneyPageView: View {
                 .presentationBackground(.white)
                 .presentationDragIndicator(.visible)
             }
+            .navigationTitle("Perjalanan")
         }
-//        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 

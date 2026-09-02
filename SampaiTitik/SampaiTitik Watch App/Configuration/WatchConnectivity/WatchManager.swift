@@ -7,7 +7,12 @@
 
 import WatchConnectivity
 
-class WatchSessionManager: NSObject, WCSessionDelegate {
+@Observable
+class WatchManager: NSObject, WCSessionDelegate {
+    var isOnJouney = false
+
+    static let shared = WatchManager()
+    
     override init() {
         super.init()
         
@@ -19,16 +24,23 @@ class WatchSessionManager: NSObject, WCSessionDelegate {
     }
     
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]){
-        
-    }
-    
-    func sendMessage(_ message: [String: Any]){
-        if WCSession.default.isReachable {
-
+        DispatchQueue.main.async {
+            
         }
     }
     
+    
+    func sendMessage(action: String,journey: startJourney){
+        if WCSession.default.isReachable {
+            if isOnJouney {
+//                let data = try JSONEncoder().encode(journey) else
+//                WCSession.default.sendMessage(["action": action, "data": data], replyHandler: nil, errorHandler: nil)
+            }
+        }
+    }
+
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
         
     }
 }
+
