@@ -17,8 +17,8 @@ struct JourneyCard: View {
                 .fontWeight(.semibold)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
-            HStack {
-                Image(systemName: "train.side.front.car")
+            HStack(spacing: 12) {
+                Image(systemName: "tram.fill")
                 Text(viewModel.destinationName)
             }
             .padding()
@@ -99,7 +99,7 @@ struct JourneyCard: View {
             }
         }
         .padding()
-        .background(.white)
+        .background(Color(.secondarySystemBackground))
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
         .padding()
@@ -108,6 +108,6 @@ struct JourneyCard: View {
 
 #Preview {
     NavigationStack {
-        JourneyCard(viewModel: JourneyPageMainVM())
+        JourneyCard(viewModel: JourneyPageMainVM(stations: JourneyStation.sampleStations))
     }
 }

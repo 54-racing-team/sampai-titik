@@ -7,15 +7,13 @@
 
 import SwiftUI
 
-typealias SoundExpandListView = SoundExpandPageView
-
 struct SoundExpandPageView: View {
     @Binding var selectedSound: SoundOption
     @State private var audioManager = AudioManager.shared
     
     var body: some View {
         ZStack {
-            Color("Background")
+            Color.backgroundBlue
                 .ignoresSafeArea()
             
             ScrollView {
@@ -35,9 +33,9 @@ struct SoundExpandPageView: View {
                     .padding(.horizontal, 20)
                     .padding(.vertical, 16)
                     .frame(maxWidth: .infinity)
-                    .background(Color.white)
+                    .background(Color(.secondarySystemBackground))
                     .clipShape(Capsule())
-                    .glassEffect()
+                    .glassEffect(.regular, in: Capsule())
                     
                     // Card Pilihan Bunyi
                     VStack(spacing: 0) {
@@ -72,11 +70,11 @@ struct SoundExpandPageView: View {
                             }
                         }
                     }
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 22))
-                    .glassEffect()
+                    .background(Color(.secondarySystemBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                    .glassEffect(in: .rect(cornerRadius: 20))
                 }
-                .padding(16)
+                .padding()
             }
         }
         .navigationBarTitleDisplayMode(.inline)

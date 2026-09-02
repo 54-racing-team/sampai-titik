@@ -9,11 +9,16 @@ import SwiftUI
 
 struct RecentJourneySymbol: View {
     var body: some View {
-        VStack(spacing: 0) {            
+        VStack(spacing: 0) {
             Image(systemName: "record.circle.fill")
+                .foregroundStyle(.primary)
+                .font(.headline)
+            
             dashedLine()
+            
             Image(systemName: "record.circle.fill")
-                .foregroundStyle(Color("MainBlue"))
+                .foregroundStyle(.mainBlue)
+                .font(.headline)
         }
         .frame(width: 20)
     }
@@ -65,6 +70,7 @@ struct RecentJourneyCard: View {
                         .font(.subheadline)
                         .fontWeight(.semibold)
                 }
+                .foregroundStyle(.primary)
                 
                 Spacer()
                 
@@ -74,7 +80,7 @@ struct RecentJourneyCard: View {
                     Text("Pakai lagi")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .padding(4)
+                        .padding(0)
                 }
                 .buttonStyle(.glassProminent)
                 .tint(Color("MainBlue"))
@@ -83,10 +89,8 @@ struct RecentJourneyCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.white)
+        .background(Color("BackgroundCard"))
         .cornerRadius(20)
-        .glassEffect(in: .rect(cornerRadius: 20))
-//        .padding(.horizontal)
     }
 }
 

@@ -9,19 +9,18 @@ import SwiftUI
 
 struct JourneyForm: View {
     @Environment(Router.self) private var router
-    
+
     @State var vm = HomeViewModel()
-    
 
     var body: some View {
         VStack {
-            VStack(spacing: 16){
+            VStack(spacing: 16) {
                 Text("Stasiun Asal")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.body)
+                    .font(.subheadline)
                 
-                StationPickerButton(iconName: "train.side.front.car", selection:  vm.departStation){
+                StationPickerButton(iconName: "tram.fill", selection:  vm.departStation){
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
@@ -44,33 +43,39 @@ struct JourneyForm: View {
                 .padding(.vertical, -16)
                 
                 Text("Stasiun Tujuan")
-                    .foregroundStyle(.black)
+                    .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .font(.subheadline)
                                 
-                StationPickerButton(iconName: "paperplane.fill", selection: vm.destStation){
+                StationPickerButton(iconName: "location.fill", selection: vm.destStation){
                     vm.showDestination.toggle()
                 }
-                .sheet(isPresented: $vm.showDestination){
-                    SearchStationSheet(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
+                .sheet(isPresented: $vm.showDestination) {
+                    SearchStationView(
+                        stations: vm.allStations,
+                        selectedStation: $vm.destStation,
+                        isPresented: $vm.showDestination
+                    )
                 }
-                
-                Button{
-                    router.push(.journeySetup(data: "abc"))
+
+                Button {
+                    guard let departure = vm.departStation,
+                          let destination = vm.destStation else { return }
+                    router.push(.journeySetup(departure: departure, destination: destination))
                 } label: {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
-                        .frame(height: 48)
                         .font(.headline)
-
+                        .padding(10)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue.opacity(0.8))
-                .padding(.top, 32)
-
+                .buttonStyle(.glassProminent)
+                .tint(.mainBlue)
+                .disabled(!vm.isReadyToProceed)
+                .padding(.top, 10)
             }
             .frame(maxWidth: .infinity)
             .padding(16)
-            .background(.white)
+            .background(Color("BackgroundCard"))
             .cornerRadius(20)
         }
     }
