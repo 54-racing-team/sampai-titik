@@ -19,7 +19,7 @@ class AudioManager {
     private(set) var isAudioSessionConfigured: Bool = false
 
     init() {
-        setupAudioSession()
+        // Power saving: Jangan mengaktifkan audio session secara permanen saat app launch
     }
 
     func setupAudioSession() {
@@ -27,7 +27,7 @@ class AudioManager {
             try AVAudioSession.sharedInstance().setCategory(
                 .playback,
                 mode: .default,
-                options: []
+                options: [.mixWithOthers, .duckOthers]
             )
             try AVAudioSession.sharedInstance().setActive(true)
             isAudioSessionConfigured = true
@@ -37,7 +37,16 @@ class AudioManager {
         }
     }
 
-    /// Memulai suara alarm dengan looping tanpa henti sampai dihentikan (tetap berbunyi saat silent)
+    func deactivateAudioSession() {
+        do {
+            try AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
+            isAudioSessionConfigured = false
+        } catch {
+            print("Failed to deactivate audio session: \(error.localizedDescription)")
+        }
+    }
+
+    /// Memulai suara alarm dengan looping tanpa henti sampai dihentikan
     func startAlarm(sound: SoundOption = SoundOption.current) {
         setupAudioSession()
         guard let audioUrl = Bundle.main.url(forResource: sound.fileName, withExtension: "mp3") else {
@@ -83,15 +92,11 @@ class AudioManager {
         }
     }
 
-    /// Menghentikan suara alarm
+    /// Menghentikan suara alarm dan menonaktifkan audio session (Power Saving)
     func stopAlarm() {
         stop()
     }
 
-    /// Loads and prepares an audio file for playback
-    /// - Parameter fileName: The name of the audio file (without extension)
-    /// - Parameter extension: The file extension (default: "mp3")
-    /// - Returns: Boolean indicating if the audio was successfully loaded
     @discardableResult
     func loadAudio(named fileName: String, fileExtension: String = "mp3") -> Bool {
         guard let audioUrl = Bundle.main.path(forResource: fileName, ofType: fileExtension) else {
@@ -110,8 +115,8 @@ class AudioManager {
         }
     }
 
-    /// Plays the currently loaded audio file
     func play() {
+        setupAudioSession()
         guard let player = audioPlayer else {
             print("No audio loaded to play")
             return
@@ -128,28 +133,28 @@ class AudioManager {
         }
     }
 
-    /// Stops the currently playing audio
     func stop() {
-        guard let player = audioPlayer, player.isPlaying else { return }
+        guard let player = audioPlayer, player.isPlaying else {
+            deactivateAudioSession()
+            return
+        }
 
         player.stop()
         player.currentTime = 0
+
+        deactivateAudioSession()
 
         DispatchQueue.main.async {
             self.isPlaying = false
         }
     }
 
-    /// Loads and plays an audio file in one operation
-    /// - Parameter fileName: The name of the audio file (without extension)
-    /// - Parameter fileExtension: The file extension (default: "mp3")
     func playAudio(named fileName: String, fileExtension: String = "mp3") {
         if loadAudio(named: fileName, fileExtension: fileExtension) {
             play()
         }
     }
 
-    /// Pauses the currently playing audio (can be resumed)
     func pause() {
         guard let player = audioPlayer, player.isPlaying else { return }
 
@@ -159,28 +164,23 @@ class AudioManager {
         }
     }
 
-    /// Gets the current playback duration
     var duration: TimeInterval {
         return audioPlayer?.duration ?? 0
     }
 
-    /// Gets the current playback time
     var currentTime: TimeInterval {
         return audioPlayer?.currentTime ?? 0
     }
 
-    /// Sets the current playback time
     func seek(to time: TimeInterval) {
         audioPlayer?.currentTime = time
     }
 
-    /// Checks if audio is currently loaded
     var isAudioLoaded: Bool {
         return audioPlayer != nil
     }
 
     deinit {
         stop()
-        try? AVAudioSession.sharedInstance().setActive(false)
     }
 }

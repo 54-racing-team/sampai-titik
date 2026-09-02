@@ -22,7 +22,6 @@ struct AlarmToogleCard: View {
                 } label: {
                     HStack {
                         Text(selectedSound.displayName)
-                            .font(.subheadline)
                             .foregroundStyle(.primary)
                         
                         Spacer()
@@ -38,9 +37,9 @@ struct AlarmToogleCard: View {
             }
         }
         .padding()
-        .background(.white)
-        .clipShape(RoundedRectangle(cornerRadius: 26))
-        .glassEffect()
+        .background(Color(.secondarySystemBackground))
+        .cornerRadius(26)
+        .glassEffect(in: .rect(cornerRadius: 26))
         .animation(.easeInOut(duration: 0.25), value: isSoundEnabled)
     }
 }

@@ -20,7 +20,10 @@ app_identifiers = [
       type: "development",
       app_identifier: identifier
     )
+<<<<<<< HEAD
 
+=======
+>>>>>>> trial
 end
 end
 

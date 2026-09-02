@@ -37,25 +37,25 @@ struct JourneyPageCancelSheet: View {
                     Text("Tidak jadi")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.primary)
                         .padding(10)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(.secondary)
+                .buttonStyle(.glass)
+                .background(.secondary)
+                .clipShape(.capsule)
                 
                 Button {
-                    AudioManager.shared.stopAlarm()
-                    onConfirm?()
-                    dismiss()
+                    // Cancel the trip
                 } label: {
                     Text("Ya, akhiri")
                         .font(.headline)
                         .frame(maxWidth: .infinity)
-                        .foregroundStyle(.white)
+                        .foregroundStyle(.red)
                         .padding(10)
                 }
-                .buttonStyle(.glassProminent)
-                .tint(.red)
+                .buttonStyle(.glass)
+                .background(.secondary)
+                .clipShape(.capsule)
             }
             .padding(.horizontal)
             .padding(.bottom, 16)

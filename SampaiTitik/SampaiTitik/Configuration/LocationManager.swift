@@ -7,109 +7,119 @@
 
 import Foundation
 import CoreLocation
-import MapKit
 import UserNotifications
+
+// MARK: - LocationManager
+//
+// Tanggung jawab: HANYA mengelola Core Location dengan profil daya adaptif.
+//
+// Power-saving strategy:
+//   1. Idle: allowsBackgroundLocationUpdates = false, stopUpdatingLocation()
+//   2. Journey Aktif: allowsBackgroundLocationUpdates = true
+//   3. Adaptive Distance Filter & Accuracy:
+//      - Jarak > 3 km: distanceFilter = 500m, accuracy = kilometer (Daya sangat hemat di kereta)
+//      - Jarak 1 km - 3 km: distanceFilter = 250m, accuracy = hundredMeters
+//      - Jarak < 1 km: distanceFilter = 50m, accuracy = nearestTenMeters
 
 @Observable
 class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCenterDelegate {
-    private let manager = CLLocationManager()
-    private let destinationRegionIdentifier = "DestinationArrivalRegion"
+    static let shared = LocationManager()
 
+    private let manager = CLLocationManager()
+
+    // MARK: - Published State
     var userLocation: CLLocation?
     var departureStation: StationModelDTO?
     var destinationStation: StationModelDTO?
     var selectedCoordinate: CLLocationCoordinate2D?
     var destinationCoordinate: CLLocationCoordinate2D?
     var targetRadius: CLLocationDistance = 200 {
-        didSet {
-            checkArrival()
-        }
+        didSet { checkArrival() }
     }
     var distanceToDestination: CLLocationDistance?
-    var estimatedDuration: TimeInterval?
     var isWithinTargetRadius: Bool = false
     var availableStations: [StationModelDTO] = []
     var onArriveAtDestination: (() -> Void)?
+
     private var hasTriggeredAlarm: Bool = false
     private var isJourneyTrackingActive: Bool = false
 
-    var formattedEstimatedDuration: String? {
-        guard let duration = estimatedDuration else { return nil }
-        let minutes = Int(ceil(duration / 60.0))
-        if minutes < 1 {
-            return "< 1 menit"
-        } else if minutes >= 60 {
-            let hours = minutes / 60
-            let remainingMinutes = minutes % 60
-            if remainingMinutes == 0 {
-                return "\(hours) jam"
-            } else {
-                return "\(hours) jam \(remainingMinutes) menit"
-            }
-        } else {
-            return "\(minutes) menit"
-        }
-    }
+    // MARK: - Init
 
     override init() {
         super.init()
         self.availableStations = StationModelDTO.loadFromJSON()
         manager.delegate = self
-        manager.desiredAccuracy = kCLLocationAccuracyBest
-        manager.distanceFilter = 5
-        manager.activityType = .otherNavigation
-        manager.pausesLocationUpdatesAutomatically = false
+        // Power-saving baseline configuration saat idle
+        manager.activityType = .other
+        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.distanceFilter = 500
+        manager.pausesLocationUpdatesAutomatically = true
+        manager.allowsBackgroundLocationUpdates = false
         UNUserNotificationCenter.current().delegate = self
     }
 
+    // MARK: - Permission
+
     func requestPermission() {
-        manager.requestAlwaysAuthorization()
+        manager.requestWhenInUseAuthorization()
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
+
+    // MARK: - Journey Tracking Lifecycle
 
     func startJourneyTracking(
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
-        targetRadius: CLLocationDistance = 200
+        targetRadius: CLLocationDistance = 500
     ) {
         self.departureStation = departureStation
         self.targetRadius = targetRadius
         isJourneyTrackingActive = true
         hasTriggeredAlarm = false
-        requestPermission()
-        configureActiveLocationSession()
+
         setDestination(station: destinationStation)
-        startMonitoringDestinationRegion()
+
+        let status = manager.authorizationStatus
+        if status == .authorizedAlways || status == .authorizedWhenInUse {
+            manager.pausesLocationUpdatesAutomatically = false
+            manager.allowsBackgroundLocationUpdates = true
+            manager.showsBackgroundLocationIndicator = true
+            manager.startUpdatingLocation()
+        }
     }
 
     func stopJourneyTracking() {
         isJourneyTrackingActive = false
-        stopMonitoringDestinationRegion()
         manager.stopUpdatingLocation()
+        manager.allowsBackgroundLocationUpdates = false
+        manager.showsBackgroundLocationIndicator = false
+        manager.pausesLocationUpdatesAutomatically = true
         AudioManager.shared.stopAlarm()
         clearDestination()
     }
-    
+
+    // MARK: - Destination Management
+
     func setDestination(station: StationModelDTO) {
         destinationStation = station
         destinationCoordinate = station.coordinate
         selectedCoordinate = station.coordinate
         hasTriggeredAlarm = false
         updateDistance()
-        calculateTransitETA()
         checkArrival()
     }
-    
+
     func setDestination(station: StationModel) {
         setDestination(station: station.toDTO())
     }
-    
+
     func setDestination(byStationId id: String) {
         if let station = availableStations.first(where: { $0.id.caseInsensitiveCompare(id) == .orderedSame }) {
             setDestination(station: station)
         }
     }
-    
+
     func setDestination(byStationName name: String) {
         if let station = availableStations.first(where: { $0.name.caseInsensitiveCompare(name) == .orderedSame }) {
             setDestination(station: station)
@@ -124,169 +134,87 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         )
         setDestination(station: destinationStation)
     }
-    
+
     func selectDraftDestination(coordinate: CLLocationCoordinate2D) {
         selectedCoordinate = coordinate
         destinationCoordinate = coordinate
         updateDistance()
-        calculateTransitETA()
-    }
-    
-    private func updateDistance() {
-        guard let userLoc = userLocation,
-              let activeCoord = destinationCoordinate ?? selectedCoordinate else { return }
-        let destLoc = CLLocation(latitude: activeCoord.latitude, longitude: activeCoord.longitude)
-        distanceToDestination = userLoc.distance(from: destLoc)
-    }
-    
-    func calculateTransitETA() {
-        if let departureStation, let destinationStation,
-           let krlDuration = calculateKRLDuration(from: departureStation, to: destinationStation) {
-            estimatedDuration = krlDuration
-            return
-        }
-
-        guard let userLoc = userLocation,
-              let activeCoord = destinationCoordinate ?? selectedCoordinate else {
-            estimatedDuration = nil
-            return
-        }
-        
-        let destLoc = CLLocation(latitude: activeCoord.latitude, longitude: activeCoord.longitude)
-        let distance = userLoc.distance(from: destLoc)
-        
-        let request = MKDirections.Request()
-        request.source = MKMapItem(location: userLoc, address: nil)
-        request.destination = MKMapItem(location: destLoc, address: nil)
-        request.transportType = .transit
-        
-        let directions = MKDirections(request: request)
-        directions.calculate { [weak self] response, _ in
-            DispatchQueue.main.async {
-                if let route = response?.routes.first, route.expectedTravelTime > 0 {
-                    self?.estimatedDuration = route.expectedTravelTime
-                } else {
-                    // Fallback: Estimasi KRL berbasis kecepatan rata-rata (40 km/jam)
-                    let averageSpeedMetersPerSecond = 40.0 * 1000.0 / 3600.0
-                    self?.estimatedDuration = distance / averageSpeedMetersPerSecond
-                }
-            }
-        }
     }
 
-    private func calculateKRLDuration(from departure: StationModelDTO, to destination: StationModelDTO) -> TimeInterval? {
-        guard departure.id != destination.id else { return 0 }
-
-        let stationsByID = Dictionary(uniqueKeysWithValues: availableStations.map { ($0.id, $0) })
-        var graph: [String: [(stationID: String, duration: TimeInterval)]] = [:]
-
-        for lineName in Set(availableStations.flatMap { $0.lines.map(\.line_name) }) {
-            let orderedStations = availableStations
-                .compactMap { station -> (station: StationModelDTO, order: Int)? in
-                    guard let line = station.lines.first(where: { $0.line_name == lineName }) else { return nil }
-                    return (station, line.order)
-                }
-                .sorted { $0.order < $1.order }
-
-            for pair in zip(orderedStations, orderedStations.dropFirst()) {
-                let duration = travelDurationBetween(pair.0.station, pair.1.station)
-                graph[pair.0.station.id, default: []].append((pair.1.station.id, duration))
-                graph[pair.1.station.id, default: []].append((pair.0.station.id, duration))
-            }
-        }
-
-        var bestDurations: [String: TimeInterval] = [departure.id: 0]
-        var pendingStationIDs = Set(stationsByID.keys)
-
-        while !pendingStationIDs.isEmpty {
-            guard let currentID = pendingStationIDs.min(by: {
-                (bestDurations[$0] ?? .infinity) < (bestDurations[$1] ?? .infinity)
-            }), let currentDuration = bestDurations[currentID] else {
-                break
-            }
-
-            if currentID == destination.id {
-                return currentDuration
-            }
-
-            pendingStationIDs.remove(currentID)
-
-            for edge in graph[currentID, default: []] where pendingStationIDs.contains(edge.stationID) {
-                let candidateDuration = currentDuration + edge.duration
-                if candidateDuration < bestDurations[edge.stationID] ?? .infinity {
-                    bestDurations[edge.stationID] = candidateDuration
-                }
-            }
-        }
-
-        return nil
-    }
-
-    private func travelDurationBetween(_ firstStation: StationModelDTO, _ secondStation: StationModelDTO) -> TimeInterval {
-        let firstLocation = CLLocation(latitude: firstStation.latitude, longitude: firstStation.longitude)
-        let secondLocation = CLLocation(latitude: secondStation.latitude, longitude: secondStation.longitude)
-        let distance = firstLocation.distance(from: secondLocation)
-        let averageSpeedMetersPerSecond = 40.0 * 1000.0 / 3600.0
-        let stationStopAllowance: TimeInterval = 45
-
-        return distance / averageSpeedMetersPerSecond + stationStopAllowance
-    }
-    
     func saveDestination() {
         guard let selected = selectedCoordinate else { return }
         destinationCoordinate = selected
         hasTriggeredAlarm = false
-        calculateTransitETA()
-        startMonitoringDestinationRegion()
         checkArrival()
     }
-    
+
     func clearDestination() {
         departureStation = nil
         destinationStation = nil
         selectedCoordinate = nil
         destinationCoordinate = nil
         distanceToDestination = nil
-        estimatedDuration = nil
         isWithinTargetRadius = false
-        hasTriggeredAlarm = false
+    }
+
+    // MARK: - Adaptive Power Profile & Distance Calculation
+
+    private func updateDistance() {
+        guard let userLoc = userLocation,
+              let activeCoord = destinationCoordinate ?? selectedCoordinate else { return }
+        let destLoc = CLLocation(latitude: activeCoord.latitude, longitude: activeCoord.longitude)
+        let dist = userLoc.distance(from: destLoc)
+        distanceToDestination = dist
+
+        // Terapkan profil daya adaptif berdasarkan jarak ke stasiun tujuan
+        applyAdaptivePowerProfile(distance: dist)
+    }
+
+    /// Menyesuaikan akurasi dan frekuensi update lokasi berdasarkan jarak ke stasiun tujuan
+    /// Berdasarkan rekomendasi Apple Core Location Power Management Guide.
+    private func applyAdaptivePowerProfile(distance: CLLocationDistance) {
+        guard isJourneyTrackingActive else { return }
+
+        if distance > 3000 {
+            // > 3 km: Hemat daya maksimal
+            if manager.distanceFilter != 500 {
+                manager.distanceFilter = 500
+                manager.desiredAccuracy = kCLLocationAccuracyKilometer
+            }
+        } else if distance > 1000 {
+            // 1 km - 3 km
+            if manager.distanceFilter != 200 {
+                manager.distanceFilter = 200
+                manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            }
+        } else {
+            // < 1 km: Mendekati stasiun
+            if manager.distanceFilter != 50 {
+                manager.distanceFilter = 50
+                manager.desiredAccuracy = kCLLocationAccuracyNearestTenMeters
+            }
+        }
     }
 
     private func checkArrival() {
-        guard let userLoc = userLocation, let destCoord = destinationCoordinate else { return }
-        let destLoc = CLLocation(latitude: destCoord.latitude, longitude: destCoord.longitude)
-        let distance = userLoc.distance(from: destLoc)
-        distanceToDestination = distance
+        guard isJourneyTrackingActive, !hasTriggeredAlarm, let dist = distanceToDestination else { return }
 
-        if distance <= targetRadius {
+        if dist <= targetRadius {
+            hasTriggeredAlarm = true
+            isJourneyTrackingActive = false
             isWithinTargetRadius = true
-            if !hasTriggeredAlarm {
-                hasTriggeredAlarm = true
-                triggerArrivalAlarm()
-            }
+            manager.stopUpdatingLocation()
+            manager.allowsBackgroundLocationUpdates = false
+            manager.showsBackgroundLocationIndicator = false
+            manager.pausesLocationUpdatesAutomatically = true
+            triggerAlarmNotification()
+            onArriveAtDestination?()
         } else {
             isWithinTargetRadius = false
-            if distance > targetRadius + 50 { hasTriggeredAlarm = false }
         }
     }
 
-    private func triggerArrivalAlarm() {
-        AudioManager.shared.startAlarm(sound: SoundOption.current)
-        triggerAlarmNotification()
-        onArriveAtDestination?()
-    }
-
-    private func handleDestinationRegionReached() {
-        if let latestLocation = manager.location {
-            userLocation = latestLocation
-            updateDistance()
-        }
-
-        isWithinTargetRadius = true
-        guard !hasTriggeredAlarm else { return }
-        hasTriggeredAlarm = true
-        triggerArrivalAlarm()
-    }
+    // MARK: - Notification
 
     private func triggerAlarmNotification() {
         let content = UNMutableNotificationContent()
@@ -298,86 +226,49 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         content.body = "Waktunya siap-siap turun"
         content.sound = .default
         content.interruptionLevel = .timeSensitive
-        
+
         let request = UNNotificationRequest(identifier: "ArrivalAlarm", content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
     }
 
-    private func configureActiveLocationSession() {
-        let status = manager.authorizationStatus
-        if status == .authorizedAlways || status == .authorizedWhenInUse {
-            manager.allowsBackgroundLocationUpdates = true
-            manager.showsBackgroundLocationIndicator = true
-            manager.startUpdatingLocation()
-        }
-    }
-
-    private func startMonitoringDestinationRegion() {
-        guard isJourneyTrackingActive,
-              let destinationCoordinate,
-              CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else { return }
-
-        stopMonitoringDestinationRegion()
-
-        let radius = min(max(targetRadius, 100), manager.maximumRegionMonitoringDistance)
-        let region = CLCircularRegion(
-            center: destinationCoordinate,
-            radius: radius,
-            identifier: destinationRegionIdentifier
-        )
-        region.notifyOnEntry = true
-        region.notifyOnExit = false
-
-        manager.startMonitoring(for: region)
-        manager.requestState(for: region)
-    }
-
-    private func stopMonitoringDestinationRegion() {
-        for region in manager.monitoredRegions where region.identifier == destinationRegionIdentifier {
-            manager.stopMonitoring(for: region)
-        }
-    }
-    
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
-        completionHandler([.banner, .sound, .badge, .list])
-    }
+    // MARK: - CLLocationManagerDelegate
 
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         let status = manager.authorizationStatus
         if status == .authorizedWhenInUse || status == .authorizedAlways {
-            configureActiveLocationSession()
-            startMonitoringDestinationRegion()
+            if isJourneyTrackingActive {
+                manager.allowsBackgroundLocationUpdates = true
+                manager.showsBackgroundLocationIndicator = true
+                manager.startUpdatingLocation()
+            }
         }
     }
 
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        userLocation = locations.last
+        guard let location = locations.last else { return }
+        userLocation = location
         updateDistance()
-        calculateTransitETA()
         checkArrival()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
-        guard region.identifier == destinationRegionIdentifier else { return }
-        handleDestinationRegionReached()
-    }
-
-    func locationManager(_ manager: CLLocationManager, didDetermineState state: CLRegionState, for region: CLRegion) {
-        guard region.identifier == destinationRegionIdentifier, state == .inside else { return }
-        handleDestinationRegionReached()
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         print("Location error: \(error.localizedDescription)")
     }
+
+    // MARK: - UNUserNotificationCenterDelegate
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        completionHandler([.banner, .sound, .badge, .list])
+    }
 }
 
 // MARK: - Station Extensions for LocationManager
+
 extension StationModelDTO {
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
-    
+
     static func loadFromJSON(bundle: Bundle = .main) -> [StationModelDTO] {
         guard let url = bundle.url(forResource: "StationsData", withExtension: "json"),
               let data = try? Data(contentsOf: url),
@@ -392,7 +283,7 @@ extension StationModel {
     var coordinate: CLLocationCoordinate2D {
         CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
     }
-    
+
     func toDTO() -> StationModelDTO {
         StationModelDTO(
             id: id,

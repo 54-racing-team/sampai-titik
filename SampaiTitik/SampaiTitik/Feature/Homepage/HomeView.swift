@@ -30,21 +30,28 @@ struct HomeView: View {
 
                     } label: {
                         Image(systemName: "person.fill")
+                        .foregroundStyle(.mainBlue)
                     }
                     .padding()
-                    .background(Color.white)
+                    .background(Color("BackgroundCard"))
                     .clipShape(Circle())
                 }
 
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 8) {
                     Text("Mau kemana, Salman?")
                         .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")
+                        .font(.body)
                 }
-                .padding(.bottom, 16)
+                .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
+<<<<<<< HEAD
                 .foregroundStyle(Color.blue)
+=======
+                .foregroundStyle(Color.primary)
+                .fixedSize(horizontal: false, vertical: true)
+>>>>>>> trial
 
                 JourneyForm()
 
@@ -52,10 +59,14 @@ struct HomeView: View {
                     "Pengingat tetap bekerja saat kamu tidak sedang melihat layar."
                 )
                 .font(.caption)
-
+                .foregroundStyle(.secondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom)
+                
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
+<<<<<<< HEAD
                         .foregroundStyle(Color.blue)
                     
                     RecentJourneyCard(
@@ -66,6 +77,12 @@ struct HomeView: View {
                         onReuse: {
                             print("Reuse Metland Telaga Murni")
                         }
+=======
+                        .foregroundStyle(Color.primary)
+                    
+                    RecentJourneyCard(
+                        origin: "Pasar Minggu Baru", destination: "Metland Telaga Murni", date: "Kemarin", time: "22.15", onReuse: {print("Reuse Metland Telaga Murni")}
+>>>>>>> trial
                     )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

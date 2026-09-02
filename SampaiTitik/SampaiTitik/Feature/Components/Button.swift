@@ -60,7 +60,7 @@ struct CardButton: View {
                 .font(.headline)
                 .fontWeight(.semibold)
         }
-        .buttonStyle(.borderedProminent)
+        .buttonStyle(.glassProminent)
         .tint(Color("MainBlue"))
     }
 }
