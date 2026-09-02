@@ -104,7 +104,6 @@ struct MapCard: View {
                     Spacer()
                     
                     Text("\(Int(locationManager.targetRadius)) meter")
-                        .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
                 }
@@ -127,7 +126,7 @@ struct MapCard: View {
                 }
             }
             .padding(16)
-            .background(Color(uiColor: .secondarySystemBackground))
+            .background(Color.backgroundCard)
             .clipShape(
                 UnevenRoundedRectangle(
                     topLeadingRadius: 0,

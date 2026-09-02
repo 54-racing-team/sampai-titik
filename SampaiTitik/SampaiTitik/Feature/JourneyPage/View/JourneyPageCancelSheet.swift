@@ -45,7 +45,7 @@ struct JourneyPageCancelSheet: View {
                 .clipShape(.capsule)
                 
                 Button {
-                    // Cancel the trip
+                    onConfirm?()
                 } label: {
                     Text("Ya, akhiri")
                         .font(.headline)

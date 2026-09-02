@@ -33,7 +33,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
     var destinationStation: StationModelDTO?
     var selectedCoordinate: CLLocationCoordinate2D?
     var destinationCoordinate: CLLocationCoordinate2D?
-    var targetRadius: CLLocationDistance = 200 {
+    var targetRadius: CLLocationDistance = 500 {
         didSet { checkArrival() }
     }
     var distanceToDestination: CLLocationDistance?
