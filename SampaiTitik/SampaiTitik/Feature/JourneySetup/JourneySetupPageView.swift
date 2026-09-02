@@ -22,20 +22,27 @@ struct JourneySetupPageView: View {
             Color.backgroundBlue
                 .ignoresSafeArea()
             
-            VStack(spacing: 20) {
-                AlarmToogleCard()
+            ScrollView(showsIndicators: false) {
+                VStack(spacing: 16) {
+                    EstimateCard(
+                        departureStation: departure,
+                        destinationStation: destination,
+                        estimatedDuration: journeyRoute?.estimatedDuration
+                    )
+                    
+                    AlarmToogleCard()
 
-                MapCard(
-                    locationManager: locationManager,
-                    departureStation: departure,
-                    destinationStation: destination,
-                    estimatedDuration: journeyRoute?.estimatedDuration
-                )
 
-                Spacer()
+                    MapCard(
+                        locationManager: locationManager,
+                        departureStation: departure,
+                        destinationStation: destination
+                    )
+                }
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
+                .padding(.bottom, 16)
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 16)
             .safeAreaInset(edge: .bottom) {
                 Button {
                     guard let route = journeyRoute else { return }

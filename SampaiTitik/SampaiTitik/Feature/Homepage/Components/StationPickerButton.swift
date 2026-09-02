@@ -18,18 +18,21 @@ struct StationPickerButton: View {
         } label: {
             HStack {
                 Image(systemName: iconName)
+                    .foregroundStyle(.mainBlue)
+                
                 Text(selection?.name ?? "Pilih Stasiun")
+                    .fontWeight(.regular)
                     .opacity(selection == nil ? 0.5 : 1)
                 Spacer()
                 Image(systemName: "chevron.right")
                 .font(.body)
                 .foregroundStyle(.secondary)
             }
+            .padding()
             .frame(maxWidth: .infinity)
-            .frame(height: 48)
             .padding(.horizontal, 16)
             .font(.headline)
-            .background(Color("BackgroundBlue"))
+            .background(Color(.systemGray6))
             .clipShape(Capsule())
         }
         .buttonStyle(.plain)

@@ -22,7 +22,6 @@ struct AlarmToogleCard: View {
                 } label: {
                     HStack {
                         Text(selectedSound.displayName)
-                            .font(.subheadline)
                             .foregroundStyle(.primary)
                         
                         Spacer()

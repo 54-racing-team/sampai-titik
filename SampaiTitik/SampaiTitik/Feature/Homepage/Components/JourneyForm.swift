@@ -41,7 +41,6 @@ struct JourneyForm: View {
                 }
 
                 Text("Stasiun Tujuan")
-                    .background(Color(.systemBackground))
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .font(.subheadline)
                                 
@@ -63,13 +62,13 @@ struct JourneyForm: View {
                 } label: {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
-                        .frame(height: 48)
                         .font(.headline)
+                        .padding(10)
                 }
-                .buttonStyle(.borderedProminent)
-                .tint(.blue.opacity(0.8))
-                .padding(.top, 32)
+                .buttonStyle(.glassProminent)
+                .tint(.mainBlue)
                 .disabled(!vm.isReadyToProceed)
+                .padding(.top, 10)
             }
             .frame(maxWidth: .infinity)
             .padding(16)

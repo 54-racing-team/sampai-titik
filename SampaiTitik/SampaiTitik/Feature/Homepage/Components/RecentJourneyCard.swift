@@ -69,7 +69,6 @@ struct RecentJourneyCard: View {
                     Text(destination)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                    
                 }
                 .foregroundStyle(.primary)
                 

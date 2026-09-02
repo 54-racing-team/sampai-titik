@@ -21,9 +21,6 @@ struct JourneyPageView: View {
                 .ignoresSafeArea()
             
             VStack {
-                Text("Perjalanan")
-                    .font(.title.bold())
-                
                 JourneyCard(viewModel: viewModel)
 
                 VStack(alignment: .leading) {
@@ -33,6 +30,7 @@ struct JourneyPageView: View {
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
+                .foregroundStyle(Color.secondary)
 
                 Spacer()
 
@@ -57,6 +55,7 @@ struct JourneyPageView: View {
                 .presentationBackground(Color(.secondarySystemBackground))
                 .presentationDragIndicator(.visible)
             }
+            .navigationTitle("Perjalanan")
         }
         .onAppear {
             viewModel.startTrackingIfPossible()
