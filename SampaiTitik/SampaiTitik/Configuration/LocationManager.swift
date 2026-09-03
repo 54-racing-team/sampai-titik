@@ -220,7 +220,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
             manager.allowsBackgroundLocationUpdates = false
             manager.showsBackgroundLocationIndicator = false
             manager.pausesLocationUpdatesAutomatically = true
-            triggerAlarmNotification()
+//            triggerAlarmNotification()
             onArriveAtDestination?()
         } else {
             isWithinTargetRadius = false

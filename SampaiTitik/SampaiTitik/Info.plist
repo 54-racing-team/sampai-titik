@@ -2,8 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan kereta dan membunyikan alarm saat mendekati stasiun tujuan.</string>
+	<key>NSAlarmKitUsageDescription</key>
+	<string>Bang mau dibangunin pake alarm boleh ga?</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Montserrat-Medium.ttf</string>

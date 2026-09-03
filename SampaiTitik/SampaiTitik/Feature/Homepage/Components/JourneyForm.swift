@@ -31,19 +31,14 @@ struct JourneyForm: View {
                         showNearestStation: true
                     )
                 }
-                
-                ZStack {
-                    Divider()
-                    Button{
-                        vm.swapStations()
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.headline)
-                            .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Circle())
+
+                Button {
+                    vm.swapStations()
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.headline)
+                        .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                        .foregroundStyle(.mainBlue)
                 }
                 .padding(.vertical, -16)
                 
