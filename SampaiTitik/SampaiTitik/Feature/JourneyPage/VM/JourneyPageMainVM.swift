@@ -110,7 +110,7 @@ public final class JourneyPageMainVM {
             }
         }
 
-        trackingViewModel.startTracking(
+        await trackingViewModel.startTracking(
             departureStation: departure,
             destinationStation: destination,
             modelContext: modelContext
