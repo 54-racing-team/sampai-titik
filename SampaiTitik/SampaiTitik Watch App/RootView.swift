@@ -9,16 +9,6 @@ import SwiftUI
 import SwiftData
 
 struct RootView: View {
-    // Environment
-    @Environment(\.modelContext) private var modelContext
-    
-    // State
-    @State var vm = StationViewModel()
-    @State private var router: Router = .init()
-    
-    // Swift data
-    @Query private var stations: [StationModel]
-    
     var body: some View {
         SplashScreen {
             RouterView()

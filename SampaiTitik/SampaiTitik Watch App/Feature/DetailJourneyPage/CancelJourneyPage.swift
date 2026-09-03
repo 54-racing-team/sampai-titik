@@ -9,7 +9,7 @@ import SwiftUI
 
 struct CancelJourneyPage: View {
     @State private var isCancelJourney: Bool = false
-    
+        
     var body: some View {
         VStack(spacing: 12) {
             Text("Batalkan Perjalanan?")

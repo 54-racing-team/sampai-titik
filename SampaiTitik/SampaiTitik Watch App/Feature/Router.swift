@@ -10,11 +10,8 @@ import SwiftUI
 
 enum Route: Hashable {
     case home
-    case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
-    case journeyPage(stations: [JourneyStation])
-    case confirmation(stations: [JourneyStation])
-    case profile
-    case detail(id: String)
+    case journeySetup
+    case detailJourneyPage
 }
 
 @Observable
@@ -45,15 +42,10 @@ struct RouterView: View {
                     switch route {
                     case .home:
                         HomeView()
-                    case .journeySetup(let departure, let destination):
-                        JourneySetupPageView(
-                            departure: departure,
-                            destination: destination
-                        )
-                    case .confirmation(let stations):
-                        ConfirmationView(stations: stations)
-                    case .journeyPage(let stations):
-                        JourneyPageView(stations: stations)
+                    case .journeySetup:
+                        JourneySetupPageView()
+                    case .detailJourneyPage:
+                        DetailJourneyPageView()
                     default:
                         EmptyView()
                     }

@@ -25,9 +25,9 @@ struct JourneyTimelineIndicator: View {
         case .past:
             return Color.gray
         case .current:
-            return Color.black
+            return Color.primary
         case .next:
-            return Color("MainBlue")
+            return Color(.mainBlue)
         case .destination:
             return Color.red
         }
@@ -118,7 +118,7 @@ struct JourneyDetailCard: View {
         }
         .padding(28)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color(.secondarySystemBackground))
+        .background(Color.backgroundCard)
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
         .padding()

@@ -69,7 +69,6 @@ struct RecentJourneyCard: View {
                     Text(destination)
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                    
                 }
                 .foregroundStyle(.primary)
                 
@@ -90,7 +89,7 @@ struct RecentJourneyCard: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(Color(.systemBackground))
+        .background(Color("BackgroundCard"))
         .cornerRadius(20)
     }
 }

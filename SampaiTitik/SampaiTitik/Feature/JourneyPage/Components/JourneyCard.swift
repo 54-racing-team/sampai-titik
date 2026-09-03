@@ -96,10 +96,11 @@ struct JourneyCard: View {
                 JourneyDetailPageView(viewModel: viewModel.makeDetailViewModel())
             } label: {
                 Text("Lihat detail")
+                    .foregroundStyle(.mainBlue)
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
+        .background(Color.backgroundCard)
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
         .padding()
@@ -108,6 +109,6 @@ struct JourneyCard: View {
 
 #Preview {
     NavigationStack {
-        JourneyCard(viewModel: JourneyPageMainVM())
+        JourneyCard(viewModel: JourneyPageMainVM(stations: JourneyStation.sampleStations))
     }
 }

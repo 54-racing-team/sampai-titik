@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "JourneyPageCancelSheet_Asset_Light.png",
+      "filename" : "slide-transition-confirmation.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "JourneyPageCancelSheet_Asset_Dark.png",
+      "filename" : "slide-transition-confirmation-dark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

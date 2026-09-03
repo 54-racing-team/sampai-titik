@@ -16,6 +16,8 @@ struct JourneyPageCancelSheet: View {
             Spacer()
             
             Image("CancelSheet")
+                .resizable()
+                .scaledToFit()
             
             VStack(spacing: 6) {
                 Text("Akhiri perjalanan lebih awal?")
@@ -45,7 +47,7 @@ struct JourneyPageCancelSheet: View {
                 .clipShape(.capsule)
                 
                 Button {
-                    // Cancel the trip
+                    onConfirm?()
                 } label: {
                     Text("Ya, akhiri")
                         .font(.headline)

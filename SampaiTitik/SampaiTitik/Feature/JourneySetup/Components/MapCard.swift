@@ -12,20 +12,34 @@ struct MapCard: View {
     @Bindable var locationManager: LocationManager
     var departureStation: StationModelDTO?
     var destinationStation: StationModelDTO?
+    /// Estimasi durasi perjalanan (dalam detik) dari JourneyRouteService.
+    /// Bila nil, ditampilkan sebagai "--".
+    var estimatedDuration: TimeInterval?
     
     @State private var cameraPosition: MapCameraPosition = .automatic
     @State private var hasInitializedCamera: Bool = false
     
-    init(locationManager: LocationManager, departureStation: StationModelDTO? = nil, destinationStation: StationModelDTO? = nil) {
+    init(
+        locationManager: LocationManager,
+        departureStation: StationModelDTO? = nil,
+        destinationStation: StationModelDTO? = nil,
+        estimatedDuration: TimeInterval? = nil
+    ) {
         self.locationManager = locationManager
         self.departureStation = departureStation
         self.destinationStation = destinationStation
+        self.estimatedDuration = estimatedDuration
     }
     
-    init(departureStation: StationModelDTO? = nil, destinationStation: StationModelDTO? = nil) {
-        self._locationManager = Bindable(wrappedValue: LocationManager())
+    init(
+        departureStation: StationModelDTO? = nil,
+        destinationStation: StationModelDTO? = nil,
+        estimatedDuration: TimeInterval? = nil
+    ) {
+        self._locationManager = Bindable(wrappedValue: LocationManager.shared)
         self.departureStation = departureStation
         self.destinationStation = destinationStation
+        self.estimatedDuration = estimatedDuration
     }
     
     private var activeStation: StationModelDTO? {
@@ -35,6 +49,7 @@ struct MapCard: View {
     private var activeCoordinate: CLLocationCoordinate2D? {
         activeStation?.coordinate ?? locationManager.destinationCoordinate ?? locationManager.selectedCoordinate
     }
+    
     
     var body: some View {
         VStack(spacing: 0) {
@@ -54,7 +69,7 @@ struct MapCard: View {
                             .stroke(Color.red, lineWidth: 1)
                     }
                 }
-                .mapStyle(.standard(elevation: .realistic))
+                .mapStyle(.standard(elevation: .flat))
                 .frame(height: 250)
                 .clipShape(
                     UnevenRoundedRectangle(
@@ -81,79 +96,48 @@ struct MapCard: View {
                 .padding(12)
             }
             
-            // MARK: - Route Indicator & Slider Section (Card Bottom)
-            VStack(alignment: .leading, spacing: 14) {
-                VStack(spacing: 4) {
-                    Text("\(locationManager.formattedEstimatedDuration ?? "-- menit")")
-                        .font(.caption2)
-                        .multilineTextAlignment(.center)
+            // MARK: - Radius Adjustment Slider Section (Card Bottom)
+            VStack(alignment: .leading, spacing: 8) {
+                HStack {
+                    Text("Radius Alarm")
                     
-                    routeIndicator
-
-                    HStack(alignment: .top, spacing: 0) {
-                        VStack(spacing: 4) {
-                            Text(departureStation?.name ?? "Stasiun Asal")
-                                .font(.caption)
-                                .fontWeight(.medium)
-                                .foregroundColor(.primary)
-                                .multilineTextAlignment(.center)
-                                .lineLimit(2)
-                        }
-                        .frame(width: 80)
-
-                        Spacer()
-
-                        Text(activeStation?.name ?? "Stasiun Tujuan")
-                            .font(.caption)
-                            .fontWeight(.medium)
-                            .foregroundColor(.primary)
-                            .multilineTextAlignment(.center)
-                            .lineLimit(2)
-                            .frame(width: 80)
-                    }
+                    Spacer()
+                    
+                    Text("\(Int(locationManager.targetRadius)) meter")
+                        .fontWeight(.semibold)
+                        .foregroundStyle(.secondary)
                 }
                 
-                Divider()
+                Slider(value: $locationManager.targetRadius, in: 50...1500, step: 25)
+                    .tint(.mainBlue)
                 
-                // Radius Adjustment Slider
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack {
-                        Text("Radius Alarm")
-                            .font(.subheadline)
-                            .fontWeight(.medium)
-                            .foregroundColor(.secondary)
-                        
-                        Spacer()
-                        
-                        Text("\(Int(locationManager.targetRadius)) meter")
-                            .font(.subheadline)
-                            .fontWeight(.semibold)
-                    }
-                    
-                    Slider(value: $locationManager.targetRadius, in: 50...1000, step: 25)
-                        .tint(.blue)
-                    
-                    HStack {
-                        Text("50 m")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Text("500 m")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                        Spacer()
-                        Text("1000 m")
-                            .font(.caption2)
-                            .foregroundColor(.secondary)
-                    }
+                HStack {
+                    Text("50 m")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text("750 m")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
+                    Spacer()
+                    Text("1500 m")
+                        .font(.caption2)
+                        .foregroundColor(.secondary)
                 }
             }
             .padding(16)
-            .background(Color(uiColor: .secondarySystemBackground))
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .background(Color.backgroundCard)
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 0,
+                    bottomLeadingRadius: 20,
+                    bottomTrailingRadius: 20,
+                    topTrailingRadius: 0,
+                    style: .continuous
+                )
+            )
         }
         .glassEffect(in: .rect(cornerRadius: 20))
-        
         .onAppear {
             locationManager.requestPermission()
             setupDestination()
@@ -166,45 +150,6 @@ struct MapCard: View {
         }
     }
     
-    private var routeIndicator: some View {
-        GeometryReader { proxy in
-            let markerWidth: CGFloat = 80
-            let markerRadius: CGFloat = 9
-            let centerY = proxy.size.height / 2
-
-            Path { path in
-                path.move(to: CGPoint(x: markerWidth / 2 + markerRadius, y: centerY))
-                path.addLine(to: CGPoint(x: proxy.size.width - markerWidth / 2 - markerRadius, y: centerY))
-            }
-            .stroke(
-                Color.gray.opacity(0.5),
-                style: StrokeStyle(lineWidth: 1.5, dash: [5, 4])
-            )
-
-            HStack(spacing: 0) {
-                stationMarker(color: .black)
-                    .frame(width: markerWidth)
-
-                Spacer(minLength: 0)
-
-                stationMarker(color: .blue)
-                    .frame(width: markerWidth)
-            }
-        }
-        .frame(height: 18)
-    }
-
-    private func stationMarker(color: Color) -> some View {
-        ZStack {
-            Circle()
-                .fill(color)
-                .frame(width: 18, height: 18)
-            Circle()
-                .fill(.white)
-                .frame(width: 6, height: 6)
-        }
-    }
-
     private func setupDestination() {
         if let destinationStation {
             locationManager.setDestination(station: destinationStation)
@@ -231,23 +176,23 @@ struct MapCard: View {
 }
 
 #Preview {
-    let journey = JourneySetupMockData.makeJourney()
+    let stations = StationModelDTO.loadFromJSON()
+    let dep = stations.first { $0.id == "SUD" } ?? stations[0]
+    let dst = stations.first { $0.id == "BKS" } ?? stations[1]
     let locationManager = LocationManager()
-    locationManager.setMockJourney(
-        departureStation: journey.departureStation,
-        destinationStation: journey.destinationStation
-    )
-
+    locationManager.setMockJourney(departureStation: dep, destinationStation: dst)
+    let route = JourneyRouteService(stations: stations).createRoute(from: dep, to: dst)
+    
     return ScrollView {
         VStack(spacing: 20) {
             MapCard(
                 locationManager: locationManager,
-                departureStation: journey.departureStation,
-                destinationStation: journey.destinationStation
+                departureStation: dep,
+                destinationStation: dst,
+                estimatedDuration: route?.estimatedDuration
             )
         }
         .padding()
     }
     .background(Color(uiColor: .systemGroupedBackground))
 }
-
