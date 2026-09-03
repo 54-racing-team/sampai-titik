@@ -9,6 +9,7 @@ import SwiftUI
 
 struct DetailJourneyPageView: View {
     @State private var selectedTab:Int = 2
+    @Environment(Router.self) var route
     
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -21,9 +22,11 @@ struct DetailJourneyPageView: View {
                 .tag(2)
         }
         .tabViewStyle(.page)
+        .navigationBarHidden(true)
     }
 }
 
 #Preview {
     DetailJourneyPageView()
+        .environment(Router())
 }

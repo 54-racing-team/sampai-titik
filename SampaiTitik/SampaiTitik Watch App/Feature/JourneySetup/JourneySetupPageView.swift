@@ -36,6 +36,7 @@ struct JourneySymbol: View {
 
 struct JourneySetupPageView: View {
     @State var isAlarmOn: Bool = true
+    @Environment(Router.self) var route
     
     var body: some View {
         ScrollView {
@@ -70,6 +71,7 @@ struct JourneySetupPageView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     // Action
+                    route.push(.detailJourneyPage)
                 } label: {
                     Image(systemName: "checkmark")
                 }
@@ -80,4 +82,5 @@ struct JourneySetupPageView: View {
 
 #Preview {
     JourneySetupPageView()
+        .environment(Router())
 }
