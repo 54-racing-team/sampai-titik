@@ -104,7 +104,7 @@ struct SearchStationView: View {
                 } else {
                     stationRows(filteredStations)
                 }
-                .foregroundStyle(.primary)
+//                .foregroundStyle(.primary)
             }
             .searchable(text: $searchStation, prompt: "Cari stasiun...")
             .navigationTitle("Pilih Stasiun")

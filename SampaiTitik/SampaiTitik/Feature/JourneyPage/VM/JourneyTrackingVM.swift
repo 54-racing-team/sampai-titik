@@ -86,12 +86,15 @@ final class JourneyTrackingVM {
     }
     
     func addRecentJourney(src: String, dst: String, context: ModelContext){
-        let recentJourney = RecentJourneyModel(
+        let newJourney = RecentJourneyModel(
             date: Date(),
             origin: src,
             destination: dst
         )
         
-        context.insert(recentJourney)
+        context.insert(newJourney)
+        
+        let journeys = [recentJourney(date: Date(), origin: src, destination: dst)]
+        WatchManager.shared.sendRecentJourney(journeys)
     }
 }
