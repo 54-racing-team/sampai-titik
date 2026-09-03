@@ -24,7 +24,7 @@ struct JourneyForm: View {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationSheet(selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
+                    SearchStationView(stations: vm.allStations, selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
                 }
                 
                 ZStack {

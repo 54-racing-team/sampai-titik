@@ -21,8 +21,8 @@ struct SplashScreen<Content: View>: View {
     // reduced motion, skip straight to the final frame instead of animating.
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
-    private let logoSize: CGFloat = 64
-    private let dotSize: CGFloat = 18
+    private let logoSize: CGFloat = 32
+    private let dotSize: CGFloat = 9
     
     init(@ViewBuilder content: () -> Content) {
         self.content = content()
@@ -53,10 +53,9 @@ struct SplashScreen<Content: View>: View {
             if revealed {
                 Text("ampai")
                     .font(.montserrat(size: logoSize))
-                    .kerning(-3)
                     .foregroundColor(.white)
                     .transition(.opacity)
-                    .padding(.leading, 2)
+                    .padding(.leading, 1)
             }
 
             Circle()
