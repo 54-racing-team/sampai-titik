@@ -6,15 +6,19 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct JourneyPageView: View {
+    @Environment(\.modelContext) var modelContext
+    @Environment(WatchManager.self) var watchManager
     @State var viewModel: JourneyPageMainVM
     @State private var isCancel: Bool = false
-
+    @Environment(Router.self) private var router
+    
     init(stations: [JourneyStation] = JourneyStation.sampleStations) {
         self._viewModel = State(wrappedValue: JourneyPageMainVM(stations: stations))
     }
-
+    
     var body: some View {
         ZStack {
             Color.backgroundBlue
@@ -25,15 +29,14 @@ struct JourneyPageView: View {
 
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
-//                    Text("Kamu bisa keluar dari aplikasi.")
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .foregroundStyle(Color.secondary)
-
+                
                 Spacer()
-
+                
                 Button {
                     isCancel = true
                 } label: {
@@ -44,28 +47,33 @@ struct JourneyPageView: View {
                         .padding(10)
                 }
                 .buttonStyle(.glass)
-                .tint(Color(.systemBackground))
+                .tint(Color.backgroundCard)
                 .padding(.horizontal)
             }
             .sheet(isPresented: $isCancel) {
                 JourneyPageCancelSheet {
                     viewModel.stopJourneyTracking()
+                    isCancel = false
+                    router.popToRoot()
                 }
                 .presentationDetents([.fraction(0.5)])
                 .presentationBackground(Color(.secondarySystemBackground))
                 .presentationDragIndicator(.visible)
             }
             .navigationTitle("Perjalanan")
+            .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
-            viewModel.startTrackingIfPossible()
+            Task {
+                await viewModel.startTrackingIfPossible(modelContext: modelContext)
+            }
         }
-//        .navigationBarBackButtonHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
-    NavigationStack {
-        JourneyPageView()
-    }
+    JourneyPageView()
+        .environment(Router())
+        .environment(WatchManager())
 }

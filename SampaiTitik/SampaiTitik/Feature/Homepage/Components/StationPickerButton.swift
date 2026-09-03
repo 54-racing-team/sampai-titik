@@ -30,7 +30,6 @@ struct StationPickerButton: View {
             }
             .padding()
             .frame(maxWidth: .infinity)
-            .padding(.horizontal, 16)
             .font(.headline)
             .background(Color(.systemGray6))
             .clipShape(Capsule())

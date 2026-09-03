@@ -24,21 +24,21 @@ struct JourneyForm: View {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationView(stations: vm.allStations, selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
+                    SearchStationView(
+                        stations: vm.allStations,
+                        selectedStation: $vm.departStation,
+                        isPresented: $vm.showDeparture,
+                        showNearestStation: true
+                    )
                 }
-                
-                ZStack {
-                    Divider()
-                    Button{
-                        vm.swapStations()
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.headline)
-                            .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Circle())
+
+                Button {
+                    vm.swapStations()
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.headline)
+                        .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                        .foregroundStyle(.mainBlue)
                 }
                 .padding(.vertical, -16)
                 
@@ -83,4 +83,5 @@ struct JourneyForm: View {
 
 #Preview {
     JourneyForm(vm: HomeViewModel())
+        .environment(Router())
 }
