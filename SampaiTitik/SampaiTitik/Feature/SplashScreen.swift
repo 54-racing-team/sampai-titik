@@ -34,7 +34,7 @@ struct SplashScreen<Content: View>: View {
                 .transition(.opacity)
         } else {
             ZStack {
-                Color(red: 0.0, green: 0.451, blue: 0.690).ignoresSafeArea()
+                Color(red: 0.129, green: 0.525, blue: 0.757).ignoresSafeArea()
                 logoLayout
             }
             .onAppear { runAnimation() }
