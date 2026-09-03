@@ -33,7 +33,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
     var destinationStation: StationModelDTO?
     var selectedCoordinate: CLLocationCoordinate2D?
     var destinationCoordinate: CLLocationCoordinate2D?
-    var targetRadius: CLLocationDistance = 200 {
+    var targetRadius: CLLocationDistance = 500 {
         didSet { checkArrival() }
     }
     var distanceToDestination: CLLocationDistance?
@@ -66,15 +66,27 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
+    func requestCurrentLocation() {
+        let status = manager.authorizationStatus
+        if status == .notDetermined {
+            manager.requestWhenInUseAuthorization()
+        }
+        if status == .authorizedWhenInUse || status == .authorizedAlways || status == .notDetermined {
+            manager.requestLocation()
+        }
+    }
+
     // MARK: - Journey Tracking Lifecycle
 
     func startJourneyTracking(
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
-        targetRadius: CLLocationDistance = 500
+        targetRadius: CLLocationDistance? = nil
     ) {
         self.departureStation = departureStation
-        self.targetRadius = targetRadius
+        if let targetRadius {
+            self.targetRadius = targetRadius
+        }
         isJourneyTrackingActive = true
         hasTriggeredAlarm = false
 

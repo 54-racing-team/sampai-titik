@@ -8,17 +8,20 @@
 import SwiftUI
 
 struct ConfirmationView: View {
+    var stations: [JourneyStation] = []
+    @Environment(Router.self) private var router
 
     let animationFrames = [
         "slide-transition-confirmation",
         "slide-transition-confirmation-2"
     ]
 
+    private var destinationName: String {
+        stations.first(where: { $0.type == .destination })?.name ?? stations.last?.name ?? "Tujuan"
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-
-            Spacer()
-
             // MARK: Animation
             TimelineView(.animation(minimumInterval: 0.5)) { timeline in
                 let frame = Int(
@@ -32,28 +35,23 @@ struct ConfirmationView: View {
             }
 
             // MARK: Message
-            Text("Tenang! Aku akan ingatkan kamu ketika\nsudah sampai di Stasiun Sudirman")
+            Text("Tenang! Aku akan ingatkan kamu ketika sudah sampai di Stasiun \(destinationName)")
                 .font(.body)
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.primary)
-                .padding(.top, 24)
-
-            Spacer()
-
-            // MARK: Button
-            CardButton(
-                title: "Oke"
-            ) {
-                // action
-            }
-            .padding(.horizontal, 30)
-            .padding(.bottom, 48)
+                .padding(30)
         }
+        .navigationBarBackButtonHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color(.systemBackground))
+        .background(Color(.backgroundBlue))
+        .task {
+            try? await Task.sleep(for: .seconds(2))
+            router.push(.journeyPage(stations: stations))
+        }
     }
 }
 
 #Preview {
     ConfirmationView()
+        .environment(Router())
 }

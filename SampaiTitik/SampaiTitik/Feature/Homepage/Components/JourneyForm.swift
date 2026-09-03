@@ -24,7 +24,12 @@ struct JourneyForm: View {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationView(stations: vm.allStations, selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
+                    SearchStationView(
+                        stations: vm.allStations,
+                        selectedStation: $vm.departStation,
+                        isPresented: $vm.showDeparture,
+                        showNearestStation: true
+                    )
                 }
                 
                 ZStack {
@@ -83,4 +88,5 @@ struct JourneyForm: View {
 
 #Preview {
     JourneyForm(vm: HomeViewModel())
+        .environment(Router())
 }

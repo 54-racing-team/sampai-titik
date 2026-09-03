@@ -39,37 +39,36 @@ struct JourneySetupPageView: View {
                         destinationStation: destination
                     )
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, 16)
-                .padding(.bottom, 16)
-            }
-            .safeAreaInset(edge: .bottom) {
-                Button {
-                    guard let route = journeyRoute else { return }
-                    let stations = route.stations.enumerated().map { index, station -> JourneyStation in
-                        let type: StationType
-                        if index == 0 {
-                            type = .current
-                        } else if index == route.stations.count - 1 {
-                            type = .destination
-                        } else {
-                            type = .next
+                .padding()
+                .safeAreaInset(edge: .bottom) {
+                    Button {
+                        guard let route = journeyRoute else { return }
+                        let stations = route.stations.enumerated().map { index, station -> JourneyStation in
+                            let type: StationType
+                            if index == 0 {
+                                type = .current
+                            } else if index == route.stations.count - 1 {
+                                type = .destination
+                            } else {
+                                type = .next
+                            }
+                            return JourneyStation(name: station.name, type: type)
                         }
-                        return JourneyStation(name: station.name, type: type)
+                        router.push(.confirmation(stations: stations))
+                    } label: {
+                        Text("Mulai Perjalanan")
+                            .font(.headline)
+                            .frame(maxWidth: .infinity)
+                            .padding(10)
                     }
-                    router.push(.journeyPage(stations: stations))
-                } label: {
-                    Text("Mulai Perjalanan")
-                        .font(.headline)
-                        .frame(maxWidth: .infinity)
-                        .padding(10)
+                    .buttonStyle(.glassProminent)
+                    .tint(.mainBlue)
+                    .padding(.horizontal)
+                    .disabled(journeyRoute == nil)
                 }
-                .buttonStyle(.glassProminent)
-                .padding(.horizontal)
-                .disabled(journeyRoute == nil)
-            }
-            .onAppear {
-                setupJourney()
+                .onAppear {
+                    setupJourney()
+                }
             }
         }
         .navigationBarTitleDisplayMode(.inline)

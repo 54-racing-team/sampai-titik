@@ -12,6 +12,7 @@ enum Route: Hashable {
     case home
     case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
     case journeyPage(stations: [JourneyStation])
+    case confirmation(stations: [JourneyStation])
     case profile
     case detail(id: String)
 }
@@ -49,6 +50,8 @@ struct RouterView: View {
                             departure: departure,
                             destination: destination
                         )
+                    case .confirmation(let stations):
+                        ConfirmationView(stations: stations)
                     case .journeyPage(let stations):
                         JourneyPageView(stations: stations)
                     default:

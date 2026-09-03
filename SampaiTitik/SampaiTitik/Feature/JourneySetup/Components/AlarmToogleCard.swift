@@ -37,7 +37,7 @@ struct AlarmToogleCard: View {
             }
         }
         .padding()
-        .background(Color(.secondarySystemBackground))
+        .background(Color.backgroundCard)
         .cornerRadius(26)
         .glassEffect(in: .rect(cornerRadius: 26))
         .animation(.easeInOut(duration: 0.25), value: isSoundEnabled)

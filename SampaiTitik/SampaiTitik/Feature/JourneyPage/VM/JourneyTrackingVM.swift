@@ -33,7 +33,7 @@ final class JourneyTrackingVM {
     func startTracking(
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
-        targetRadius: CLLocationDistance = 200
+        targetRadius: CLLocationDistance? = nil
     ) {
         hasTriggeredArrivalAlarm = false
         isTrackingActive = true
