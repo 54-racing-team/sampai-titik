@@ -81,7 +81,7 @@ struct RecentJourneyCard: View {
                     Text("Pakai lagi")
                         .font(.subheadline)
                         .fontWeight(.semibold)
-                        .padding(0)
+                        .padding(.horizontal, 4)
                 }
                 .buttonStyle(.glassProminent)
                 .tint(Color("MainBlue"))
@@ -89,7 +89,6 @@ struct RecentJourneyCard: View {
             .frame(maxWidth: .infinity, maxHeight: 60)
         }
         .padding()
-        .frame(maxWidth: .infinity)
         .background(Color("BackgroundCard"))
         .cornerRadius(20)
     }

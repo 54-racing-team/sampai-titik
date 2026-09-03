@@ -64,9 +64,9 @@ struct HomeView: View {
                         .font(.body.bold())
                         .foregroundStyle(Color.primary)
                     
-                    ScrollView(.horizontal) {
+                    ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 12) {
-                            ForEach(recentJourneys) { journey in
+                            ForEach(recentJourneys.prefix(3)) { journey in
                                 RecentJourneyCard(
                                     origin: journey.origin,
                                     destination: journey.destination,
@@ -80,6 +80,7 @@ struct HomeView: View {
                                         router.push(.journeySetup(departure: departureDTO, destination: destinationDTO))
                                     }
                                 }
+                                .frame(width: 320)
                             }
                         }
                     }
