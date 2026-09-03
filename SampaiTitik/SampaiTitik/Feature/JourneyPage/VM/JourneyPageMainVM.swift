@@ -107,7 +107,6 @@ public final class JourneyPageMainVM {
         }
     }
     
-    
     func addRecentJourney(context: ModelContext){
         guard let origin = stations.first?.name,let destination = stations.last?.name else {return}
         
