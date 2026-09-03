@@ -52,7 +52,7 @@ extension WatchManager {
         guard WCSession.default.isReachable == true else { return }
         do {
             let data = try JSONEncoder().encode(tracking)
-            WCSession.default.sendMessage(["action": "updateTracking", "data": data], replyHandler: nil)
+            WCSession.default.sendMessage(["action": "updateTracking", "data": data], replyHandler: nil, errorHandler: nil)
         } catch {
             print("fail upload journey tracking data to watch")
         }
