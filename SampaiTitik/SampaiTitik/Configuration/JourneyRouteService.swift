@@ -71,19 +71,8 @@ final class JourneyRouteService {
         }
 
         let weightedGraph = buildWeightedGraph()
-        let unweightedGraph = buildUnweightedGraph()
 
-        // Urutan stasiun via BFS
-        guard let orderedStationIDs = bfsPath(
-            from: departure.id,
-            to: destination.id,
-            in: unweightedGraph
-        ) else {
-            return nil
-        }
-
-        // Durasi via Dijkstra
-        guard let duration = dijkstraDuration(
+        guard let result = findShortestRoute(
             from: departure.id,
             to: destination.id,
             in: weightedGraph
@@ -91,10 +80,10 @@ final class JourneyRouteService {
             return nil
         }
 
-        let orderedStations = orderedStationIDs.compactMap { stationsByID[$0] }
+        let orderedStations = result.path.compactMap { stationsByID[$0] }
         guard !orderedStations.isEmpty else { return nil }
 
-        return JourneyRoute(stations: orderedStations, estimatedDuration: duration)
+        return JourneyRoute(stations: orderedStations, estimatedDuration: result.duration)
     }
 
     // MARK: - Graph Building
@@ -116,92 +105,53 @@ final class JourneyRouteService {
         return graph
     }
 
-    /// Membangun unweighted graph: edge hanya berisi adjacency (untuk BFS path finding).
-    private func buildUnweightedGraph() -> [String: Set<String>] {
-        var graph: [String: Set<String>] = [:]
-        let lineNames = Set(stations.flatMap { $0.lines.map(\.line_name) })
-
-        for lineName in lineNames {
-            let ordered = stationsOrderedOnLine(lineName)
-            for pair in zip(ordered, ordered.dropFirst()) {
-                graph[pair.0.station.id, default: []].insert(pair.1.station.id)
-                graph[pair.1.station.id, default: []].insert(pair.0.station.id)
-            }
-        }
-
-        return graph
-    }
-
     private func stationsOrderedOnLine(_ lineName: String) -> [(station: StationModelDTO, order: Int)] {
-        stations
-            .compactMap { station -> (station: StationModelDTO, order: Int)? in
-                guard let line = station.lines.first(where: { $0.line_name == lineName }) else { return nil }
-                return (station, line.order)
-            }
-            .sorted { $0.order < $1.order }
+        stations.flatMap { station in
+            station.lines
+                .filter { $0.line_name == lineName }
+                .map { (station: station, order: $0.order) }
+        }
+        .sorted { $0.order < $1.order }
     }
 
     // MARK: - Path Finding
 
-    /// BFS untuk mendapatkan urutan stasiun dari departure ke destination.
-    private func bfsPath(
-        from departureID: String,
-        to destinationID: String,
-        in graph: [String: Set<String>]
-    ) -> [String]? {
-        var queue = [departureID]
-        var visited = Set([departureID])
-        var previousID: [String: String] = [:]
-
-        while !queue.isEmpty {
-            let currentID = queue.removeFirst()
-            if currentID == destinationID { break }
-
-            for neighborID in graph[currentID, default: []].sorted() where !visited.contains(neighborID) {
-                visited.insert(neighborID)
-                previousID[neighborID] = currentID
-                queue.append(neighborID)
-            }
-        }
-
-        guard visited.contains(destinationID) else { return nil }
-
-        var path = [destinationID]
-        var current = destinationID
-        while let previous = previousID[current] {
-            path.append(previous)
-            current = previous
-        }
-
-        return path.reversed()
-    }
-
-    /// Dijkstra untuk menghitung durasi terpendek dari departure ke destination.
-    private func dijkstraDuration(
+    /// Dijkstra untuk mencari urutan stasiun dan estimasi durasi terpendek dari departure ke destination.
+    private func findShortestRoute(
         from departureID: String,
         to destinationID: String,
         in graph: [String: [(stationID: String, duration: TimeInterval)]]
-    ) -> TimeInterval? {
+    ) -> (path: [String], duration: TimeInterval)? {
         var bestDurations: [String: TimeInterval] = [departureID: 0]
-        var pending = Set(stations.map { $0.id })
+        var previousID: [String: String] = [:]
+        var visited = Set<String>()
 
-        while !pending.isEmpty {
-            guard let currentID = pending.min(by: {
-                (bestDurations[$0] ?? .infinity) < (bestDurations[$1] ?? .infinity)
-            }), let currentDuration = bestDurations[currentID] else {
+        while true {
+            guard let currentID = bestDurations
+                .filter({ !visited.contains($0.key) })
+                .min(by: { $0.value < $1.value })?
+                .key,
+                let currentDuration = bestDurations[currentID] else {
                 break
             }
 
             if currentID == destinationID {
-                return currentDuration
+                var path = [destinationID]
+                var curr = destinationID
+                while let prev = previousID[curr] {
+                    path.append(prev)
+                    curr = prev
+                }
+                return (path.reversed(), currentDuration)
             }
 
-            pending.remove(currentID)
+            visited.insert(currentID)
 
-            for edge in graph[currentID, default: []] where pending.contains(edge.stationID) {
+            for edge in graph[currentID, default: []] where !visited.contains(edge.stationID) {
                 let candidate = currentDuration + edge.duration
                 if candidate < (bestDurations[edge.stationID] ?? .infinity) {
                     bestDurations[edge.stationID] = candidate
+                    previousID[edge.stationID] = currentID
                 }
             }
         }
