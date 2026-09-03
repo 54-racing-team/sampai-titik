@@ -13,7 +13,8 @@ struct HomeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text("Rute Terakhir")
-                .font(.headline)
+                .font(.title3.bold())
+                .fixedSize(horizontal: false, vertical: true)
                 .foregroundStyle(Color("MainBlue"))
             
             ScrollView {
@@ -36,6 +37,7 @@ struct HomeView: View {
                         time: "10.00",
                         onReuse: {
                             print("Reuse Metland Telaga Murni")
+                            route.push(.journeySetup)
                         }
                     )
                 }
