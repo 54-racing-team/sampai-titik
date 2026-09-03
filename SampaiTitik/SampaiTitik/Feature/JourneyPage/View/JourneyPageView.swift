@@ -6,15 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct JourneyPageView: View {
-<<<<<<< HEAD
+    @Environment(\.modelContext) var modelContext
     @Environment(WatchManager.self) var watchManager
-    
-    @State var viewModel = JourneyPageMainVM()
-=======
     @State var viewModel: JourneyPageMainVM
->>>>>>> trial
     @State private var isCancel: Bool = false
 
     init(stations: [JourneyStation] = JourneyStation.sampleStations) {
@@ -31,7 +28,6 @@ struct JourneyPageView: View {
 
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
-//                    Text("Kamu bisa keluar dari aplikasi.")
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -56,18 +52,16 @@ struct JourneyPageView: View {
             .sheet(isPresented: $isCancel) {
                 JourneyPageCancelSheet {
                     viewModel.stopJourneyTracking()
+                    viewModel.addRecentJourney(context: modelContext)
                 }
                 .presentationDetents([.fraction(0.5)])
                 .presentationBackground(Color(.secondarySystemBackground))
                 .presentationDragIndicator(.visible)
             }
             .navigationTitle("Perjalanan")
-<<<<<<< HEAD
-=======
         }
         .onAppear {
             viewModel.startTrackingIfPossible()
->>>>>>> trial
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -76,5 +70,6 @@ struct JourneyPageView: View {
 #Preview {
     NavigationStack {
         JourneyPageView()
+            .environment(WatchManager())
     }
 }

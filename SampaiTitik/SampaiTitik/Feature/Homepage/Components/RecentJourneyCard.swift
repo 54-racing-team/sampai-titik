@@ -9,13 +9,6 @@ import SwiftUI
 
 struct RecentJourneySymbol: View {
     var body: some View {
-<<<<<<< HEAD
-        VStack(spacing: 0) {            
-            Image(systemName: "record.circle.fill")
-            dashedLine()
-            Image(systemName: "record.circle.fill")
-                .foregroundStyle(Color("MainBlue"))
-=======
         VStack(spacing: 0) {
             Image(systemName: "record.circle.fill")
                 .foregroundStyle(.primary)
@@ -26,7 +19,6 @@ struct RecentJourneySymbol: View {
             Image(systemName: "record.circle.fill")
                 .foregroundStyle(.mainBlue)
                 .font(.headline)
->>>>>>> trial
         }
         .frame(width: 20)
     }
@@ -99,11 +91,6 @@ struct RecentJourneyCard: View {
         .frame(maxWidth: .infinity)
         .background(Color("BackgroundCard"))
         .cornerRadius(20)
-<<<<<<< HEAD
-        .glassEffect(in: .rect(cornerRadius: 20))
-//        .padding(.horizontal)
-=======
->>>>>>> trial
     }
 }
 

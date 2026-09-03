@@ -57,7 +57,7 @@ struct RouterView: View {
                     }
                 }.onChange(of: watchManager.isOnJouney) { oldValue, newValue in
                     if newValue {
-                        router.push(.journeyPage)
+                        router.push(.journeyPage(stations: []))
                     } else {
                         router.popToRoot()
                     }

@@ -87,22 +87,11 @@
 		3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				Feature/Components/Button.swift,
 				Info.plist,
 			);
 			target = 3D3DFBFC303879EB00B841E1 /* SampaiTitik */;
 		};
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
-/* Begin PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
-		2233B2C13048216E00F4B502 /* Exceptions for "SampaiTitik" folder in "Copy Bundle Resources" phase from "SampaiTitik" target */ = {
-			isa = PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet;
-			buildPhase = 3D3DFBFB303879EB00B841E1 /* Resources */;
-			membershipExceptions = (
-				Feature/Components/Button.swift,
-			);
-		};
-/* End PBXFileSystemSynchronizedGroupBuildPhaseMembershipExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		3D166B383040B39F00FB4578 /* SampaiTitikWidget */ = {
@@ -114,7 +103,6 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
-				2233B2C13048216E00F4B502 /* Exceptions for "SampaiTitik" folder in "Copy Bundle Resources" phase from "SampaiTitik" target */,
 			);
 			path = SampaiTitik;
 			sourceTree = "<group>";

@@ -24,25 +24,6 @@ struct JourneyForm: View {
                     vm.showDeparture.toggle()
                 }
                 .sheet(isPresented: $vm.showDeparture) {
-                    SearchStationView(stations: vm.allStations, selectedStation: $vm.departStation, isPresented: $vm.showDeparture)
-                }
-                
-                ZStack {
-                    Divider()
-                    Button{
-                        vm.swapStations()
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.headline)
-                            .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Circle())
-                }
-                .padding(.vertical, -16)
-                
-=======
                     SearchStationView(
                         stations: vm.allStations,
                         selectedStation: $vm.departStation,
@@ -58,8 +39,6 @@ struct JourneyForm: View {
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
                         .foregroundStyle(.mainBlue)
                 }
-
->>>>>>> trial
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -68,17 +47,12 @@ struct JourneyForm: View {
                 StationPickerButton(iconName: "location.fill", selection: vm.destStation){
                     vm.showDestination.toggle()
                 }
-<<<<<<< HEAD
-                .sheet(isPresented: $vm.showDestination){
-                    SearchStationSheet(selectedStation: $vm.destStation, isPresented: $vm.showDestination)
-=======
                 .sheet(isPresented: $vm.showDestination) {
                     SearchStationView(
                         stations: vm.allStations,
                         selectedStation: $vm.destStation,
                         isPresented: $vm.showDestination
                     )
->>>>>>> trial
                 }
 
                 Button {
@@ -106,4 +80,5 @@ struct JourneyForm: View {
 
 #Preview {
     JourneyForm(vm: HomeViewModel())
+        .environment(Router())
 }

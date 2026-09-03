@@ -14,7 +14,6 @@ struct HomeView: View {
     @State var stationVM = StationViewModel()
     @Environment(\.modelContext) private var modelContext
     
-
     var body: some View {
         ZStack {
             Color(Color("BackgroundBlue"))
@@ -46,12 +45,8 @@ struct HomeView: View {
                 }
                 .padding(.bottom, 8)
                 .frame(maxWidth: .infinity, alignment: .leading)
-<<<<<<< HEAD
-                .foregroundStyle(Color.blue)
-=======
                 .foregroundStyle(Color.primary)
                 .fixedSize(horizontal: false, vertical: true)
->>>>>>> trial
 
                 JourneyForm()
 
@@ -66,23 +61,10 @@ struct HomeView: View {
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
                         .font(.body.bold())
-<<<<<<< HEAD
-                        .foregroundStyle(Color.blue)
-                    
-                    RecentJourneyCard(
-                        origin: "Pasar Minggu Baru",
-                        destination: "Metland Telaga Murni",
-                        date: "Kemarin",
-                        time: "22.15",
-                        onReuse: {
-                            print("Reuse Metland Telaga Murni")
-                        }
-=======
                         .foregroundStyle(Color.primary)
                     
                     RecentJourneyCard(
                         origin: "Pasar Minggu Baru", destination: "Metland Telaga Murni", date: "Kemarin", time: "22.15", onReuse: {print("Reuse Metland Telaga Murni")}
->>>>>>> trial
                     )
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
