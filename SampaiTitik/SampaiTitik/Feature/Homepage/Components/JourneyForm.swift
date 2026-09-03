@@ -38,6 +38,7 @@ struct JourneyForm: View {
                         Image(systemName: "arrow.up.arrow.down")
                             .font(.headline)
                             .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                            .foregroundStyle(.mainBlue)
                     }
     
                 Text("Stasiun Tujuan")
