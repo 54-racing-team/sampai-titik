@@ -12,7 +12,7 @@ import Observation
 @MainActor
 @Observable
 final class JourneyTrackingVM {
-    private let locationManager: LocationManager
+    let locationManager: LocationManager
     private let alarmScheduler: AlarmSchedulerManager
     private var hasTriggeredArrivalAlarm = false
 

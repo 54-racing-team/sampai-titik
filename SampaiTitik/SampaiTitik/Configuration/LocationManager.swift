@@ -17,8 +17,8 @@ import UserNotifications
 //   1. Idle: allowsBackgroundLocationUpdates = false, stopUpdatingLocation()
 //   2. Journey Aktif: allowsBackgroundLocationUpdates = true
 //   3. Adaptive Distance Filter & Accuracy:
-//      - Jarak > 3 km: distanceFilter = 500m, accuracy = kilometer (Daya sangat hemat di kereta)
-//      - Jarak 1 km - 3 km: distanceFilter = 250m, accuracy = hundredMeters
+//      - Jarak > 3 km: distanceFilter = 300m, accuracy = kilometer (Daya sangat hemat di kereta)
+//      - Jarak 1 km - 3 km: distanceFilter = 150m, accuracy = hundredMeters
 //      - Jarak < 1 km: distanceFilter = 50m, accuracy = nearestTenMeters
 
 @Observable
@@ -40,6 +40,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
     var isWithinTargetRadius: Bool = false
     var availableStations: [StationModelDTO] = []
     var onArriveAtDestination: (() -> Void)?
+    var onLocationUpdate: ((CLLocation) -> Void)?
 
     private var hasTriggeredAlarm: Bool = false
     private var isJourneyTrackingActive: Bool = false
@@ -53,7 +54,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         // Power-saving baseline configuration saat idle
         manager.activityType = .other
         manager.desiredAccuracy = kCLLocationAccuracyKilometer
-        manager.distanceFilter = 500
+        manager.distanceFilter = 300
         manager.pausesLocationUpdatesAutomatically = true
         manager.allowsBackgroundLocationUpdates = false
         UNUserNotificationCenter.current().delegate = self
@@ -189,14 +190,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
 
         if distance > 3000 {
             // > 3 km: Hemat daya maksimal
-            if manager.distanceFilter != 500 {
-                manager.distanceFilter = 500
+            if manager.distanceFilter != 300 {
+                manager.distanceFilter = 300
                 manager.desiredAccuracy = kCLLocationAccuracyKilometer
             }
         } else if distance > 1000 {
             // 1 km - 3 km
-            if manager.distanceFilter != 200 {
-                manager.distanceFilter = 200
+            if manager.distanceFilter != 150 {
+                manager.distanceFilter = 150
                 manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             }
         } else {
@@ -261,6 +262,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         userLocation = location
         updateDistance()
         checkArrival()
+        onLocationUpdate?(location)
     }
 
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
