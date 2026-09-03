@@ -27,7 +27,8 @@ struct JourneyForm: View {
                     SearchStationView(
                         stations: vm.allStations,
                         selectedStation: $vm.departStation,
-                        isPresented: $vm.showDeparture
+                        isPresented: $vm.showDeparture,
+                        showNearestStation: true
                     )
                 }
 
@@ -39,6 +40,8 @@ struct JourneyForm: View {
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
                         .foregroundStyle(.mainBlue)
                 }
+                .padding(.vertical, -16)
+                
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)

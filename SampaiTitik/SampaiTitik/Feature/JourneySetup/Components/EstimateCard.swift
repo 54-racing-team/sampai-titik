@@ -32,16 +32,13 @@ struct EstimateCard: View {
             HStack {
                 HStack(spacing: 6) {
                     Image(systemName: "clock")
-                        .font(.caption)
                     Text("Estimasi Perjalanan")
-                        .font(.subheadline)
                 }
                 .foregroundStyle(.secondary)
 
                 Spacer()
 
                 Text(formattedDuration)
-                    .font(.subheadline)
                     .fontWeight(.semibold)
                     .foregroundStyle(.secondary)
             }
@@ -54,12 +51,10 @@ struct EstimateCard: View {
 
                 VStack(alignment: .leading, spacing: 24) {
                     Text(departureStation?.name ?? "Stasiun Asal")
-                        .font(.subheadline)
                         .fontWeight(.semibold)
                         .lineLimit(1)
 
                     Text(destinationStation?.name ?? "Stasiun Tujuan")
-                        .font(.subheadline)
                         .fontWeight(.semibold)
                         .lineLimit(1)
                 }
@@ -67,7 +62,7 @@ struct EstimateCard: View {
             }
         }
         .padding()
-        .background(Color(uiColor: .secondarySystemBackground))
+        .background(Color.backgroundCard)
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .glassEffect(in: .rect(cornerRadius: 20))
     }

@@ -104,12 +104,11 @@ struct MapCard: View {
                     Spacer()
                     
                     Text("\(Int(locationManager.targetRadius)) meter")
-                        .font(.subheadline)
                         .fontWeight(.semibold)
                         .foregroundStyle(.secondary)
                 }
                 
-                Slider(value: $locationManager.targetRadius, in: 50...1000, step: 25)
+                Slider(value: $locationManager.targetRadius, in: 50...1500, step: 25)
                     .tint(.mainBlue)
                 
                 HStack {
@@ -117,17 +116,17 @@ struct MapCard: View {
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("500 m")
+                    Text("750 m")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                     Spacer()
-                    Text("1000 m")
+                    Text("1500 m")
                         .font(.caption2)
                         .foregroundColor(.secondary)
                 }
             }
             .padding(16)
-            .background(Color(uiColor: .secondarySystemBackground))
+            .background(Color.backgroundCard)
             .clipShape(
                 UnevenRoundedRectangle(
                     topLeadingRadius: 0,
