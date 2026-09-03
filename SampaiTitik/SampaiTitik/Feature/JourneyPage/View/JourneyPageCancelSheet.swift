@@ -16,6 +16,8 @@ struct JourneyPageCancelSheet: View {
             Spacer()
             
             Image("CancelSheet")
+                .resizable()
+                .scaledToFit()
             
             VStack(spacing: 6) {
                 Text("Akhiri perjalanan lebih awal?")
