@@ -28,7 +28,6 @@ final class AlarmSchedulerManager: ObservableObject {
     // MARK: - Authorization
 
     func requestAuthorizationIfNeeded() async {
-        print("called")
         switch manager.authorizationState {
         case .authorized:
             isAuthorized = true

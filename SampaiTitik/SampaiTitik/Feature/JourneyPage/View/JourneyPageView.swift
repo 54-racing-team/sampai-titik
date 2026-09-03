@@ -29,7 +29,6 @@ struct JourneyPageView: View {
                 
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
-                    //                    Text("Kamu bisa keluar dari aplikasi.")
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -54,7 +53,6 @@ struct JourneyPageView: View {
             .sheet(isPresented: $isCancel) {
                 JourneyPageCancelSheet {
                     viewModel.stopJourneyTracking()
-                    viewModel.addRecentJourney(context: modelContext)
                     isCancel = false
                     router.popToRoot()
                 }
@@ -66,7 +64,9 @@ struct JourneyPageView: View {
             .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
-            viewModel.startTrackingIfPossible()
+            Task {
+                await viewModel.startTrackingIfPossible(modelContext: modelContext)
+            }
         }
         .navigationBarBackButtonHidden(true)
     }

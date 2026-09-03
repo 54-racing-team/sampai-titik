@@ -14,6 +14,7 @@ import SwiftData
 public final class JourneyPageMainVM {
     public var stations: [JourneyStation]
     public var isReminderActive: Bool
+    
     private let trackingViewModel: JourneyTrackingVM
 
     private var isTrackingStarted = false
@@ -73,31 +74,27 @@ public final class JourneyPageMainVM {
         JourneyPageDetailVM(stations: stations)
     }
 
-    public func toggleReminder() {
-        isReminderActive.toggle()
-        if isReminderActive {
-            startTrackingIfPossible()
-        } else {
-            trackingViewModel.stopTracking()
-        }
-    }
-
     public func stopJourneyTracking() {
         trackingViewModel.stopTracking()
     }
 
     // MARK: - Tracking Control
 
-    public func startTrackingIfPossible() {
+    public func startTrackingIfPossible(modelContext: ModelContext) async {
         guard !isTrackingStarted,
               isReminderActive,
               let departure = stationDTO(named: currentStationName),
               let destination = stationDTO(named: destinationName) else { return }
 
+        // Ask alarm permissions
+        await trackingViewModel.alarmScheduler.requestAuthorizationIfNeeded()
+
         isTrackingStarted = true
-        trackingViewModel.startTracking(
+
+        await trackingViewModel.startTracking(
             departureStation: departure,
-            destinationStation: destination
+            destinationStation: destination,
+            modelContext: modelContext
         )
     }
 
@@ -107,15 +104,4 @@ public final class JourneyPageMainVM {
         }
     }
     
-    func addRecentJourney(context: ModelContext){
-        guard let origin = stations.first?.name,let destination = stations.last?.name else {return}
-        
-        let recentJourney = RecentJourneyModel(
-            date: Date(),
-            origin: origin,
-            destination: destination
-        )
-        
-        context.insert(recentJourney)
-    }
 }
