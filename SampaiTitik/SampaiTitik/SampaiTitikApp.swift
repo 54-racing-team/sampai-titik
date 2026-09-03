@@ -14,6 +14,9 @@ struct SampaiTitikApp: App {
         WindowGroup {
             RootView()
         }
-        .modelContainer(for: StationModel.self)
+        .modelContainer(for: [
+            StationModel.self,
+            RecentJourneyModel.self
+        ])
     }
 }

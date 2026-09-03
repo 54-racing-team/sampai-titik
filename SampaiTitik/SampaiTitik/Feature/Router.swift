@@ -37,6 +37,7 @@ class Router {
 
 struct RouterView: View {
     @State private var router = Router()
+    @State private var watchManager = WatchManager.shared
 
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -57,8 +58,16 @@ struct RouterView: View {
                     default:
                         EmptyView()
                     }
+                }.onChange(of: watchManager.isOnJouney) { oldValue, newValue in
+                    if newValue {
+                        router.push(.journeyPage(stations: []))
+                    } else {
+                        router.popToRoot()
+                    }
+                    
                 }
         }
         .environment(router)
+        .environment(watchManager)
     }
 }

@@ -31,16 +31,17 @@ struct JourneyForm: View {
                         showNearestStation: true
                     )
                 }
+
+                Button {
+                    vm.swapStations()
+                } label: {
+                    Image(systemName: "arrow.up.arrow.down")
+                        .font(.headline)
+                        .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
+                        .foregroundStyle(.mainBlue)
+                }
+                .padding(.vertical, -16)
                 
-                    Button{
-                        vm.swapStations()
-                    } label: {
-                        Image(systemName: "arrow.up.arrow.down")
-                            .font(.headline)
-                            .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
-                            .foregroundStyle(.mainBlue)
-                    }
-    
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
