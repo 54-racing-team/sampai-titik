@@ -7,6 +7,7 @@
 
 import Foundation
 import Observation
+import SwiftData
 
 @MainActor
 @Observable
@@ -104,5 +105,17 @@ public final class JourneyPageMainVM {
         StationModelDTO.loadFromJSON().first {
             $0.name.caseInsensitiveCompare(name) == .orderedSame
         }
+    }
+    
+    func addRecentJourney(context: ModelContext){
+        guard let origin = stations.first?.name,let destination = stations.last?.name else {return}
+        
+        let recentJourney = RecentJourneyModel(
+            date: Date(),
+            origin: origin,
+            destination: destination
+        )
+        
+        context.insert(recentJourney)
     }
 }

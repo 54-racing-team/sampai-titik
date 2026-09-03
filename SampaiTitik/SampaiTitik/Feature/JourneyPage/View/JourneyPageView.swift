@@ -6,8 +6,11 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct JourneyPageView: View {
+    @Environment(\.modelContext) var modelContext
+    @Environment(WatchManager.self) var watchManager
     @State var viewModel: JourneyPageMainVM
     @State private var isCancel: Bool = false
     @Environment(Router.self) private var router
@@ -51,6 +54,7 @@ struct JourneyPageView: View {
             .sheet(isPresented: $isCancel) {
                 JourneyPageCancelSheet {
                     viewModel.stopJourneyTracking()
+                    viewModel.addRecentJourney(context: modelContext)
                     isCancel = false
                     router.popToRoot()
                 }
@@ -71,4 +75,5 @@ struct JourneyPageView: View {
 #Preview {
     JourneyPageView()
         .environment(Router())
+        .environment(WatchManager())
 }
