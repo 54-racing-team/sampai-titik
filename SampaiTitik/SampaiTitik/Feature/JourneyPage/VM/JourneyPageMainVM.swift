@@ -8,6 +8,7 @@
 import CoreLocation
 import Foundation
 import Observation
+import SwiftData
 
 @MainActor
 @Observable
@@ -84,15 +85,6 @@ public final class JourneyPageMainVM {
         JourneyPageDetailVM(stations: stations)
     }
 
-    public func toggleReminder() {
-        isReminderActive.toggle()
-        if isReminderActive {
-            startTrackingIfPossible()
-        } else {
-            trackingViewModel.stopTracking()
-        }
-    }
-
     public func stopJourneyTracking() {
         trackingViewModel.locationManager.onLocationUpdate = nil
         trackingViewModel.stopTracking()
@@ -100,11 +92,14 @@ public final class JourneyPageMainVM {
 
     // MARK: - Tracking Control
 
-    public func startTrackingIfPossible() {
+    public func startTrackingIfPossible(modelContext: ModelContext) async {
         guard !isTrackingStarted,
               isReminderActive,
               let departure = stationDTO(named: currentStationName),
               let destination = stationDTO(named: destinationName) else { return }
+
+        // Ask alarm permissions
+        await trackingViewModel.alarmScheduler.requestAuthorizationIfNeeded()
 
         isTrackingStarted = true
 
@@ -117,7 +112,8 @@ public final class JourneyPageMainVM {
 
         trackingViewModel.startTracking(
             departureStation: departure,
-            destinationStation: destination
+            destinationStation: destination,
+            modelContext: modelContext
         )
 
         // Segera evaluasi posisi lokasi saat ini jika sudah ada
@@ -222,4 +218,5 @@ public final class JourneyPageMainVM {
             $0.name.caseInsensitiveCompare(name) == .orderedSame
         }
     }
+    
 }

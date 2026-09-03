@@ -21,31 +21,11 @@ enum AlarmConfiguration {
         soundTitle: String,
     ) -> AlarmManager.AlarmConfiguration<MyAlarmMetadata> {
 
-        let snoozButton = AlarmButton(
-            text: "Nanti dulu deh",
-            textColor: .white,
-            systemImageName: "pause.circle",
-        )
-        
-        let stopButton = AlarmButton(
-            text: "Stop",
-            textColor: .yellow,
-            systemImageName: "play.circle",
-        )
-
         let alert = AlarmPresentation.Alert(
             title: LocalizedStringResource(stringLiteral: label),
-            stopButton: stopButton,
-            secondaryButton: snoozButton,
-            secondaryButtonBehavior: .countdown
         )
-        
-        let countdown = AlarmPresentation.Countdown(title: "Lanjutin Perjalanan")
-        let paused = AlarmPresentation.Paused(
-            title: "Perjalanan tertunda",
-            resumeButton: AlarmButton(text: "Resume", textColor: .blue, systemImageName: "play.circle"))
 
-        let presentation = AlarmPresentation(alert: alert, countdown: countdown, paused: paused)
+        let presentation = AlarmPresentation(alert: alert)
 
         let attributes = AlarmAttributes<MyAlarmMetadata>(
             presentation: presentation,
