@@ -32,8 +32,6 @@ struct JourneyForm: View {
                     )
                 }
                 
-                ZStack {
-                    Divider()
                     Button{
                         vm.swapStations()
                     } label: {
@@ -41,12 +39,7 @@ struct JourneyForm: View {
                             .font(.headline)
                             .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
                     }
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(Circle())
-                }
-                .padding(.vertical, -16)
-                
+    
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
