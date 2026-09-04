@@ -52,7 +52,7 @@ struct JourneySetupPageView: View {
                             } else {
                                 type = .next
                             }
-                            return JourneyStation(name: station.name, type: type)
+                            return JourneyStation(name: station.name, type: type, latitude: station.latitude, longitude: station.longitude)
                         }
                         router.push(.confirmation(stations: stations))
                     } label: {
