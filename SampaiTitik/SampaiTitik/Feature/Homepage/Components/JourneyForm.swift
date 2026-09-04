@@ -40,7 +40,6 @@ struct JourneyForm: View {
                         .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
                         .foregroundStyle(.mainBlue)
                 }
-                .padding(.vertical, -16)
                 
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)

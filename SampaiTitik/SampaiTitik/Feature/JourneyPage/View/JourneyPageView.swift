@@ -26,7 +26,7 @@ struct JourneyPageView: View {
             
             VStack {
                 JourneyCard(viewModel: viewModel)
-                
+
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
                 }
@@ -67,6 +67,13 @@ struct JourneyPageView: View {
             Task {
                 await viewModel.startTrackingIfPossible(modelContext: modelContext)
             }
+            watchManager.sendJourneyTracking(
+                journeyTracking(
+                    destination: viewModel.destinationName,
+                    currentStation: viewModel.currentStationName,
+                    nextStation: viewModel.nextStationName,
+                    stationRemaining: viewModel.remainingStationsCount)
+            )
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -75,5 +82,5 @@ struct JourneyPageView: View {
 #Preview {
     JourneyPageView()
         .environment(Router())
-        .environment(WatchManager())
+        .environment(WatchManager.shared)
 }

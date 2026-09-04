@@ -51,7 +51,7 @@ struct SearchStationView: View {
             $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -104,6 +104,7 @@ struct SearchStationView: View {
                 } else {
                     stationRows(filteredStations)
                 }
+//                .foregroundStyle(.primary)
             }
             .searchable(text: $searchStation, prompt: "Cari stasiun...")
             .navigationTitle("Pilih Stasiun")

@@ -7,10 +7,10 @@
 
 import Foundation
 
-struct recentJourney: Codable {
+struct recentJourney: Codable, Hashable {
+    let date: Date
     let origin: String
     let destination: String
-    let date: Date
 }
 
 struct setAlarm: Codable {

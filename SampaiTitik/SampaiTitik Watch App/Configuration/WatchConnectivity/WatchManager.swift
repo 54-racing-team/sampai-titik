@@ -9,7 +9,7 @@ import WatchConnectivity
 
 @Observable
 class WatchManager: NSObject, WCSessionDelegate {
-    var isOnJouney = false
+    var isOnJourney = false
     
     var recentJouneys: [recentJourney] = []
     var currentTracking: journeyTracking?
@@ -29,7 +29,12 @@ class WatchManager: NSObject, WCSessionDelegate {
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
+        DispatchQueue.main.async {
+            if let data = session.receivedApplicationContext["data"] as? Data,
+               let journeys = try? JSONDecoder().decode([recentJourney].self, from: data) {
+                self.recentJouneys = journeys
+            }
+        }
     }
 }
 
@@ -39,6 +44,7 @@ extension WatchManager {
         do {
             let data = try JSONEncoder().encode(journey)
             WCSession.default.sendMessage(["action": "startJourney", "data": data], replyHandler: nil, errorHandler: nil)
+            print("upload journey tracking data to iphone is succed")
         } catch {
             print("fail upload journey tracking data to iphone")
         }
@@ -51,7 +57,7 @@ extension WatchManager {
         }
         
         WCSession.default.sendMessage(["action": "finishJourney"], replyHandler: nil, errorHandler: nil)
-        self.isOnJouney = false
+        self.isOnJourney = false
         self.currentTracking = nil
     }
     
@@ -62,7 +68,7 @@ extension WatchManager {
         }
         
         WCSession.default.sendMessage(["action":"cancelJourney"], replyHandler: nil, errorHandler: nil)
-        self.isOnJouney = false
+        self.isOnJourney = false
         self.currentTracking = nil
     }
     
@@ -76,7 +82,7 @@ extension WatchManager {
                 do {
                     let data = try JSONDecoder().decode(journeyTracking.self, from: tracking)
                     self.currentTracking = data
-                    self.isOnJouney = true
+                    self.isOnJourney = true
                 } catch {
                     print("failed to decode recentTracking from tracking: \(error)")
                 }

@@ -35,8 +35,9 @@ struct JourneySymbol: View {
 }
 
 struct JourneySetupPageView: View {
-    @State var isAlarmOn: Bool = true
+//    @State var isAlarmOn: Bool = true
     @Environment(Router.self) var route
+    @State var watchManager = WatchManager.shared
     
     var body: some View {
         ScrollView {
@@ -51,18 +52,18 @@ struct JourneySetupPageView: View {
                     JourneySymbol()
                     
                     VStack(alignment: .leading, spacing: 12){
-                        Text("Pasar Minggu Baru")
+                        Text(watchManager.selectedJourney!.origin)
                             .font(.caption)
                             .fixedSize(horizontal: false, vertical: true)
                         
-                        Text("Metland Telaga Murni")
+                        Text(watchManager.selectedJourney!.destination)
                             .font(.caption)
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 
-                Toggle("Alarm", isOn: $isAlarmOn)
+                Toggle("Alarm", isOn: $watchManager.isAlarmOn)
                     .padding(10)
                     .glassEffect(.regular, in: Capsule())
             }
@@ -72,6 +73,12 @@ struct JourneySetupPageView: View {
                 Button {
                     // Action
                     route.push(.detailJourneyPage)
+                    watchManager.sendStartJourney(
+                        startJourney(
+                            selectedJourney: watchManager.selectedJourney!,
+                            alarmConfig: setAlarm(isAlarmOn: watchManager.isAlarmOn)
+                        )
+                    )
                 } label: {
                     Image(systemName: "checkmark")
                 }
