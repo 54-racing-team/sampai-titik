@@ -218,3 +218,23 @@ final class JourneyRouteService {
         return distance / averageSpeedMPS + stationStopAllowance
     }
 }
+
+extension JourneyRouteService {
+        static func createJourneyStations(originName: String, destinationName: String) -> [JourneyStation] {
+            let allStations = StationModelDTO.loadFromJSON()
+            guard let departure = allStations.first(where: { $0.name == originName }),
+                  let destination = allStations.first(where: { $0.name == destinationName }) else {
+                return []
+            }
+            
+            let service = JourneyRouteService(stations: allStations)
+            guard let route = service.createRoute(from: departure, to: destination) else {
+                return []
+            }
+            
+            return route.stations.enumerated().map { index, station in
+                let type: StationType = (index == 0) ? .current : (index == route.stations.count - 1 ? .destination : .next)
+                return JourneyStation(name: station.name, type: type)
+            }
+        }
+    }

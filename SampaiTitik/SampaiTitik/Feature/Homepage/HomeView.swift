@@ -99,7 +99,7 @@ struct HomeView: View {
                 recentJourney(date: $0.date, origin: $0.origin, destination: $0.destination)
             }
             WatchManager.shared.sendRecentJourney(journeys)
-            
+                 
         }
     }
 }

@@ -73,6 +73,7 @@ extension WatchManager {
                     let data = try JSONDecoder().decode(startJourney.self, from: journeyInfo)
                     self.activeJourney = data
                     self.isOnJourney = true
+                    print("iphone get startJourney from watch")
                 } catch {
                     print("failed to decode startJourney from journeyInfo: \(error)")
                 }

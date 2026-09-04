@@ -29,7 +29,12 @@ class WatchManager: NSObject, WCSessionDelegate {
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        WCSession.default.receivedApplicationContext
+        DispatchQueue.main.async {
+            if let data = session.receivedApplicationContext["data"] as? Data,
+               let journeys = try? JSONDecoder().decode([recentJourney].self, from: data) {
+                self.recentJouneys = journeys
+            }
+        }
     }
 }
 
@@ -39,6 +44,7 @@ extension WatchManager {
         do {
             let data = try JSONEncoder().encode(journey)
             WCSession.default.sendMessage(["action": "startJourney", "data": data], replyHandler: nil, errorHandler: nil)
+            print("upload journey tracking data to iphone is succed")
         } catch {
             print("fail upload journey tracking data to iphone")
         }

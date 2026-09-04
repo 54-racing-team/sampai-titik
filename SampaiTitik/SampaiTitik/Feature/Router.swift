@@ -60,7 +60,12 @@ struct RouterView: View {
                     }
                 }.onChange(of: watchManager.isOnJourney) { oldValue, newValue in
                     if newValue {
-                        router.push(.journeyPage(stations: []))
+                        let origin = watchManager.activeJourney?.selectedJourney.origin ?? ""
+                        let destination = watchManager.activeJourney?.selectedJourney.destination ?? ""
+                        
+                        let stations = JourneyRouteService.createJourneyStations(originName: origin, destinationName: destination)
+                        
+                        router.push(.journeyPage(stations: stations))
                     } else {
                         router.popToRoot()
                     }

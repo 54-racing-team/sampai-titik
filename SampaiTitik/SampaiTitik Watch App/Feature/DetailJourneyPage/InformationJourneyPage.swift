@@ -13,50 +13,62 @@ struct InformationJourneyPage: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                Text("Tujuan Akhir")
-                    .font(.title3.bold())
-                    .fixedSize(horizontal: false, vertical: true)
-                
-                HStack{
-                    Image(systemName: "location.fill")
-                        .font(.caption)
-                    
-                    Text(watchManager.currentTracking!.destination)
-                        .font(.caption)
-                        .foregroundStyle(.mainBlue)
-                }
-                .padding(10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .fixedSize(horizontal: false, vertical: true)
-                .glassEffect(.regular, in: Capsule())
-                
-                
-                HStack(spacing: 8) {
-                    Text("\(watchManager.currentTracking!.stationRemaining)")
+            if let tracking = watchManager.currentTracking {
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("Tujuan Akhir")
                         .font(.title3.bold())
-                        .foregroundStyle(.orange)
-                    
-                    Text("sisa pemberhentian")
-                        .font(.caption)
-                }
-                .fixedSize(horizontal: false, vertical: true)
-                
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Stasiun berikutnya")
-                        .font(.headline)
+                        .fixedSize(horizontal: false, vertical: true)
                     
                     HStack{
-                        Image(systemName: "tram.fill")
+                        Image(systemName: "location.fill")
                             .font(.caption)
                         
-                        Text(watchManager.currentTracking!.nextStation)
+                        Text(tracking.destination)
+                            .font(.caption)
+                            .foregroundStyle(.mainBlue)
+                    }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .glassEffect(.regular, in: Capsule())
+                    
+                    
+                    HStack(spacing: 8) {
+                        Text("\(tracking.stationRemaining)")
+                            .font(.title3.bold())
+                            .foregroundStyle(.orange)
+                        
+                        Text("sisa pemberhentian")
                             .font(.caption)
                     }
+                    .fixedSize(horizontal: false, vertical: true)
+                    
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Stasiun berikutnya")
+                            .font(.headline)
+                        
+                        HStack{
+                            Image(systemName: "tram.fill")
+                                .font(.caption)
+                            
+                            Text(tracking.nextStation)
+                                .font(.caption)
+                        }
+                    }
+                    .padding(10)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 20))
                 }
-                .padding(10)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .glassEffect(.regular, in: RoundedRectangle(cornerRadius: 20))
+            } else {
+                VStack(spacing: 12) {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle())
+                    
+                    Text("Menyambungkan...")
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                }
+                .frame(maxWidth: .infinity, minHeight: 120)
             }
         }
     }

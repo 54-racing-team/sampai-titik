@@ -67,6 +67,13 @@ struct JourneyPageView: View {
             Task {
                 await viewModel.startTrackingIfPossible(modelContext: modelContext)
             }
+            watchManager.sendJourneyTracking(
+                journeyTracking(
+                    destination: viewModel.destinationName,
+                    currentStation: viewModel.currentStationName,
+                    nextStation: viewModel.nextStationName,
+                    stationRemaining: viewModel.remainingStationsCount)
+            )
         }
         .navigationBarBackButtonHidden(true)
     }
