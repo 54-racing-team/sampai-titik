@@ -75,5 +75,5 @@ struct JourneyPageView: View {
 #Preview {
     JourneyPageView()
         .environment(Router())
-        .environment(WatchManager())
+        .environment(WatchManager.shared)
 }

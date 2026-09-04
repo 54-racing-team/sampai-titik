@@ -9,7 +9,7 @@ import WatchConnectivity
 
 @Observable
 class WatchManager: NSObject, WCSessionDelegate {
-    var isOnJouney = false
+    var isOnJourney = false
     var activeJourney: startJourney?
 
     static let shared = WatchManager()
@@ -29,7 +29,7 @@ class WatchManager: NSObject, WCSessionDelegate {
     }
     
     func sessionDidDeactivate(_ session: WCSession) {
-        
+        WCSession.default.activate()
     }
     
     func sessionDidBecomeInactive(_ session: WCSession) {
@@ -72,18 +72,18 @@ extension WatchManager {
                 do {
                     let data = try JSONDecoder().decode(startJourney.self, from: journeyInfo)
                     self.activeJourney = data
-                    self.isOnJouney = true
+                    self.isOnJourney = true
                 } catch {
                     print("failed to decode startJourney from journeyInfo: \(error)")
                 }
                 
             case "finishJourney":
                 self.activeJourney = nil
-                self.isOnJouney = false
+                self.isOnJourney = false
                 
             case "cancelJourney":
                 self.activeJourney = nil
-                self.isOnJouney = false
+                self.isOnJourney = false
                 
             default:
                 print("action can't be handled")

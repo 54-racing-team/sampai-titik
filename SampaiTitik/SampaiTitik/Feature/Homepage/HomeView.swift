@@ -13,6 +13,7 @@ struct HomeView: View {
     @State var stationVM = StationViewModel()
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) var router
+    
     @Query(sort: \RecentJourneyModel.date, order: .reverse) var recentJourneys: [RecentJourneyModel]
     
     var body: some View {
@@ -93,6 +94,12 @@ struct HomeView: View {
         }
         .onAppear {
             stationVM.getStations(context: modelContext)
+            
+            let journeys = recentJourneys.prefix(5).map {
+                recentJourney(date: $0.date, origin: $0.origin, destination: $0.destination)
+            }
+            WatchManager.shared.sendRecentJourney(journeys)
+            
         }
     }
 }

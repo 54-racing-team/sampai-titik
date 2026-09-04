@@ -93,8 +93,15 @@ final class JourneyTrackingVM {
         )
         
         context.insert(newJourney)
+        try? context.save()
         
-        let journeys = [recentJourney(date: Date(), origin: src, destination: dst)]
-        WatchManager.shared.sendRecentJourney(journeys)
+        let descriptor = FetchDescriptor<RecentJourneyModel>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+        
+        if let savedJourneys = try? context.fetch(descriptor){
+            let journeys = savedJourneys.prefix(5).map {
+                recentJourney(date: $0.date, origin: $0.origin, destination: $0.destination)
+            }
+            WatchManager.shared.sendRecentJourney(journeys)
+        }
     }
 }

@@ -9,7 +9,7 @@ import WatchConnectivity
 
 @Observable
 class WatchManager: NSObject, WCSessionDelegate {
-    var isOnJouney = false
+    var isOnJourney = false
     
     var recentJouneys: [recentJourney] = []
     var currentTracking: journeyTracking?
@@ -29,7 +29,7 @@ class WatchManager: NSObject, WCSessionDelegate {
     }
     
     func session(_ session: WCSession, activationDidCompleteWith activationState: WCSessionActivationState, error: Error?) {
-        
+        WCSession.default.receivedApplicationContext
     }
 }
 
@@ -51,7 +51,7 @@ extension WatchManager {
         }
         
         WCSession.default.sendMessage(["action": "finishJourney"], replyHandler: nil, errorHandler: nil)
-        self.isOnJouney = false
+        self.isOnJourney = false
         self.currentTracking = nil
     }
     
@@ -62,7 +62,7 @@ extension WatchManager {
         }
         
         WCSession.default.sendMessage(["action":"cancelJourney"], replyHandler: nil, errorHandler: nil)
-        self.isOnJouney = false
+        self.isOnJourney = false
         self.currentTracking = nil
     }
     
@@ -76,7 +76,7 @@ extension WatchManager {
                 do {
                     let data = try JSONDecoder().decode(journeyTracking.self, from: tracking)
                     self.currentTracking = data
-                    self.isOnJouney = true
+                    self.isOnJourney = true
                 } catch {
                     print("failed to decode recentTracking from tracking: \(error)")
                 }

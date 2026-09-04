@@ -9,6 +9,7 @@ import SwiftUI
 
 struct InformationJourneyPage: View {
     @Environment(Router.self) var route
+    @State var watchManager = WatchManager.shared
 
     var body: some View {
         ScrollView {
@@ -21,7 +22,7 @@ struct InformationJourneyPage: View {
                     Image(systemName: "location.fill")
                         .font(.caption)
                     
-                    Text("Metland Telaga Murni")
+                    Text(watchManager.currentTracking!.destination)
                         .font(.caption)
                         .foregroundStyle(.mainBlue)
                 }
@@ -32,7 +33,7 @@ struct InformationJourneyPage: View {
                 
                 
                 HStack(spacing: 8) {
-                    Text("13")
+                    Text("\(watchManager.currentTracking!.stationRemaining)")
                         .font(.title3.bold())
                         .foregroundStyle(.orange)
                     
@@ -49,7 +50,7 @@ struct InformationJourneyPage: View {
                         Image(systemName: "tram.fill")
                             .font(.caption)
                         
-                        Text("Klender Baru")
+                        Text(watchManager.currentTracking!.nextStation)
                             .font(.caption)
                     }
                 }
