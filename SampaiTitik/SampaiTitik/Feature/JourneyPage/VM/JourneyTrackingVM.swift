@@ -14,9 +14,8 @@ import SwiftData
 @MainActor
 @Observable
 final class JourneyTrackingVM {
-    public let alarmScheduler: AlarmSchedulerManager
-    
-    private let locationManager: LocationManager
+    let locationManager: LocationManager
+    let alarmScheduler: AlarmSchedulerManager
     private var hasTriggeredArrivalAlarm = false
 
     var isTrackingActive = false
