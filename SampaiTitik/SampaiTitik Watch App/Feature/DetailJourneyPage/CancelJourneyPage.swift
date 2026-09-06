@@ -9,7 +9,6 @@ import SwiftUI
 
 struct CancelJourneyPage: View {
     @State private var isCancelJourney: Bool = false
-    @State var watchManager = WatchManager.shared
         
     var body: some View {
         VStack(spacing: 12) {
@@ -20,7 +19,6 @@ struct CancelJourneyPage: View {
             
             Button{
                 isCancelJourney = true
-                watchManager.sendCancelJourney()
             } label: {
                 Image(systemName: "xmark.circle.fill")
                     .font(.system(size: 80))

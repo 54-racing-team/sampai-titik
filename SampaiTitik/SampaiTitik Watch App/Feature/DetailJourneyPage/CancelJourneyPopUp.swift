@@ -10,6 +10,7 @@ import SwiftUI
 struct CancelJourneyPopUp: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(Router.self) var route
+    @State var watchManager = WatchManager.shared
 
     var body: some View {
         ScrollView {
@@ -23,6 +24,7 @@ struct CancelJourneyPopUp: View {
                     Button{
                         // Action
                         route.popToRoot()
+                        watchManager.sendCancelJourney()
                     } label: {
                         Text("Ya, batalkan")
                             .font(.caption)

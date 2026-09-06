@@ -120,6 +120,7 @@ public final class JourneyPageMainVM {
         if let currentLocation = trackingViewModel.locationManager.userLocation {
             updateStationProgress(with: currentLocation)
         }
+        sendTrackingToWatch()
     }
 
     // MARK: - Real-Time Segment & Station Tracking
@@ -211,6 +212,7 @@ public final class JourneyPageMainVM {
             }
         }
         activeStationIndex = newIndex
+        sendTrackingToWatch()
     }
 
     private func stationDTO(named name: String) -> StationModelDTO? {
@@ -219,4 +221,14 @@ public final class JourneyPageMainVM {
         }
     }
     
+    private func sendTrackingToWatch() {
+        WatchManager.shared.sendJourneyTracking(
+            journeyTracking(
+                destination: self.destinationName,
+                currentStation: self.currentStationName,
+                nextStation: self.nextStationName,
+                stationRemaining: self.remainingStationsCount)
+        )
+
+    }
 }

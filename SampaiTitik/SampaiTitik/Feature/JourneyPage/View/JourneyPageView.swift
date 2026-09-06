@@ -55,6 +55,7 @@ struct JourneyPageView: View {
                     viewModel.stopJourneyTracking()
                     isCancel = false
                     router.popToRoot()
+                    watchManager.sendCancelJourney()
                 }
                 .presentationDetents([.fraction(0.5)])
                 .presentationBackground(Color(.secondarySystemBackground))
@@ -67,13 +68,6 @@ struct JourneyPageView: View {
             Task {
                 await viewModel.startTrackingIfPossible(modelContext: modelContext)
             }
-            watchManager.sendJourneyTracking(
-                journeyTracking(
-                    destination: viewModel.destinationName,
-                    currentStation: viewModel.currentStationName,
-                    nextStation: viewModel.nextStationName,
-                    stationRemaining: viewModel.remainingStationsCount)
-            )
         }
         .navigationBarBackButtonHidden(true)
     }

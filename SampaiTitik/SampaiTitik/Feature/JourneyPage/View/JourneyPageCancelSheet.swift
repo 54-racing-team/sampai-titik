@@ -68,4 +68,5 @@ struct JourneyPageCancelSheet: View {
 
 #Preview {
     JourneyPageCancelSheet()
+        .environment(WatchManager())
 }
