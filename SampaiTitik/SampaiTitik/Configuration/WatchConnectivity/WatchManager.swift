@@ -53,9 +53,25 @@ extension WatchManager {
         do {
             let data = try JSONEncoder().encode(tracking)
             WCSession.default.sendMessage(["action": "updateTracking", "data": data], replyHandler: nil, errorHandler: nil)
+            print("iphone success to upload journey tracking data to watch")
         } catch {
             print("fail upload journey tracking data to watch")
         }
+    }
+    func sendFinsihJourney() {
+        guard WCSession.default.activationState == .activated else { return }
+        
+        WCSession.default.sendMessage(["action": "finishJourney"], replyHandler: nil, errorHandler: nil)
+        self.activeJourney = nil
+        self.isOnJourney = false
+    }
+    
+    func sendCancelJourney() {
+        guard WCSession.default.activationState == .activated else { return }
+        
+        WCSession.default.sendMessage(["action": "cancelJourney"], replyHandler: nil, errorHandler: nil)
+        self.activeJourney = nil
+        self.isOnJourney = false
     }
 
     func session(_ session: WCSession, didReceiveMessage message: [String : Any]){
@@ -81,10 +97,12 @@ extension WatchManager {
             case "finishJourney":
                 self.activeJourney = nil
                 self.isOnJourney = false
+                print("iphone: the journey is finished")
                 
             case "cancelJourney":
                 self.activeJourney = nil
                 self.isOnJourney = false
+                print("iphone: the journey is cancelled")
                 
             default:
                 print("action can't be handled")

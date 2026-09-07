@@ -68,6 +68,7 @@ struct RouterView: View {
                         router.push(.journeyPage(stations: stations, soundName: nil))
                     } else {
                         router.popToRoot()
+                        print("journey off")
                     }
                     
                 }

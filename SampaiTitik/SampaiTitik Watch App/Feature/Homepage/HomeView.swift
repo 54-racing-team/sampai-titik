@@ -13,11 +13,6 @@ struct HomeView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text("Rute Terakhir")
-                .font(.title3.bold())
-                .fixedSize(horizontal: false, vertical: true)
-                .foregroundStyle(Color("MainBlue"))
-            
             ScrollView {
                 LazyVStack(spacing: 8) {
                     ForEach(watchManager.recentJouneys, id: \.self){ journey in
@@ -33,6 +28,14 @@ struct HomeView: View {
                         )
                     }
                 }
+            }
+        }
+        .toolbar{
+            ToolbarItem(placement: .topBarLeading) {
+                Text("Rute Terakhir")
+                    .font(.title3.bold())
+                    .fixedSize(horizontal: false, vertical: true)
+                    .foregroundStyle(Color("MainBlue"))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)

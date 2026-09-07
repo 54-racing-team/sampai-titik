@@ -86,7 +86,17 @@ extension WatchManager {
                 } catch {
                     print("failed to decode recentTracking from tracking: \(error)")
                 }
+            
+            case "cancelJourney":
+                self.isOnJourney = false
+                self.currentTracking = nil
+                print("watch: cancel journey")
                 
+            case "finishJourney":
+                self.isOnJourney = false
+                self.currentTracking = nil
+                print("watch: cancel journey")
+
             default:
                 print("There is no action")
             }

@@ -94,5 +94,6 @@ struct JourneySetupPageView: View {
     NavigationStack {
         JourneySetupPageView(departure: dep, destination: dst)
             .environment(Router())
+            .environment(WatchManager())
     }
 }

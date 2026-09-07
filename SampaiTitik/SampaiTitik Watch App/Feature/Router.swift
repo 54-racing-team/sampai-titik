@@ -50,6 +50,13 @@ struct RouterView: View {
                         EmptyView()
                     }
                 }
+                .onChange(of: WatchManager.shared.isOnJourney) { oldValue, newValue in
+                    if newValue {
+                        router.push(.detailJourneyPage)
+                    } else {
+                        router.popToRoot()
+                    }
+                }
         }
         .environment(router)
     }

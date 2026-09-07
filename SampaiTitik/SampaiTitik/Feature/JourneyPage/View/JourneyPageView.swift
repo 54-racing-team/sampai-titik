@@ -70,6 +70,7 @@ struct JourneyPageView: View {
                     viewModel.stopJourneyTracking()
                     isCancel = false
                     router.popToRoot()
+                    watchManager.sendCancelJourney()
                 }
                 .presentationDetents([.fraction(0.5)])
                 .presentationBackground(Color(.secondarySystemBackground))
