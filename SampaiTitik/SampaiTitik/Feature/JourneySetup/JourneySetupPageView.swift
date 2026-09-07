@@ -55,7 +55,7 @@ struct JourneySetupPageView: View {
                             }
                             return JourneyStation(name: station.name, type: type, latitude: station.latitude, longitude: station.longitude)
                         }
-                        router.push(.confirmation(stations: stations, soundName: $soundName.wrappedValue.displayName))
+                        router.push(.confirmation(stations: stations, soundName: soundName.fileName))
                     } label: {
                         Text("Mulai Perjalanan")
                             .font(.headline)
