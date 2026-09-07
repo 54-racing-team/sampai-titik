@@ -52,8 +52,8 @@ struct JourneyCard: View {
             VStack(alignment: .leading, spacing: 0) {
                 HStack(alignment: .top, spacing: 16) {
                     JourneyTimelineIndicator(
-                        type: .current,
-                        isLast: false
+                        type: viewModel.currentStation?.type ?? .current,
+                        isLast: viewModel.nextStation == nil
                     )
                     
                     VStack(alignment: .leading, spacing: 2) {
@@ -63,29 +63,32 @@ struct JourneyCard: View {
                             .font(.footnote)
                             .fontWeight(.light)
                     }
-                    .padding(.top, 1)
-                    .padding(.bottom, 20)
+                    .padding(.top, -1)
+                    .padding(.bottom, viewModel.nextStation == nil ? 0 : 20)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 
-                HStack(alignment: .top, spacing: 16) {
-                    JourneyTimelineIndicator(
-                        type: .next,
-                        isLast: true
-                    )
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(viewModel.nextStationName)
-                            .fontWeight(.semibold)
-                        Text("Stasiun selanjutnya")
-                            .font(.footnote)
-                            .fontWeight(.light)
+                if let nextStation = viewModel.nextStation {
+                    HStack(alignment: .top, spacing: 16) {
+                        JourneyTimelineIndicator(
+                            type: nextStation.type,
+                            isLast: true
+                        )
+                        
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(nextStation.name)
+                                .fontWeight(.semibold)
+                            Text("Stasiun selanjutnya")
+                                .font(.footnote)
+                                .fontWeight(.light)
+                        }
+                        .padding(.top, -1)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .padding(.top, 1)
-                    .frame(maxWidth: .infinity, alignment: .leading)
                 }
             }
-            .frame(maxWidth: .infinity, maxHeight: 110)
+            .frame(maxWidth: .infinity)
+            .frame(maxHeight: viewModel.nextStation == nil ? 60 : 110)
             .padding(.horizontal)
             
             Rectangle()
