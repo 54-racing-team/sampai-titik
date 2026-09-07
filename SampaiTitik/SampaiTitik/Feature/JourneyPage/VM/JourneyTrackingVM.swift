@@ -69,8 +69,7 @@ final class JourneyTrackingVM {
         locationManager.stopJourneyTracking()
         alarmScheduler.cancelActiveAlarm()
         AudioManager.shared.stopAlarm()
-    }
-    
+    }    
     
     private func triggerArrivalNotification() {
         let content = UNMutableNotificationContent()

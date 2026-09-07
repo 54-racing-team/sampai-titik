@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "confirmation-light.png",
+      "filename" : "slide-transition-confirmation-2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -12,7 +12,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "confirmation-dark.png",
+      "filename" : "slide-transition-confirmation-2-dark.png",
       "idiom" : "universal",
       "scale" : "1x"
     },

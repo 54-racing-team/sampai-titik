@@ -13,20 +13,26 @@ import SwiftData
 @MainActor
 @Observable
 public final class JourneyPageMainVM {
-    public var stations: [JourneyStation]
-    public var isReminderActive: Bool
-    public var soundName: String? = nil
-    let trackingViewModel: JourneyTrackingVM
-
-    private var isTrackingStarted = false
-
-    /// Index stasiun yang sedang aktif (current), di-track secara manual
+  public var stations: [JourneyStation] {
+        didSet {
+            // Auto-update Live Activity whenever station state changes during tracking
+            if isTrackingStarted {
+                updateLiveActivity()
+            }
+        }
+    }
+  
+      public var isReminderActive: Bool
+      private let trackingViewModel: JourneyTrackingVM
+      private var isTrackingStarted = false
+      public var soundName: String? = nil
+      /// Index stasiun yang sedang aktif (current), di-track secara manual
     private(set) var activeStationIndex: Int = 0
 
     /// Radius proximity untuk mendeteksi kedatangan tepat di stasiun (meter)
     let stationProximityRadius: CLLocationDistance = 400
-
-    /// Initializer utama — menerima urutan stasiun dari JourneyRouteService via Router.
+  
+  /// Initializer utama — menerima urutan stasiun dari JourneyRouteService via Router.
     public init(
         stations: [JourneyStation],
         isReminderActive: Bool = true,
@@ -91,6 +97,7 @@ public final class JourneyPageMainVM {
     public func stopJourneyTracking() {
         trackingViewModel.locationManager.onLocationUpdate = nil
         trackingViewModel.stopTracking()
+        LiveActivityManager.shared.endActivity()
     }
 
     // MARK: - Tracking Control
@@ -119,6 +126,39 @@ public final class JourneyPageMainVM {
             modelContext: modelContext,
             soundName: soundName
         )
+        
+        let nextDTO = stationDTO(named: nextStationName) ?? destination
+        
+        LiveActivityManager.shared.startJourneyActivity(
+            startStation: departure.name,
+            endStation: destination.name,
+            currentStationCode: departure.id,
+            currentStationName: departure.name,
+            nextStationCode: nextDTO.id,
+            nextStationName: nextStationName,
+            isSoundEnabled: isReminderActive
+        )
+    }
+    
+    // MARK: - Live Activity Updates
+    
+    /// Updates the Dynamic Island / Lock Screen Live Activity with the current journey state.
+    /// Called automatically when `stations` is mutated (via didSet), and when the reminder is toggled.
+    public func updateLiveActivity() {
+        guard isTrackingStarted else { return }
+        
+        let currentDTO = stationDTO(named: currentStationName)
+        let nextDTO = stationDTO(named: nextStationName)
+        let destinationDTO = stationDTO(named: destinationName)
+        
+        LiveActivityManager.shared.updateJourneyActivity(
+            currentStationCode: currentDTO?.id ?? currentStationName,
+            currentStationName: currentStationName,
+            nextStationCode: nextDTO?.id ?? destinationDTO?.id ?? "-",
+            nextStationName: nextStationName,
+            isSoundEnabled: isReminderActive
+        )
+    }
 
         // Segera evaluasi posisi lokasi saat ini jika sudah ada
         if let currentLocation = trackingViewModel.locationManager.userLocation {

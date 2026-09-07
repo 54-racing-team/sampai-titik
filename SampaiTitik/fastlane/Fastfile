@@ -12,7 +12,8 @@ lane :sync_certs do
 
 app_identifiers = [
     "com.54racing.SampaiTitik",
-    "com.54racing.SampaiTitik.watchkitapp"
+    "com.54racing.SampaiTitik.watchkitapp",
+    "com.54racing.SampaiTitik.SampaiTitikWidget"
   ]
 
   app_identifiers.each do |identifier|

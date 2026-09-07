@@ -2,7 +2,7 @@
 //  SampaiTitikWidgetBundle.swift
 //  SampaiTitikWidget
 //
-//  Created by Bomanarakasura on 28/08/26.
+//  Created by Ahmad Yasri Zaenuri on 07/09/26.
 //
 
 import WidgetKit

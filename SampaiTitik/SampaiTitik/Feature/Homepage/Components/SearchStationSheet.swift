@@ -64,9 +64,6 @@ struct SearchStationView: View {
                                     isPresented = false
                                 } label: {
                                     HStack(spacing: 12) {
-//                                        Image(systemName: "location.fill")
-//                                            .foregroundStyle(.mainBlue)
-//                                            .font(.headline)
                                         
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text(item.station.name)
@@ -104,7 +101,6 @@ struct SearchStationView: View {
                 } else {
                     stationRows(filteredStations)
                 }
-//                .foregroundStyle(.primary)
             }
             .searchable(text: $searchStation, prompt: "Cari stasiun...")
             .navigationTitle("Pilih Stasiun")

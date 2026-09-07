@@ -20,7 +20,38 @@ struct LiveActivityAttributes: ActivityAttributes {
         var isOnJourney: Bool
         var currentStation: String
         var remainingTime: String
-        var remainingStation:String
+        var remainingStation: String
+        
+        var currentStationCode: String?
+        var currentStationName: String?
+        var nextStationCode: String?
+        var nextStationName: String?
+        var isMuted: Bool?
+        var isSoundEnabled: Bool?
+        
+        var displayCurrentCode: String {
+            currentStationCode ?? (currentStation.isEmpty ? "SUD" : currentStation)
+        }
+        
+        var displayCurrentName: String {
+            currentStationName ?? "Sudirman"
+        }
+        
+        var displayNextCode: String {
+            nextStationCode ?? (remainingStation.isEmpty ? "MRI" : remainingStation)
+        }
+        
+        var displayNextName: String {
+            nextStationName ?? "Manggarai"
+        }
+        
+        var displayIsMuted: Bool {
+            isMuted ?? false
+        }
+        
+        var displayIsSoundEnabled: Bool {
+            isSoundEnabled ?? !displayIsMuted
+        }
     }
 }
 
@@ -28,8 +59,8 @@ extension LiveActivityAttributes {
     static var preview: LiveActivityAttributes {
         .init(appTitle: "SampaiTitik",
               journeyCaption: "Journey",
-              startStation: "Jakarta",
-              endStation: "Surabaya",
+              startStation: "Sudirman",
+              endStation: "Manggarai",
               id: .init())
     }
 }

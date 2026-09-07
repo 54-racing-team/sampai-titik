@@ -49,9 +49,6 @@ struct AlarmToogleCard: View {
         .sheet(isPresented: $isSheetPresented) {
             SoundExpandPageView(selectedSound: $soundName)
         }
-//        .onChange(of: self.soundName) { oldValue, newValue in
-//            print("[\(#file)] newValue: \(newValue.rawValue)")
-//        }
     }
 }
 
