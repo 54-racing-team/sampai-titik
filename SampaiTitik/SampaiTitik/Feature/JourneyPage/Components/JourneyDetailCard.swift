@@ -35,16 +35,8 @@ struct JourneyTimelineIndicator: View {
     
     var body: some View {
         VStack(spacing: 1) {
-            ZStack {
-                Circle()
-                    .fill(circleColor)
-                    .frame(width: 18, height: 18)
-                
-                Circle()
-                    .fill(.white)
-                    .frame(width: 6, height: 6)
-            }
-            .frame(width: 20, height: 22)
+            Image(systemName: "record.circle.fill")
+                .foregroundStyle(circleColor)
             
             if !isLast {
                 DashedLine()

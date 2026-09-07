@@ -44,13 +44,14 @@ struct SearchStationView: View {
     
     var filteredStations: [StationModelDTO] {
         let list = searchStation.isEmpty ? stations : stations.filter { station in
-            station.name.localizedStandardContains(searchStation)
+            station.name.localizedStandardContains(searchStation) ||
+            station.id.localizedStandardContains(searchStation)
         }
         return list.sorted {
             $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
     }
-    
+
     var body: some View {
         NavigationStack {
             List {
@@ -63,9 +64,6 @@ struct SearchStationView: View {
                                     isPresented = false
                                 } label: {
                                     HStack(spacing: 12) {
-//                                        Image(systemName: "location.fill")
-//                                            .foregroundStyle(.mainBlue)
-//                                            .font(.headline)
                                         
                                         VStack(alignment: .leading, spacing: 2) {
                                             Text(item.station.name)

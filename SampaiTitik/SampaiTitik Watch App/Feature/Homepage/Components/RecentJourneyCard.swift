@@ -36,8 +36,8 @@ struct RecentJourneySymbol: View {
 struct RecentJourneyCard: View {
     let origin: String
     let destination: String
-    let date: String
-    let time: String
+    let date: Date
+    let time: Date
     let onReuse: () -> Void
     
     var body: some View {
@@ -45,9 +45,9 @@ struct RecentJourneyCard: View {
             VStack(spacing: 12) {
                 VStack(alignment: .leading) {
                     HStack {
-                        Text(date)
+                        Text(date, style: .date)
                         Text("•")
-                        Text(time)
+                        Text(time, style: .time)
                     }
                     .font(.caption2)
                     .foregroundStyle(.secondary)
@@ -81,8 +81,8 @@ struct RecentJourneyCard: View {
     RecentJourneyCard(
         origin: "Pasar Minggu Baru",
         destination: "Metland Telaga Murni",
-        date: "Kemarin",
-        time: "22.15",
+        date: Date(),
+        time: Date(),
         onReuse: {
             print("Reuse Metland Telaga Murni")
         }

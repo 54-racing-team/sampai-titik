@@ -8,12 +8,14 @@
 import CoreLocation
 import Foundation
 import Observation
+import UserNotifications
+import SwiftData
 
 @MainActor
 @Observable
 final class JourneyTrackingVM {
-    private let locationManager: LocationManager
-    private let alarmScheduler: AlarmSchedulerManager
+    let locationManager: LocationManager
+    let alarmScheduler: AlarmSchedulerManager
     private var hasTriggeredArrivalAlarm = false
 
     var isTrackingActive = false
@@ -33,15 +35,27 @@ final class JourneyTrackingVM {
     func startTracking(
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
-        targetRadius: CLLocationDistance? = nil
-    ) {
+        modelContext: ModelContext,
+        soundName: String? = nil,
+        targetRadius: CLLocationDistance? = nil,
+    ) async {
         hasTriggeredArrivalAlarm = false
         isTrackingActive = true
+
         locationManager.onArriveAtDestination = { [weak self] in
+            self?.triggerArrivalNotification()
             Task { @MainActor in
                 self?.isTrackingActive = false
+                
+                if soundName != nil {
+                    await self?.alarmScheduler.scheduleAlarm(after: 3, label: "Kamu sudah di \(self?.locationManager.destinationStation?.name ?? "tujuan")", soundTitle: "\(soundName!).mp3")
+                }
+                
+                self?.addRecentJourney(src: departureStation.name, dst: destinationStation.name, context: modelContext)
             }
         }
+        
+        // Start location journey
         locationManager.startJourneyTracking(
             departureStation: departureStation,
             destinationStation: destinationStation,
@@ -55,5 +69,44 @@ final class JourneyTrackingVM {
         locationManager.stopJourneyTracking()
         alarmScheduler.cancelActiveAlarm()
         AudioManager.shared.stopAlarm()
+    }    
+    
+    private func triggerArrivalNotification() {
+        let content = UNMutableNotificationContent()
+        if let stationName = locationManager.destinationStation?.name {
+            content.title = "Kamu sudah hampir sampai di \(stationName)!"
+        } else {
+            content.title = "Kamu sudah hampir sampai, nih!"
+        }
+        content.body = "Waktunya siap-siap turun"
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+
+        let request = UNNotificationRequest(identifier: "ArrivalAlarm", content: content, trigger: nil)
+        UNUserNotificationCenter.current().add(request)
+        
+        // Notify to global observer
+        NotificationCenter.default.post(name: .userArrived, object: nil)
+        
+    }
+    
+    func addRecentJourney(src: String, dst: String, context: ModelContext){
+        let newJourney = RecentJourneyModel(
+            date: Date(),
+            origin: src,
+            destination: dst
+        )
+        
+        context.insert(newJourney)
+        try? context.save()
+        
+        let descriptor = FetchDescriptor<RecentJourneyModel>(sortBy: [SortDescriptor(\.date, order: .reverse)])
+        
+        if let savedJourneys = try? context.fetch(descriptor){
+            let journeys = savedJourneys.prefix(5).map {
+                recentJourney(date: $0.date, origin: $0.origin, destination: $0.destination)
+            }
+            WatchManager.shared.sendRecentJourney(journeys)
+        }
     }
 }

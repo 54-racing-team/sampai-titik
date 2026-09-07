@@ -11,8 +11,8 @@ import SwiftUI
 enum Route: Hashable {
     case home
     case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
-    case journeyPage(stations: [JourneyStation])
-    case confirmation(stations: [JourneyStation])
+    case journeyPage(stations: [JourneyStation], soundName: String?)
+    case confirmation(stations: [JourneyStation], soundName: String?)
     case profile
     case detail(id: String)
 }
@@ -37,6 +37,7 @@ class Router {
 
 struct RouterView: View {
     @State private var router = Router()
+    @State private var watchManager = WatchManager.shared
 
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -50,15 +51,28 @@ struct RouterView: View {
                             departure: departure,
                             destination: destination
                         )
-                    case .confirmation(let stations):
-                        ConfirmationView(stations: stations)
-                    case .journeyPage(let stations):
-                        JourneyPageView(stations: stations)
+                    case .confirmation(let stations, let soundName):
+                        ConfirmationView(stations: stations, soundName: soundName)
+                    case .journeyPage(let stations, let soundName):
+                        JourneyPageView(stations: stations, soundName: soundName)
                     default:
                         EmptyView()
                     }
+                }.onChange(of: watchManager.isOnJourney) { oldValue, newValue in
+                    if newValue {
+                        let origin = watchManager.activeJourney?.selectedJourney.origin ?? ""
+                        let destination = watchManager.activeJourney?.selectedJourney.destination ?? ""
+                        
+                        let stations = JourneyRouteService.createJourneyStations(originName: origin, destinationName: destination)
+                        
+                        router.push(.journeyPage(stations: stations, soundName: nil))
+                    } else {
+                        router.popToRoot()
+                    }
+                    
                 }
         }
         .environment(router)
+        .environment(watchManager)
     }
 }

@@ -10,11 +10,12 @@ import SwiftData
 
 struct HomeView: View {
     @StateObject private var scheduler = AlarmSchedulerManager.shared
-
     @State var stationVM = StationViewModel()
     @Environment(\.modelContext) private var modelContext
+    @Environment(Router.self) var router
     
-
+    @Query(sort: \RecentJourneyModel.date, order: .reverse) var recentJourneys: [RecentJourneyModel]
+    
     var body: some View {
         ZStack {
             Color(Color("BackgroundBlue"))
@@ -64,9 +65,26 @@ struct HomeView: View {
                         .font(.body.bold())
                         .foregroundStyle(Color.primary)
                     
-                    RecentJourneyCard(
-                        origin: "Pasar Minggu Baru", destination: "Metland Telaga Murni", date: "Kemarin", time: "22.15", onReuse: {print("Reuse Metland Telaga Murni")}
-                    )
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        LazyHStack(spacing: 12) {
+                            ForEach(recentJourneys.prefix(3)) { journey in
+                                RecentJourneyCard(
+                                    origin: journey.origin,
+                                    destination: journey.destination,
+                                    date: journey.date,
+                                    time: journey.date
+                                ){
+                                    let allStations = StationModelDTO.loadFromJSON()
+                                    if let departureDTO = allStations.first(where: { $0.name == journey.origin }),
+                                       let destinationDTO = allStations.first(where: { $0.name == journey.destination }) {
+                                        
+                                        router.push(.journeySetup(departure: departureDTO, destination: destinationDTO))
+                                    }
+                                }
+                                .frame(width: 320)
+                            }
+                        }
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
 
@@ -76,6 +94,12 @@ struct HomeView: View {
         }
         .onAppear {
             stationVM.getStations(context: modelContext)
+            
+            let journeys = recentJourneys.prefix(5).map {
+                recentJourney(date: $0.date, origin: $0.origin, destination: $0.destination)
+            }
+            WatchManager.shared.sendRecentJourney(journeys)
+                 
         }
     }
 }

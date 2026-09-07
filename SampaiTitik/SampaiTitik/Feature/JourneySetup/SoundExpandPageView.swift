@@ -41,7 +41,9 @@ struct SoundExpandPageView: View {
                     VStack(spacing: 0) {
                         ForEach(Array(SoundOption.allCases.enumerated()), id: \.element.id) { index, sound in
                             Button {
-                                selectedSound = sound
+                                Task { @MainActor in
+                                    selectedSound = sound
+                                }
                                 SoundOption.current = sound
                                 audioManager.playPreview(sound: sound)
                             } label: {

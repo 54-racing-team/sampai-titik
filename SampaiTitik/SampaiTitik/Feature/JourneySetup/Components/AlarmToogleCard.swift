@@ -9,23 +9,27 @@ import SwiftUI
 
 struct AlarmToogleCard: View {
     @State private var isSoundEnabled = true
-    @State private var selectedSound: SoundOption = SoundOption.current
-    
+    @State private var isSheetPresented: Bool = false
+    @Binding var soundName: SoundOption
+
     var body: some View {
         VStack(alignment: .leading, spacing: 0) {
             AlarmSetupExpandableToggle(
                 title: "Bunyi",
                 isOn: $isSoundEnabled
             ) {
-                NavigationLink {
-                    SoundExpandPageView(selectedSound: $selectedSound)
+                Button {
+                    isSheetPresented.toggle()
                 } label: {
                     HStack {
-                        Text(selectedSound.displayName)
+                        Spacer().frame(width: 20)
+                        Image(systemName: "music.note")
+
+                        Text(soundName.displayName)
                             .foregroundStyle(.primary)
-                        
+
                         Spacer()
-                        
+
                         Image(systemName: "chevron.right")
                             .font(.footnote.weight(.semibold))
                             .foregroundStyle(.secondary)
@@ -33,6 +37,7 @@ struct AlarmToogleCard: View {
                     .padding(.vertical, 10)
                     .contentShape(Rectangle())
                 }
+                .foregroundStyle(.mainBlue)
                 .buttonStyle(.plain)
             }
         }
@@ -41,9 +46,12 @@ struct AlarmToogleCard: View {
         .cornerRadius(26)
         .glassEffect(in: .rect(cornerRadius: 26))
         .animation(.easeInOut(duration: 0.25), value: isSoundEnabled)
+        .sheet(isPresented: $isSheetPresented) {
+            SoundExpandPageView(selectedSound: $soundName)
+        }
     }
 }
 
 #Preview {
-    AlarmToogleCard()
+    AlarmToogleCard(soundName: .constant(.heartOfHope))
 }

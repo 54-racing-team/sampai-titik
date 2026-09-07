@@ -9,6 +9,7 @@ import SwiftUI
 
 struct HomeView: View {
     @Environment(Router.self) var route
+    @State var watchManager = WatchManager.shared
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -19,27 +20,18 @@ struct HomeView: View {
             
             ScrollView {
                 LazyVStack(spacing: 8) {
-                    RecentJourneyCard(
-                        origin: "Pasar Minggu Baru",
-                        destination: "Metland Telaga Murni",
-                        date: "Kemarin",
-                        time: "22.15",
-                        onReuse: {
-                            print("Reuse Metland Telaga Murni")
-                            route.push(.journeySetup)
-                        }
-                    )
-                    
-                    RecentJourneyCard(
-                        origin: "Sudirman",
-                        destination: "Bojonggede",
-                        date: "Kemarin",
-                        time: "10.00",
-                        onReuse: {
-                            print("Reuse Metland Telaga Murni")
-                            route.push(.journeySetup)
-                        }
-                    )
+                    ForEach(watchManager.recentJouneys, id: \.self){ journey in
+                        RecentJourneyCard(
+                            origin: journey.origin,
+                            destination: journey.destination,
+                            date: journey.date,
+                            time: journey.date,
+                            onReuse: {
+                                watchManager.selectedJourney = journey
+                                route.push(.journeySetup)
+                            }
+                        )
+                    }
                 }
             }
         }

@@ -5,36 +5,53 @@
 //  Created by Muhammad Muthi' Nuritzan on 24/08/26.
 //
 
+import SwiftData
 import SwiftUI
 
 struct JourneyPageView: View {
+    @Environment(\.modelContext) var modelContext
+    @Environment(WatchManager.self) var watchManager
+
     @State var viewModel: JourneyPageMainVM
+
     @State private var isCancel: Bool = false
     @Environment(Router.self) private var router
-    
-    init(stations: [JourneyStation] = JourneyStation.sampleStations) {
-        self._viewModel = State(wrappedValue: JourneyPageMainVM(stations: stations))
+
+    // Observed Notificationm
+    let userArriveNotification = NotificationCenter.default.publisher(
+        for: .userArrived
+    )
+
+    init(
+        stations: [JourneyStation] = JourneyStation.sampleStations,
+        soundName: String? = nil
+    ) {
+        self._viewModel = State(
+            wrappedValue: JourneyPageMainVM(
+                stations: stations,
+                soundName: soundName
+            )
+        )
     }
-    
+
     var body: some View {
         ZStack {
             Color.backgroundBlue
                 .ignoresSafeArea()
-            
+
             VStack {
                 JourneyCard(viewModel: viewModel)
-                
+
                 VStack(alignment: .leading) {
                     Text("Aplikasi memantau perjalananmu di latar belakang.")
-                    //                    Text("Kamu bisa keluar dari aplikasi.")
                 }
                 .font(.footnote)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal)
                 .foregroundStyle(Color.secondary)
-                
+
                 Spacer()
-                
+
                 Button {
                     isCancel = true
                 } label: {
@@ -62,7 +79,29 @@ struct JourneyPageView: View {
             .navigationBarTitleDisplayMode(.large)
         }
         .onAppear {
-            viewModel.startTrackingIfPossible()
+            Task {
+                await viewModel.startTrackingIfPossible(
+                    modelContext: modelContext
+                )
+            }
+            watchManager.sendJourneyTracking(
+                journeyTracking(
+                    destination: viewModel.destinationName,
+                    currentStation: viewModel.currentStationName,
+                    nextStation: viewModel.nextStationName,
+                    stationRemaining: viewModel.remainingStationsCount
+                )
+            )
+        }
+        .onReceive(userArriveNotification) { output in
+            Task {
+                try await Task.sleep(for: .seconds(3))
+
+                // Pop back to root
+                await MainActor.run {
+                    router.popToRoot()
+                }
+            }
         }
         .navigationBarBackButtonHidden(true)
     }
@@ -71,4 +110,5 @@ struct JourneyPageView: View {
 #Preview {
     JourneyPageView()
         .environment(Router())
+        .environment(WatchManager.shared)
 }

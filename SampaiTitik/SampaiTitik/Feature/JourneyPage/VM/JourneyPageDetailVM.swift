@@ -29,7 +29,7 @@ public final class JourneyPageDetailVM {
             } else {
                 type = .next
             }
-            return JourneyStation(name: name, type: type)
+            return JourneyStation(name: name, type: type, latitude: 0, longitude: 0)
         }
     }
     
