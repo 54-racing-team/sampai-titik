@@ -11,7 +11,14 @@ import Observation
 @MainActor
 @Observable
 public final class JourneyPageMainVM {
-    public var stations: [JourneyStation]
+    public var stations: [JourneyStation] {
+        didSet {
+            // Auto-update Live Activity whenever station state changes during tracking
+            if isTrackingStarted {
+                updateLiveActivity()
+            }
+        }
+    }
     public var isReminderActive: Bool
     private let trackingViewModel: JourneyTrackingVM
 
@@ -79,10 +86,13 @@ public final class JourneyPageMainVM {
         } else {
             trackingViewModel.stopTracking()
         }
+        // Update Live Activity to reflect sound toggle change
+        updateLiveActivity()
     }
 
     public func stopJourneyTracking() {
         trackingViewModel.stopTracking()
+        LiveActivityManager.shared.endActivity()
     }
 
     // MARK: - Tracking Control
@@ -97,6 +107,38 @@ public final class JourneyPageMainVM {
         trackingViewModel.startTracking(
             departureStation: departure,
             destinationStation: destination
+        )
+        
+        let nextDTO = stationDTO(named: nextStationName) ?? destination
+        
+        LiveActivityManager.shared.startJourneyActivity(
+            startStation: departure.name,
+            endStation: destination.name,
+            currentStationCode: departure.id,
+            currentStationName: departure.name,
+            nextStationCode: nextDTO.id,
+            nextStationName: nextStationName,
+            isSoundEnabled: isReminderActive
+        )
+    }
+    
+    // MARK: - Live Activity Updates
+    
+    /// Updates the Dynamic Island / Lock Screen Live Activity with the current journey state.
+    /// Called automatically when `stations` is mutated (via didSet), and when the reminder is toggled.
+    public func updateLiveActivity() {
+        guard isTrackingStarted else { return }
+        
+        let currentDTO = stationDTO(named: currentStationName)
+        let nextDTO = stationDTO(named: nextStationName)
+        let destinationDTO = stationDTO(named: destinationName)
+        
+        LiveActivityManager.shared.updateJourneyActivity(
+            currentStationCode: currentDTO?.id ?? currentStationName,
+            currentStationName: currentStationName,
+            nextStationCode: nextDTO?.id ?? destinationDTO?.id ?? "-",
+            nextStationName: nextStationName,
+            isSoundEnabled: isReminderActive
         )
     }
 
