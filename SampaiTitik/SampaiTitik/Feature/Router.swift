@@ -11,8 +11,8 @@ import SwiftUI
 enum Route: Hashable {
     case home
     case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
-    case journeyPage(stations: [JourneyStation])
-    case confirmation(stations: [JourneyStation])
+    case journeyPage(stations: [JourneyStation], soundName: String?)
+    case confirmation(stations: [JourneyStation], soundName: String?)
     case profile
     case detail(id: String)
 }
@@ -51,10 +51,10 @@ struct RouterView: View {
                             departure: departure,
                             destination: destination
                         )
-                    case .confirmation(let stations):
-                        ConfirmationView(stations: stations)
-                    case .journeyPage(let stations):
-                        JourneyPageView(stations: stations)
+                    case .confirmation(let stations, let soundName):
+                        ConfirmationView(stations: stations, soundName: soundName)
+                    case .journeyPage(let stations, let soundName):
+                        JourneyPageView(stations: stations, soundName: soundName)
                     default:
                         EmptyView()
                     }
@@ -65,7 +65,7 @@ struct RouterView: View {
                         
                         let stations = JourneyRouteService.createJourneyStations(originName: origin, destinationName: destination)
                         
-                        router.push(.journeyPage(stations: stations))
+                        router.push(.journeyPage(stations: stations, soundName: nil))
                     } else {
                         router.popToRoot()
                     }

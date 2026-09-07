@@ -36,6 +36,7 @@ final class JourneyTrackingVM {
         departureStation: StationModelDTO,
         destinationStation: StationModelDTO,
         modelContext: ModelContext,
+        soundName: String? = nil,
         targetRadius: CLLocationDistance? = nil,
     ) async {
         hasTriggeredArrivalAlarm = false
@@ -46,7 +47,9 @@ final class JourneyTrackingVM {
             Task { @MainActor in
                 self?.isTrackingActive = false
                 
-                await self?.alarmScheduler.scheduleAlarm(after: 3, label: "Kamu sudah di \(self?.locationManager.destinationStation?.name ?? "tujuan")", soundTitle: "AS_01_HeartOfHope.mp3")
+                if soundName != nil {
+                    await self?.alarmScheduler.scheduleAlarm(after: 3, label: "Kamu sudah di \(self?.locationManager.destinationStation?.name ?? "tujuan")", soundTitle: "\(soundName!).mp3")
+                }
                 
                 self?.addRecentJourney(src: departureStation.name, dst: destinationStation.name, context: modelContext)
             }
@@ -82,6 +85,10 @@ final class JourneyTrackingVM {
 
         let request = UNNotificationRequest(identifier: "ArrivalAlarm", content: content, trigger: nil)
         UNUserNotificationCenter.current().add(request)
+        
+        // Notify to global observer
+        NotificationCenter.default.post(name: .userArrived, object: nil)
+        
     }
     
     func addRecentJourney(src: String, dst: String, context: ModelContext){

@@ -15,6 +15,7 @@ import SwiftData
 public final class JourneyPageMainVM {
     public var stations: [JourneyStation]
     public var isReminderActive: Bool
+    public var soundName: String? = nil
     let trackingViewModel: JourneyTrackingVM
 
     private var isTrackingStarted = false
@@ -28,10 +29,12 @@ public final class JourneyPageMainVM {
     /// Initializer utama — menerima urutan stasiun dari JourneyRouteService via Router.
     public init(
         stations: [JourneyStation],
-        isReminderActive: Bool = true
+        isReminderActive: Bool = true,
+        soundName: String? = nil
     ) {
         self.stations = stations
         self.isReminderActive = isReminderActive
+        self.soundName = soundName
         self.trackingViewModel = JourneyTrackingVM()
 
         // Set activeStationIndex ke stasiun yang saat ini .current
@@ -113,7 +116,8 @@ public final class JourneyPageMainVM {
         await trackingViewModel.startTracking(
             departureStation: departure,
             destinationStation: destination,
-            modelContext: modelContext
+            modelContext: modelContext,
+            soundName: soundName
         )
 
         // Segera evaluasi posisi lokasi saat ini jika sudah ada
