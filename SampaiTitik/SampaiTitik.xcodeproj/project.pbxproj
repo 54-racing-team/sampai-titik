@@ -104,6 +104,13 @@
 			);
 			target = 3D3DFBFC303879EB00B841E1 /* SampaiTitik */;
 		};
+		3D20487F304FAFB600571252 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Resources/AlarmSound/AS_04_MarcRebillet_Alarm.mp3,
+			);
+			target = 3D3DFC1F303879EC00B841E1 /* SampaiTitik Watch App */;
+		};
 		3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -141,6 +148,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				3DE52E60303EEA72002B9F42 /* Exceptions for "SampaiTitik" folder in "SampaiTitik" target */,
+				3D20487F304FAFB600571252 /* Exceptions for "SampaiTitik" folder in "SampaiTitik Watch App" target */,
 				8560614D304DD9BA009A6145 /* Exceptions for "SampaiTitik" folder in "SampaiTitikWidgetExtension" target */,
 			);
 			path = SampaiTitik;

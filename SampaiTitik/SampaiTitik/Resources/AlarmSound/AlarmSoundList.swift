@@ -11,8 +11,9 @@ import Foundation
 
 enum SoundOption: String, CaseIterable, Identifiable {
     case heartOfHope = "AS_01_HeartOfHope"
-    case prabUtang = "AS_02_PrabUtang"
-    case sayaAkanLawan = "AS_03_SayaAkanLawan"
+//    case prabUtang = "AS_02_PrabUtang"
+//    case sayaAkanLawan = "AS_03_SayaAkanLawan"
+    case marcRebilletAlarm = "AS_04_MarcRebillet_Alarm"
 
     var id: String { rawValue }
 
@@ -20,10 +21,12 @@ enum SoundOption: String, CaseIterable, Identifiable {
         switch self {
         case .heartOfHope:
             return "Heart of Hope"
-        case .prabUtang:
-            return "Saudara Utang"
-        case .sayaAkanLawan:
-            return "Saya Akan Lawan"
+//        case .prabUtang:
+//            return "Saudara Utang"
+//        case .sayaAkanLawan:
+//            return "Saya Akan Lawan"
+        case .marcRebilletAlarm:
+            return "Marc Rebillet - Alarm"
         }
     }
 
