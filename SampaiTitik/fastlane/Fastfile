@@ -127,6 +127,13 @@ platform :ios do
       profile_name: ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
       targets: ["SampaiTitik Watch App"]
     )
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "SampaiTitik.xcodeproj",
+      code_sign_identity: "Apple Distribution",
+      profile_name: ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"],
+      targets: ["SampaiTitik Watch App"]
+    )
 
     increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
 
@@ -141,7 +148,8 @@ platform :ios do
         signingStyle: "manual",
         provisioningProfiles: {
             "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
-            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
+            "com.54racing.SampaiTitik.SampaiTitikWidget" => ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"]
         }
       }
     )
