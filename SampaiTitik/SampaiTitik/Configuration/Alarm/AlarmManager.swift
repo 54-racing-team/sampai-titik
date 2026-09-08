@@ -49,6 +49,7 @@ final class AlarmSchedulerManager: ObservableObject {
     func scheduleAlarm(after seconds: TimeInterval, label: String, soundTitle: String) async {
         guard isAuthorized else {
             print("Belum diizinkan — panggil requestAuthorizationIfNeeded() dulu")
+            LiveActivityManager.shared.endActivity()
             return
         }
 
@@ -64,23 +65,29 @@ final class AlarmSchedulerManager: ObservableObject {
             activeAlarmID = alarm.id
         } catch let error as AlarmManager.AlarmError {
             print("Gagal schedule alarm: \(error)")
+            LiveActivityManager.shared.endActivity()
         } catch {
             print("Error tak terduga: \(error)")
+            LiveActivityManager.shared.endActivity()
         }
     }
 
     func cancelActiveAlarm() {
         AudioManager.shared.stopAlarm()
-        guard let id = activeAlarmID else { return }
-        try? manager.cancel(id: id)
-        activeAlarmID = nil
+        if let id = activeAlarmID {
+            try? manager.cancel(id: id)
+            activeAlarmID = nil
+        }
+        LiveActivityManager.shared.endActivity()
     }
 
     func stopActiveAlarm() {
         AudioManager.shared.stopAlarm()
-        guard let id = activeAlarmID else { return }
-        try? manager.stop(id: id)
-        activeAlarmID = nil
+        if let id = activeAlarmID {
+            try? manager.stop(id: id)
+            activeAlarmID = nil
+        }
+        LiveActivityManager.shared.endActivity()
     }
 
     // MARK: - Observing state (buat update UI kalau alarm alerting/paused/dsb)
@@ -88,8 +95,16 @@ final class AlarmSchedulerManager: ObservableObject {
     private func observeAlarmUpdates() {
         updatesTask = Task {
             for await alarms in manager.alarmUpdates {
-                if let current = alarms.first(where: { $0.id == activeAlarmID }) {
+                guard let activeID = activeAlarmID else { continue }
+                
+                if let current = alarms.first(where: { $0.id == activeID }) {
                     print("Alarm state berubah: \(current.state)")
+                } else {
+                    // Alarm sudah tidak ada di daftar alarms -> alarm telah dimatikan / di-dismiss oleh user
+                    print("Alarm telah dimatikan / selesai oleh user")
+                    activeAlarmID = nil
+                    LiveActivityManager.shared.endActivity()
+                    AudioManager.shared.stopAlarm()
                 }
             }
         }

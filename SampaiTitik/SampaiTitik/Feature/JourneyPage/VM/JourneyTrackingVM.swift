@@ -47,8 +47,14 @@ final class JourneyTrackingVM {
             Task { @MainActor in
                 self?.isTrackingActive = false
                 
-                if soundName != nil {
-                    await self?.alarmScheduler.scheduleAlarm(after: 3, label: "Kamu sudah di \(self?.locationManager.destinationStation?.name ?? "tujuan")", soundTitle: "\(soundName!).mp3")
+                if let sound = soundName, !sound.isEmpty {
+                    await self?.alarmScheduler.scheduleAlarm(
+                        after: 3,
+                        label: "Kamu sudah di \(self?.locationManager.destinationStation?.name ?? "tujuan")",
+                        soundTitle: "\(sound).mp3"
+                    )
+                } else {
+                    LiveActivityManager.shared.endActivity()
                 }
                 
                 self?.addRecentJourney(src: departureStation.name, dst: destinationStation.name, context: modelContext)
@@ -69,25 +75,12 @@ final class JourneyTrackingVM {
         locationManager.stopJourneyTracking()
         alarmScheduler.cancelActiveAlarm()
         AudioManager.shared.stopAlarm()
+        LiveActivityManager.shared.endActivity()
     }    
     
     private func triggerArrivalNotification() {
-        let content = UNMutableNotificationContent()
-        if let stationName = locationManager.destinationStation?.name {
-            content.title = "Kamu sudah hampir sampai di \(stationName)!"
-        } else {
-            content.title = "Kamu sudah hampir sampai, nih!"
-        }
-        content.body = "Waktunya siap-siap turun"
-        content.sound = .default
-        content.interruptionLevel = .timeSensitive
-
-        let request = UNNotificationRequest(identifier: "ArrivalAlarm", content: content, trigger: nil)
-        UNUserNotificationCenter.current().add(request)
-        
-        // Notify to global observer
+        // Notify to global observer for navigation & UI transitions
         NotificationCenter.default.post(name: .userArrived, object: nil)
-        
     }
     
     func addRecentJourney(src: String, dst: String, context: ModelContext){

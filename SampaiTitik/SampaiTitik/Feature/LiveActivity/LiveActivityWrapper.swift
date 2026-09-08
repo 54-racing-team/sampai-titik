@@ -16,7 +16,15 @@ final class LiveActivityManager {
     
     private var currentActivity: Activity<LiveActivityAttributes>?
     
-    private init() {}
+    private init() {
+        NotificationCenter.default.addObserver(
+            forName: UIApplication.willTerminateNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.endActivitySynchronously()
+        }
+    }
     
     func startJourneyActivity(
         appTitle: String = "SampaiTitik",
@@ -34,7 +42,15 @@ final class LiveActivityManager {
             return
         }
         
-        endActivity()
+        // Bersihkan activity lama yang sudah ada sebelumnya
+        let existingActivities = Activity<LiveActivityAttributes>.activities
+        if !existingActivities.isEmpty {
+            Task {
+                for activity in existingActivities {
+                    await activity.end(nil, dismissalPolicy: .immediate)
+                }
+            }
+        }
         
         let attributes = LiveActivityAttributes(
             appTitle: appTitle,
@@ -79,7 +95,8 @@ final class LiveActivityManager {
         remainingTime: String = "5 min",
         isSoundEnabled: Bool = true
     ) {
-        guard let activity = currentActivity else { return }
+        let activity = currentActivity ?? Activity<LiveActivityAttributes>.activities.first
+        guard let activity else { return }
         
         let updatedState = LiveActivityAttributes.ContentState(
             isOnJourney: true,
@@ -100,11 +117,26 @@ final class LiveActivityManager {
     }
     
     func endActivity() {
-        guard let activity = currentActivity else { return }
+        self.currentActivity = nil
         Task {
-            await activity.end(nil, dismissalPolicy: .immediate)
+            for activity in Activity<LiveActivityAttributes>.activities {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+        }
+    }
+    
+    nonisolated func endActivitySynchronously() {
+        Task { @MainActor in
             self.currentActivity = nil
         }
+        let semaphore = DispatchSemaphore(value: 0)
+        Task.detached(priority: .high) {
+            for activity in Activity<LiveActivityAttributes>.activities {
+                await activity.end(nil, dismissalPolicy: .immediate)
+            }
+            semaphore.signal()
+        }
+        _ = semaphore.wait(timeout: .now() + 1.5)
     }
 }
 

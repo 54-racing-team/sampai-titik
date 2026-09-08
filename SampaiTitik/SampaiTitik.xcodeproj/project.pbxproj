@@ -156,36 +156,26 @@
 		};
 		3D3DFC0D303879EC00B841E1 /* SampaiTitikTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikTests;
 			sourceTree = "<group>";
 		};
 		3D3DFC17303879EC00B841E1 /* SampaiTitikUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = SampaiTitikUITests;
 			sourceTree = "<group>";
 		};
 		3D3DFC24303879EC00B841E1 /* SampaiTitik Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch App";
 			sourceTree = "<group>";
 		};
 		3D3DFC32303879ED00B841E1 /* SampaiTitik Watch AppTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppTests";
 			sourceTree = "<group>";
 		};
 		3D3DFC3C303879ED00B841E1 /* SampaiTitik Watch AppUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-			);
 			path = "SampaiTitik Watch AppUITests";
 			sourceTree = "<group>";
 		};
@@ -768,7 +758,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -787,7 +777,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik.watchkitapp";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match AppStore com.54racing.SampaiTitik.watchkitapp";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.54racing.SampaiTitik.watchkitapp";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -807,7 +797,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -826,7 +816,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik.watchkitapp";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match AppStore com.54racing.SampaiTitik.watchkitapp";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=watchos*]" = "match Development com.54racing.SampaiTitik.watchkitapp";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -847,7 +837,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -857,7 +847,8 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan kereta dan membunyikan alarm saat mendekati stasiun tujuan.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -872,7 +863,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.54racing.SampaiTitik";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.54racing.SampaiTitik";
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -894,7 +885,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -904,7 +895,8 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan kereta dan membunyikan alarm saat mendekati stasiun tujuan.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -919,7 +911,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.54racing.SampaiTitik";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.54racing.SampaiTitik";
 				SDKROOT = iphoneos;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1126,7 +1118,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -1145,7 +1137,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.SampaiTitikWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik.SampaiTitikWidget";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.54racing.SampaiTitik.SampaiTitikWidget";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.54racing.SampaiTitik.SampaiTitikWidget";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -1163,7 +1155,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_WIDGET_BACKGROUND_COLOR_NAME = WidgetBackground;
 				CODE_SIGN_IDENTITY = "Apple Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
@@ -1182,7 +1174,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.54racing.SampaiTitik.SampaiTitikWidget;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "match AppStore com.54racing.SampaiTitik.SampaiTitikWidget";
-				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match AppStore com.54racing.SampaiTitik.SampaiTitikWidget";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=iphoneos*]" = "match Development com.54racing.SampaiTitik.SampaiTitikWidget";
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;

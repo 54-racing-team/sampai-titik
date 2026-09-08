@@ -98,9 +98,10 @@ struct JourneyPageView: View {
             Task {
                 try await Task.sleep(for: .seconds(3))
 
-                // Pop back to root
+                // Pop back to root & complete Watch journey
                 await MainActor.run {
                     router.popToRoot()
+                    watchManager.sendFinsihJourney()
                 }
             }
         }
