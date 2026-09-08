@@ -55,7 +55,7 @@ struct JourneyForm: View {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
                         .font(.headline)
-                        .foregroundStyle(vm.isReadyToProceed ? .white : .black.opacity(0.8))
+                        .foregroundStyle(vm.isReadyToProceed ? .white : .primary.opacity(0.8))
                         .padding(10)
                 }
                 .buttonStyle(.glassProminent)
