@@ -9,4 +9,5 @@ import Foundation
 
 extension Notification.Name {
     static let userArrived = Notification.Name("userArrived")
+    static let resetJourneyForm = Notification.Name("resetJourneyForm")
 }

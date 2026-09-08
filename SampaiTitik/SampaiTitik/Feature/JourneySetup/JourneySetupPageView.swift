@@ -10,14 +10,34 @@ import SwiftUI
 struct JourneySetupPageView: View {
     let departure: StationModelDTO
     let destination: StationModelDTO
+    var initialSoundName: String?
+    var initialTargetRadius: Double?
 
     @State private var locationManager = LocationManager.shared
     @State private var journeyRoute: JourneyRoute?
     @Environment(Router.self) private var router
     
-    @State private var soundName: SoundOption = .heartOfHope
+    @State private var soundName: SoundOption
 
     private let routeService = JourneyRouteService(stations: StationModelDTO.loadFromJSON())
+
+    init(
+        departure: StationModelDTO,
+        destination: StationModelDTO,
+        soundName: String? = nil,
+        targetRadius: Double? = nil
+    ) {
+        self.departure = departure
+        self.destination = destination
+        self.initialSoundName = soundName
+        self.initialTargetRadius = targetRadius
+
+        if let soundName, let option = SoundOption(rawValue: soundName) {
+            self._soundName = State(initialValue: option)
+        } else {
+            self._soundName = State(initialValue: .heartOfHope)
+        }
+    }
 
     var body: some View {
         ZStack {
@@ -55,7 +75,13 @@ struct JourneySetupPageView: View {
                             }
                             return JourneyStation(name: station.name, type: type, latitude: station.latitude, longitude: station.longitude)
                         }
-                        router.push(.confirmation(stations: stations, soundName: soundName.fileName))
+                        router.push(
+                            .confirmation(
+                                stations: stations,
+                                soundName: soundName.fileName,
+                                targetRadius: locationManager.targetRadius
+                            )
+                        )
                     } label: {
                         Text("Mulai Perjalanan")
                             .font(.headline)
@@ -82,6 +108,12 @@ struct JourneySetupPageView: View {
             departureStation: departure,
             destinationStation: destination
         )
+        // Atur radius: jika dari recent journey gunakan saved radius, jika perjalanan baru selalu reset ke default 500m
+        if let initialRadius = initialTargetRadius {
+            locationManager.targetRadius = initialRadius
+        } else {
+            locationManager.targetRadius = 500
+        }
         // Hitung route sekali saat setup
         journeyRoute = routeService.createRoute(from: departure, to: destination)
     }

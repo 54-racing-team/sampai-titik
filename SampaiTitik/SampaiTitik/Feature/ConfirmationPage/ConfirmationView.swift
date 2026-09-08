@@ -10,6 +10,7 @@ import SwiftUI
 struct ConfirmationView: View {
     var stations: [JourneyStation] = []
     var soundName: String? = nil
+    var targetRadius: Double? = nil
     @Environment(Router.self) private var router
 
     let animationFrames = [
@@ -47,7 +48,7 @@ struct ConfirmationView: View {
         .background(Color(.backgroundBlue))
         .task {
             try? await Task.sleep(for: .seconds(2))
-            router.push(.journeyPage(stations: stations, soundName: soundName))
+            router.push(.journeyPage(stations: stations, soundName: soundName, targetRadius: targetRadius))
         }
     }
 }

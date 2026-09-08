@@ -37,10 +37,11 @@ final class JourneyTrackingVM {
         destinationStation: StationModelDTO,
         modelContext: ModelContext,
         soundName: String? = nil,
-        targetRadius: CLLocationDistance? = nil,
+        targetRadius: CLLocationDistance? = nil
     ) async {
         hasTriggeredArrivalAlarm = false
         isTrackingActive = true
+        let activeRadius = targetRadius ?? locationManager.targetRadius
 
         locationManager.onArriveAtDestination = { [weak self] in
             self?.triggerArrivalNotification()
@@ -57,7 +58,13 @@ final class JourneyTrackingVM {
                     LiveActivityManager.shared.endActivity()
                 }
                 
-                self?.addRecentJourney(src: departureStation.name, dst: destinationStation.name, context: modelContext)
+                self?.addRecentJourney(
+                    src: departureStation.name,
+                    dst: destinationStation.name,
+                    soundName: soundName,
+                    targetRadius: activeRadius,
+                    context: modelContext
+                )
             }
         }
         
@@ -65,7 +72,7 @@ final class JourneyTrackingVM {
         locationManager.startJourneyTracking(
             departureStation: departureStation,
             destinationStation: destinationStation,
-            targetRadius: targetRadius
+            targetRadius: activeRadius
         )
     }
 
@@ -76,6 +83,7 @@ final class JourneyTrackingVM {
         alarmScheduler.cancelActiveAlarm()
         AudioManager.shared.stopAlarm()
         LiveActivityManager.shared.endActivity()
+        NotificationCenter.default.post(name: .resetJourneyForm, object: nil)
     }    
     
     private func triggerArrivalNotification() {
@@ -83,11 +91,19 @@ final class JourneyTrackingVM {
         NotificationCenter.default.post(name: .userArrived, object: nil)
     }
     
-    func addRecentJourney(src: String, dst: String, context: ModelContext){
+    func addRecentJourney(
+        src: String,
+        dst: String,
+        soundName: String? = nil,
+        targetRadius: CLLocationDistance? = 500,
+        context: ModelContext
+    ) {
         let newJourney = RecentJourneyModel(
             date: Date(),
             origin: src,
-            destination: dst
+            destination: dst,
+            soundName: soundName,
+            targetRadius: targetRadius ?? 500
         )
         
         context.insert(newJourney)
