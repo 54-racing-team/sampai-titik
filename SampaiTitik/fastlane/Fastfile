@@ -47,7 +47,8 @@ platform :ios do
       type: "appstore",
       app_identifier: [
         "com.54racing.SampaiTitik",
-        "com.54racing.SampaiTitik.watchkitapp"
+        "com.54racing.SampaiTitik.watchkitapp",
+        "com.54racing.SampaiTitik.SampaiTitikWidget"
       ],
       api_key: options[:api_key]
     )
