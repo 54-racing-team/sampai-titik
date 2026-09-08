@@ -2,8 +2,7 @@
 # update_fastlane
 
 lane :sync_certs do
-        app_store_connect_api_key(
-          key_id: "49HJ924HSG",
+        app_store_connect_api_key( key_id: "49HJ924HSG",
           issuer_id: "c12cad5d-903a-4151-a441-fd33f87b6271",
           key_filepath: "./fastlane/AuthKey_49HJ924HSG.p8",
           duration: 1200,
@@ -132,7 +131,7 @@ platform :ios do
       path: "SampaiTitik.xcodeproj",
       code_sign_identity: "Apple Distribution",
       profile_name: ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"],
-      targets: ["SampaiTitik Watch App"]
+      targets: ["SampaiTitikWidgetExtension"]
     )
 
     increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
