@@ -2,8 +2,7 @@
 # update_fastlane
 
 lane :sync_certs do
-        app_store_connect_api_key(
-          key_id: "49HJ924HSG",
+        app_store_connect_api_key( key_id: "49HJ924HSG",
           issuer_id: "c12cad5d-903a-4151-a441-fd33f87b6271",
           key_filepath: "./fastlane/AuthKey_49HJ924HSG.p8",
           duration: 1200,
@@ -48,7 +47,8 @@ platform :ios do
       type: "appstore",
       app_identifier: [
         "com.54racing.SampaiTitik",
-        "com.54racing.SampaiTitik.watchkitapp"
+        "com.54racing.SampaiTitik.watchkitapp",
+        "com.54racing.SampaiTitik.SampaiTitikWidget"
       ],
       api_key: options[:api_key]
     )
@@ -108,55 +108,63 @@ platform :ios do
     push_to_git_remote(remote_branch: "dev")
   end
 
-
-  desc "Push to dev without bump patch version"
-  lane :dev_build_release do
-    api_key = asc_api_key
-    setup_signing(api_key: api_key)
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "SampaiTitik.xcodeproj",
-      code_sign_identity: "Apple Distribution",
-      profile_name: ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
-      targets: ["SampaiTitik"]
-    )
-    update_code_signing_settings(
-      use_automatic_signing: false,
-      path: "SampaiTitik.xcodeproj",
-      code_sign_identity: "Apple Distribution",
-      profile_name: ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
-      targets: ["SampaiTitik Watch App"]
-    )
-
-    increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
-
-    build_app(
-      scheme: "SampaiTitik",
-      clean: true,
-      export_method: "app-store",
-      output_directory: "./build",
-      export_team_id: "CWXJ4ZG5J4",
-      export_options: {
-        method: "app-store",
-        signingStyle: "manual",
-        provisioningProfiles: {
+    desc "Push to dev without bump patch version"
+    lane :dev_build_release do
+      api_key = asc_api_key
+      setup_signing(api_key: api_key)
+    
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: "SampaiTitik.xcodeproj",
+        code_sign_identity: "Apple Distribution",
+        profile_name: ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
+        targets: ["SampaiTitik"]
+      )
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: "SampaiTitik.xcodeproj",
+        code_sign_identity: "Apple Distribution",
+        profile_name: ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
+        targets: ["SampaiTitik Watch App"]
+      )
+      update_code_signing_settings(
+        use_automatic_signing: false,
+        path: "SampaiTitik.xcodeproj",
+        code_sign_identity: "Apple Distribution",
+        profile_name: ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"],
+        targets: ["SampaiTitikWidgetExtension"] 
+      )
+    
+      increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
+    
+      build_app(
+        scheme: "SampaiTitik",
+        clean: true,
+        export_method: "app-store",
+        output_directory: "./build",
+        export_team_id: "CWXJ4ZG5J4",
+        export_options: {
+          method: "app-store",
+          signingStyle: "manual",
+          provisioningProfiles: {
             "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
-            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"]
+            "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
+            "com.54racing.SampaiTitik.SampaiTitikWidget" => ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"] 
+          }
         }
-      }
-    )
-
-    upload_to_testflight(
-      api_key: api_key,
-      skip_waiting_for_build_processing: true
-    )
-
-    git_commit(
-      path: ["*.xcodeproj/project.pbxproj"],
-      message: "chore(ci): bump build version to (#{ENV['GITHUB_RUN_NUMBER']}) [skip ci]"
-    )
-    push_to_git_remote(remote_branch: "dev")
-  end
+      )
+    
+      upload_to_testflight(
+        api_key: api_key,
+        skip_waiting_for_build_processing: true
+      )
+    
+      git_commit(
+        path: ["*.xcodeproj/project.pbxproj"],
+        message: "chore(ci): bump build version to (#{ENV['GITHUB_RUN_NUMBER']}) [skip ci]"
+      )
+      push_to_git_remote(remote_branch: "dev")
+    end
 
   desc "GitHub Release published in main -> set version from tag + TestFlight"
   lane :release do
@@ -194,4 +202,5 @@ platform :ios do
     )
     push_to_git_remote(remote_branch: "main")
   end
+
 end
