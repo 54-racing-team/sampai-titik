@@ -18,26 +18,9 @@ struct SoundExpandPageView: View {
             
             ScrollView {
                 VStack(spacing: 16) {
-                    // Card Getaran
-                    HStack {
-                        Text("Getaran")
-                            .font(.body)
-                            .foregroundStyle(.primary)
-                        
-                        Spacer()
-                        
-                        Text("Tersinkronisasi")
-                            .font(.subheadline)
-                            .foregroundStyle(.secondary)
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.vertical, 16)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(Capsule())
-                    .glassEffect(.regular, in: Capsule())
-                    
-                    // Card Pilihan Bunyi
+                    Text("Bunyi")
+                        .font(.headline)
+
                     VStack(spacing: 0) {
                         ForEach(Array(SoundOption.allCases.enumerated()), id: \.element.id) { index, sound in
                             Button {
@@ -77,10 +60,9 @@ struct SoundExpandPageView: View {
                     .glassEffect(in: .rect(cornerRadius: 20))
                 }
                 .padding()
+                .padding(.vertical)
             }
         }
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle("Bunyi")
         .onDisappear {
             audioManager.stop()
         }

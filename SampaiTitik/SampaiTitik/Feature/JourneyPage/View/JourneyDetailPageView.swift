@@ -16,17 +16,18 @@ struct JourneyDetailPageView: View {
                 .ignoresSafeArea()
             
             ScrollView {
+                Text("Detail Perjalanan")
+                    .font(.headline)
+                    .padding(.vertical, 32)
+                
                 JourneyDetailCard(viewModel: viewModel)
             }
-            .navigationTitle("Detail Perjalanan")
         }
     }
 }
 
 #Preview {
-    NavigationStack {
         JourneyDetailPageView(
             viewModel: JourneyPageDetailVM()
         )
-    }
 }

@@ -44,5 +44,5 @@ struct HomeView: View {
 
 #Preview {
     HomeView()
-        .environment(Router())
+        .environment(Router()).environment(WatchManager.shared)
 }

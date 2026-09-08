@@ -12,8 +12,8 @@ struct RecentJourneySymbol: View {
         VStack(spacing: 0) {
             Image(systemName: "record.circle.fill")
             dashedLine()
-            Image(systemName: "record.circle.fill")
-                .foregroundStyle(Color("MainBlue"))
+            Image(systemName: "mappin.circle.fill")
+                .foregroundStyle(Color.mainBlue)
         }
         .frame(width: 20)
     }
