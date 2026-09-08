@@ -130,8 +130,8 @@ platform :ios do
         use_automatic_signing: false,
         path: "SampaiTitik.xcodeproj",
         code_sign_identity: "Apple Distribution",
-        profile_name: ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"], # fix: hapus "Extension"
-        targets: ["SampaiTitikWidgetExtension"] # ini tetap benar, nama TARGET memang ada "Extension"
+        profile_name: ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"],
+        targets: ["SampaiTitikWidgetExtension"] 
       )
     
       increment_build_number(build_number: ENV["GITHUB_RUN_NUMBER"])
@@ -148,7 +148,7 @@ platform :ios do
           provisioningProfiles: {
             "com.54racing.SampaiTitik" => ENV["sigh_com.54racing.SampaiTitik_appstore_profile-name"],
             "com.54racing.SampaiTitik.watchkitapp" => ENV["sigh_com.54racing.SampaiTitik.watchkitapp_appstore_profile-name"],
-            "com.54racing.SampaiTitik.SampaiTitikWidget" => ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"] # fix: hapus "Extension" di key BUNDLE ID
+            "com.54racing.SampaiTitik.SampaiTitikWidget" => ENV["sigh_com.54racing.SampaiTitik.SampaiTitikWidget_appstore_profile-name"] 
           }
         }
       )
