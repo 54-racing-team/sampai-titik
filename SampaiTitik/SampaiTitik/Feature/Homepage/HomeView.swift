@@ -98,8 +98,10 @@ struct HomeView: View {
                             }
                         }
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.vertical)
 
                 Spacer()
             }
