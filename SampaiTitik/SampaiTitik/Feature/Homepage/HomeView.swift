@@ -11,6 +11,7 @@ import SwiftData
 struct HomeView: View {
     @StateObject private var scheduler = AlarmSchedulerManager.shared
     @State var stationVM = StationViewModel()
+    @State private var homeVM = HomeViewModel()
     @Environment(\.modelContext) private var modelContext
     @Environment(Router.self) var router
     
@@ -50,7 +51,7 @@ struct HomeView: View {
                 .foregroundStyle(Color.primary)
                 .fixedSize(horizontal: false, vertical: true)
 
-                JourneyForm()
+                JourneyForm(vm: homeVM)
 
                 Text(
                     "Pengingat tetap bekerja saat kamu tidak sedang melihat layar."
@@ -83,7 +84,14 @@ struct HomeView: View {
                                     if let departureDTO = allStations.first(where: { $0.name == journey.origin }),
                                        let destinationDTO = allStations.first(where: { $0.name == journey.destination }) {
                                         
-                                        router.push(.journeySetup(departure: departureDTO, destination: destinationDTO))
+                                        router.push(
+                                            .journeySetup(
+                                                departure: departureDTO,
+                                                destination: destinationDTO,
+                                                soundName: journey.soundName,
+                                                targetRadius: journey.targetRadius
+                                            )
+                                        )
                                     }
                                 }
                                 .frame(width: 320)
@@ -96,6 +104,9 @@ struct HomeView: View {
                 Spacer()
             }
             .padding(.horizontal, 16)
+        }
+        .onReceive(NotificationCenter.default.publisher(for: .resetJourneyForm)) { _ in
+            homeVM.reset()
         }
         .onAppear {
             stationVM.getStations(context: modelContext)

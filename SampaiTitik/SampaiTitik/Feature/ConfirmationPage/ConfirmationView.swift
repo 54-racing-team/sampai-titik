@@ -10,6 +10,7 @@ import SwiftUI
 struct ConfirmationView: View {
     var stations: [JourneyStation] = []
     var soundName: String? = nil
+    var targetRadius: Double? = nil
     @Environment(Router.self) private var router
     @State private var canProceed = false
 

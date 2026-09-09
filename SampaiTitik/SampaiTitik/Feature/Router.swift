@@ -10,9 +10,9 @@ import SwiftUI
 
 enum Route: Hashable {
     case home
-    case journeySetup(departure: StationModelDTO, destination: StationModelDTO)
-    case journeyPage(stations: [JourneyStation], soundName: String?)
-    case confirmation(stations: [JourneyStation], soundName: String?)
+    case journeySetup(departure: StationModelDTO, destination: StationModelDTO, soundName: String? = nil, targetRadius: Double? = nil)
+    case journeyPage(stations: [JourneyStation], soundName: String? = nil, targetRadius: Double? = nil)
+    case confirmation(stations: [JourneyStation], soundName: String? = nil, targetRadius: Double? = nil)
     case profile
     case detail(id: String)
 }
@@ -46,15 +46,17 @@ struct RouterView: View {
                     switch route {
                     case .home:
                         HomeView()
-                    case .journeySetup(let departure, let destination):
+                    case .journeySetup(let departure, let destination, let soundName, let targetRadius):
                         JourneySetupPageView(
                             departure: departure,
-                            destination: destination
+                            destination: destination,
+                            soundName: soundName,
+                            targetRadius: targetRadius
                         )
-                    case .confirmation(let stations, let soundName):
-                        ConfirmationView(stations: stations, soundName: soundName)
-                    case .journeyPage(let stations, let soundName):
-                        JourneyPageView(stations: stations, soundName: soundName)
+                    case .confirmation(let stations, let soundName, let targetRadius):
+                        ConfirmationView(stations: stations, soundName: soundName, targetRadius: targetRadius)
+                    case .journeyPage(let stations, let soundName, let targetRadius):
+                        JourneyPageView(stations: stations, soundName: soundName, targetRadius: targetRadius)
                     default:
                         EmptyView()
                     }
@@ -65,8 +67,9 @@ struct RouterView: View {
                         
                         let stations = JourneyRouteService.createJourneyStations(originName: origin, destinationName: destination)
                         
-                        router.push(.journeyPage(stations: stations, soundName: nil))
+                        router.push(.journeyPage(stations: stations, soundName: nil, targetRadius: nil))
                     } else {
+                        NotificationCenter.default.post(name: .resetJourneyForm, object: nil)
                         router.popToRoot()
                         print("journey off")
                     }

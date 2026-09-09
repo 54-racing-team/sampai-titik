@@ -847,7 +847,8 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan kereta dan membunyikan alarm saat mendekati stasiun tujuan.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -894,7 +895,8 @@
 				INFOPLIST_FILE = SampaiTitik/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = SampaiTitik;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.travel";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan kereta dan membunyikan alarm saat mendekati stasiun tujuan.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "Aplikasi memerlukan izin lokasi untuk melacak posisi Anda selama perjalanan.";
+				INFOPLIST_KEY_NSSupportsLiveActivities = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

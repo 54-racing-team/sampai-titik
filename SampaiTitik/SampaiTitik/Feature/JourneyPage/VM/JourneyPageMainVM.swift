@@ -19,6 +19,7 @@ public final class JourneyPageMainVM {
     private let trackingViewModel: JourneyTrackingVM
     private var isTrackingStarted = false
     public var soundName: String? = nil
+    public var targetRadius: Double? = nil
     /// Index stasiun yang sedang aktif (current), di-track secara manual
     private(set) var activeStationIndex: Int = 0
 
@@ -29,11 +30,13 @@ public final class JourneyPageMainVM {
     public init(
         stations: [JourneyStation],
         isReminderActive: Bool = true,
-        soundName: String? = nil
+        soundName: String? = nil,
+        targetRadius: Double? = nil
     ) {
         self.stations = stations
         self.isReminderActive = isReminderActive
         self.soundName = soundName
+        self.targetRadius = targetRadius
         self.trackingViewModel = JourneyTrackingVM()
 
         // Set activeStationIndex ke stasiun yang saat ini .current
@@ -120,7 +123,8 @@ public final class JourneyPageMainVM {
             departureStation: departure,
             destinationStation: destination,
             modelContext: modelContext,
-            soundName: soundName
+            soundName: soundName,
+            targetRadius: targetRadius
         )
 
         let nextDTO = stationDTO(named: nextStationName) ?? destination

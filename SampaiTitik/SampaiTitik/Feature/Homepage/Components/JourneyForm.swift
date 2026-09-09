@@ -10,7 +10,11 @@ import SwiftUI
 struct JourneyForm: View {
     @Environment(Router.self) private var router
 
-    @State var vm = HomeViewModel()
+    @Bindable var vm: HomeViewModel
+
+    init(vm: HomeViewModel = HomeViewModel()) {
+        self.vm = vm
+    }
 
     var body: some View {
         VStack {

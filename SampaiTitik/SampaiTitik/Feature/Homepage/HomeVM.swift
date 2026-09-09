@@ -31,6 +31,14 @@ class HomeViewModel {
         isRotating.toggle()
     }
 
+    func reset() {
+        departStation = nil
+        destStation = nil
+        isRotating = false
+        showDeparture = false
+        showDestination = false
+    }
+
     /// Apakah user sudah memilih kedua stasiun
     var isReadyToProceed: Bool {
         departStation != nil && destStation != nil

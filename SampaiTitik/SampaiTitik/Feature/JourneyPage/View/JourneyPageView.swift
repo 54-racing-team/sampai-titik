@@ -24,12 +24,14 @@ struct JourneyPageView: View {
 
     init(
         stations: [JourneyStation] = JourneyStation.sampleStations,
-        soundName: String? = nil
+        soundName: String? = nil,
+        targetRadius: Double? = nil
     ) {
         self._viewModel = State(
             wrappedValue: JourneyPageMainVM(
                 stations: stations,
-                soundName: soundName
+                soundName: soundName,
+                targetRadius: targetRadius
             )
         )
     }
@@ -69,6 +71,7 @@ struct JourneyPageView: View {
                 JourneyPageCancelSheet {
                     viewModel.stopJourneyTracking()
                     isCancel = false
+                    NotificationCenter.default.post(name: .resetJourneyForm, object: nil)
                     router.popToRoot()
                     watchManager.sendCancelJourney()
                 }
@@ -98,9 +101,11 @@ struct JourneyPageView: View {
             Task {
                 try await Task.sleep(for: .seconds(3))
 
-                // Pop back to root
+                // Pop back to root & complete Watch journey
                 await MainActor.run {
+                    NotificationCenter.default.post(name: .resetJourneyForm, object: nil)
                     router.popToRoot()
+                    watchManager.sendFinsihJourney()
                 }
             }
         }
