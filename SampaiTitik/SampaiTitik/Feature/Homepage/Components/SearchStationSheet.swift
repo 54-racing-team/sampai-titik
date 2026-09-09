@@ -5,9 +5,9 @@
 //  Created by Salman on 23/08/26.
 //
 
-import SwiftUI
-import SwiftData
 import CoreLocation
+import SwiftData
+import SwiftUI
 
 struct SearchStationView: View {
     let stations: [StationModelDTO]
@@ -15,17 +15,24 @@ struct SearchStationView: View {
     @Binding var isPresented: Bool
     var showNearestStation: Bool = false
     var maxDistanceMeters: CLLocationDistance = 10_000
-    
+
     @State var searchStation: String = ""
     private var locationManager: LocationManager { LocationManager.shared }
     private var hasUserLocation: Bool {
         locationManager.userLocation != nil
     }
-    
-    var nearestStations: [(station: StationModelDTO, distance: CLLocationDistance)] {
+
+    var nearestStations:
+        [(station: StationModelDTO, distance: CLLocationDistance)]
+    {
         guard let userLoc = locationManager.userLocation else { return [] }
-        let mapped = stations.map { station -> (station: StationModelDTO, distance: CLLocationDistance) in
-            let loc = CLLocation(latitude: station.latitude, longitude: station.longitude)
+        let mapped = stations.map {
+            station -> (station: StationModelDTO, distance: CLLocationDistance)
+            in
+            let loc = CLLocation(
+                latitude: station.latitude,
+                longitude: station.longitude
+            )
             let dist = userLoc.distance(from: loc)
             return (station: station, distance: dist)
         }
@@ -33,7 +40,7 @@ struct SearchStationView: View {
         let sorted = withinRange.sorted { $0.distance < $1.distance }
         return Array(sorted.prefix(3))
     }
-    
+
     func formattedDistance(_ distance: CLLocationDistance) -> String {
         if distance < 1000 {
             return "\(Int(distance)) m"
@@ -41,12 +48,15 @@ struct SearchStationView: View {
             return String(format: "%.1f km", distance / 1000)
         }
     }
-    
+
     var filteredStations: [StationModelDTO] {
-        let list = searchStation.isEmpty ? stations : stations.filter { station in
-            station.name.localizedStandardContains(searchStation) ||
-            station.id.localizedStandardContains(searchStation)
-        }
+        let list =
+            searchStation.isEmpty
+            ? stations
+            : stations.filter { station in
+                station.name.localizedStandardContains(searchStation)
+                    || station.id.localizedStandardContains(searchStation)
+            }
         return list.sorted {
             $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
@@ -64,18 +74,21 @@ struct SearchStationView: View {
                                     isPresented = false
                                 } label: {
                                     HStack(spacing: 12) {
-                                        
-                                        VStack(alignment: .leading, spacing: 2) {
+
+                                        VStack(alignment: .leading, spacing: 2)
+                                        {
                                             Text(item.station.name)
                                                 .font(.body)
                                                 .foregroundStyle(.primary)
-                                            Text("Jarak: \(formattedDistance(item.distance))")
-                                                .font(.caption)
-                                                .foregroundStyle(.secondary)
+                                            Text(
+                                                "Jarak: \(formattedDistance(item.distance))"
+                                            )
+                                            .font(.caption)
+                                            .foregroundStyle(.secondary)
                                         }
-                                        
+
                                         Spacer()
-                                        
+
                                         Text(item.station.id)
                                             .foregroundStyle(.secondary)
                                             .font(.caption)
@@ -86,7 +99,7 @@ struct SearchStationView: View {
                         }
                     } else if !hasUserLocation {
                         Section("Stasiun Terdekat") {
-                            HStack{
+                            HStack {
                                 ProgressView()
                                 Text("Mencari stasiun terdekat...")
                                     .font(.subheadline)
@@ -112,7 +125,7 @@ struct SearchStationView: View {
             }
         }
     }
-    
+
     @ViewBuilder
     private func stationRows(_ list: [StationModelDTO]) -> some View {
         ForEach(list) { station in
@@ -121,8 +134,15 @@ struct SearchStationView: View {
                 isPresented = false
             } label: {
                 HStack {
+
                     Text(station.name)
                     Spacer()
+                    
+                    ForEach(station.lines, id: \.self) { line in
+                        lineBadge(forLineName: line.line_name)
+
+                    }
+                    
                     Text(station.id)
                         .foregroundStyle(.secondary)
                         .font(.caption)
@@ -131,6 +151,55 @@ struct SearchStationView: View {
             .foregroundStyle(.primary)
         }
     }
+    
+    func letter(forLineName lineName: String) -> String {
+        switch lineName {
+        case "Bogor Line" :
+            return "B"
+        case "Bogor Line (Nambo Branch)":
+            return "B"
+        case "Cikarang Line" :
+            return "C"
+        case "Cikarang Line (Cikarang Branch)":
+            return "C"
+        case "Rangkasbitung Line":
+            return "R"
+        case "Tangerang Line":
+            return "T"
+        case "Tanjung Priok Line":
+            return "TP"
+        case "Basoetta Line":
+            return "A"
+        default:
+            return "?"
+        }
+    }
+
+    func color(forLineName lineName: String) -> Color {
+        switch lineName {
+        case "Bogor Line", "Bogor Line (Nambo Branch)":
+            return .red
+        case "Cikarang Line", "Cikarang Line (Cikarang Branch)":
+            return .blue
+        case "Rangkasbitung Line":
+            return .green
+        case "Tangerang Line":
+            return .brown
+        case "Tanjung Priok Line":
+            return .pink
+        default:
+            return .gray
+        }
+    }
+
+    func lineBadge(forLineName lineName: String) -> some View {
+        Text(letter(forLineName: lineName))
+            .frame(width: 24, height: 24)
+            .overlay(
+                Circle().stroke(color(forLineName: lineName), lineWidth: 2.5)
+            )
+    }
+
 }
 
 #Preview {

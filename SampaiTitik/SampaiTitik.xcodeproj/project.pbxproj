@@ -108,6 +108,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Resources/AlarmSound/AS_04_MarcRebillet_Alarm.mp3,
+				Resources/AlarmSound/AS_Silent.mp3,
 			);
 			target = 3D3DFC1F303879EC00B841E1 /* SampaiTitik Watch App */;
 		};

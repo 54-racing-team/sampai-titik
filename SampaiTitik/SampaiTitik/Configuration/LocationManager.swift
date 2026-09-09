@@ -67,14 +67,21 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) { _, _ in }
     }
 
-    func requestCurrentLocation() {
+    @discardableResult
+    func requestCurrentLocation() -> Bool {
         let status = manager.authorizationStatus
+        
         if status == .notDetermined {
             manager.requestWhenInUseAuthorization()
         }
+        
         if status == .authorizedWhenInUse || status == .authorizedAlways || status == .notDetermined {
             manager.requestLocation()
+            
+            return true
         }
+        
+        return false
     }
 
     // MARK: - Journey Tracking Lifecycle

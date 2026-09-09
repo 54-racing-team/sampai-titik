@@ -35,6 +35,7 @@ enum SoundOption: String, CaseIterable, Identifiable {
     }
 
     private static let storageKey = "selected_alarm_sound"
+    static let silentSound = "AS_Silent"
 
     static var current: SoundOption {
         get {

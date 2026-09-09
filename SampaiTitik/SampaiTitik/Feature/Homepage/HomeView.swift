@@ -28,19 +28,19 @@ struct HomeView: View {
                     
                     Spacer()
 
-                    Button {
-
-                    } label: {
-                        Image(systemName: "person.fill")
-                        .foregroundStyle(.mainBlue)
-                    }
-                    .padding()
-                    .background(Color("BackgroundCard"))
-                    .clipShape(Circle())
+//                    Button {
+//
+//                    } label: {
+//                        Image(systemName: "person.fill")
+//                        .foregroundStyle(.mainBlue)
+//                    }
+//                    .padding()
+//                    .background(Color("BackgroundCard"))
+//                    .clipShape(Circle())
                 }
 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("Mau kemana, Salman?")
+                    Text("Mau kemana hari ini?")
                         .font(.title.bold())
                     
                     Text("Siapkan perjalananmu, kami bantu mengingatkan saat sudah dekat.")

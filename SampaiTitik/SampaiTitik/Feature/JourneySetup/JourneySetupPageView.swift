@@ -17,7 +17,8 @@ struct JourneySetupPageView: View {
     @State private var journeyRoute: JourneyRoute?
     @Environment(Router.self) private var router
     
-    @State private var soundName: SoundOption
+    @State private var isSoundEnabled: Bool = true
+    @State private var soundName: SoundOption = .heartOfHope
 
     private let routeService = JourneyRouteService(stations: StationModelDTO.loadFromJSON())
 
@@ -52,7 +53,7 @@ struct JourneySetupPageView: View {
                         estimatedDuration: journeyRoute?.estimatedDuration
                     )
                     
-                    AlarmToogleCard(soundName: $soundName)
+                    AlarmToogleCard(isSoundEnabled: $isSoundEnabled, soundName: $soundName)
 
                     MapCard(
                         locationManager: locationManager,
@@ -75,13 +76,7 @@ struct JourneySetupPageView: View {
                             }
                             return JourneyStation(name: station.name, type: type, latitude: station.latitude, longitude: station.longitude)
                         }
-                        router.push(
-                            .confirmation(
-                                stations: stations,
-                                soundName: soundName.fileName,
-                                targetRadius: locationManager.targetRadius
-                            )
-                        )
+                        router.push(.confirmation(stations: stations, soundName: isSoundEnabled ? soundName.fileName : SoundOption.silentSound))
                     } label: {
                         Text("Mulai Perjalanan")
                             .font(.headline)

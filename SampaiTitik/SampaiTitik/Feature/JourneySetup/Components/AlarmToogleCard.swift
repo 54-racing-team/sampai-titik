@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct AlarmToogleCard: View {
-    @State private var isSoundEnabled = true
     @State private var isSheetPresented: Bool = false
+    @Binding var isSoundEnabled: Bool
     @Binding var soundName: SoundOption
 
     var body: some View {
@@ -24,7 +24,7 @@ struct AlarmToogleCard: View {
                     HStack {
                         Image(systemName: "music.note")
 
-                        Text(soundName.displayName)
+                        Text(SoundOption.heartOfHope.displayName)
                             .foregroundStyle(.primary)
 
                         Spacer()
@@ -52,5 +52,5 @@ struct AlarmToogleCard: View {
 }
 
 #Preview {
-    AlarmToogleCard(soundName: .constant(.heartOfHope))
+    AlarmToogleCard(isSoundEnabled: .constant(true), soundName: .constant(.heartOfHope))
 }
