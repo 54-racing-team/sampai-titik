@@ -16,11 +16,13 @@ struct JourneySetupPageView: View {
     @State private var locationManager = LocationManager.shared
     @State private var journeyRoute: JourneyRoute?
     @Environment(Router.self) private var router
-    
+
     @State private var isSoundEnabled: Bool = true
     @State private var soundName: SoundOption = .heartOfHope
 
-    private let routeService = JourneyRouteService(stations: StationModelDTO.loadFromJSON())
+    private let routeService = JourneyRouteService(
+        stations: StationModelDTO.loadFromJSON()
+    )
 
     init(
         departure: StationModelDTO,
@@ -44,7 +46,7 @@ struct JourneySetupPageView: View {
         ZStack {
             Color.backgroundBlue
                 .ignoresSafeArea()
-            
+
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 16) {
                     EstimateCard(
@@ -52,8 +54,11 @@ struct JourneySetupPageView: View {
                         destinationStation: destination,
                         estimatedDuration: journeyRoute?.estimatedDuration
                     )
-                    
-                    AlarmToogleCard(isSoundEnabled: $isSoundEnabled, soundName: $soundName)
+
+                    AlarmToogleCard(
+                        isSoundEnabled: $isSoundEnabled,
+                        soundName: $soundName
+                    )
 
                     MapCard(
                         locationManager: locationManager,
@@ -65,7 +70,9 @@ struct JourneySetupPageView: View {
                 .safeAreaInset(edge: .bottom) {
                     Button {
                         guard let route = journeyRoute else { return }
-                        let stations = route.stations.enumerated().map { index, station -> JourneyStation in
+                        let stations = route.stations.enumerated().map {
+                            index,
+                            station -> JourneyStation in
                             let type: StationType
                             if index == 0 {
                                 type = .current
@@ -74,9 +81,22 @@ struct JourneySetupPageView: View {
                             } else {
                                 type = .next
                             }
-                            return JourneyStation(name: station.name, type: type, latitude: station.latitude, longitude: station.longitude)
+                            return JourneyStation(
+                                name: station.name,
+                                type: type,
+                                latitude: station.latitude,
+                                longitude: station.longitude
+                            )
                         }
-                        router.push(.confirmation(stations: stations, soundName: isSoundEnabled ? soundName.fileName : SoundOption.silentSound))
+                        router.push(
+                            .confirmation(
+                                stations: stations,
+                                soundName: isSoundEnabled
+                                    ? soundName.fileName
+                                    : SoundOption.silentSound,
+                                targetRadius: locationManager.targetRadius
+                            )
+                        )
                     } label: {
                         Text("Mulai Perjalanan")
                             .font(.headline)
@@ -110,7 +130,10 @@ struct JourneySetupPageView: View {
             locationManager.targetRadius = 500
         }
         // Hitung route sekali saat setup
-        journeyRoute = routeService.createRoute(from: departure, to: destination)
+        journeyRoute = routeService.createRoute(
+            from: departure,
+            to: destination
+        )
     }
 }
 
