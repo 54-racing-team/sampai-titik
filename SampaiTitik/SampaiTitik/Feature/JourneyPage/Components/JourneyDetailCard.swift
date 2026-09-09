@@ -25,17 +25,40 @@ struct JourneyTimelineIndicator: View {
         case .past:
             return Color.gray
         case .current:
-            return Color.primary
+            return Color.mainBlue
         case .next:
-            return Color(.mainBlue)
+            return Color.mainBlue
         case .destination:
             return Color.red
         }
     }
     
+    private var iconName: String {
+        switch type {
+        case .current:
+            return "tram.circle.fill"
+        case .destination:
+            return "mappin.circle.fill"
+        default:
+            return "record.circle.fill"
+        }
+    }
+    
+    private var iconSize: Font {
+        switch type {
+        case .current:
+            return .title2
+        case .destination:
+            return .title2
+        default:
+            return .body
+        }
+    }
+    
     var body: some View {
         VStack(spacing: 1) {
-            Image(systemName: "record.circle.fill")
+            Image(systemName: iconName)
+                .font(iconSize)
                 .foregroundStyle(circleColor)
             
             if !isLast {
@@ -108,12 +131,12 @@ struct JourneyDetailCard: View {
                 )
             }
         }
-        .padding(28)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.backgroundCard)
-        .cornerRadius(20)
-        .glassEffect(in: .rect(cornerRadius: 20))
-        .padding()
+        .padding(.horizontal, 36)
+//        .frame(maxWidth: .infinity, alignment: .leading)
+//        .background(Color.backgroundCard)
+//        .cornerRadius(20)
+//        .glassEffect(in: .rect(cornerRadius: 20))
+//        .padding()
     }
 }
 

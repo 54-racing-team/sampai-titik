@@ -11,6 +11,7 @@ struct ConfirmationView: View {
     var stations: [JourneyStation] = []
     var soundName: String? = nil
     @Environment(Router.self) private var router
+    @State private var canProceed = false
 
     let animationFrames = [
         "slide-transition-confirmation",
@@ -41,13 +42,23 @@ struct ConfirmationView: View {
                 .multilineTextAlignment(.center)
                 .foregroundStyle(.primary)
                 .padding(30)
+            
+            Text("Tap di mana saja untuk melanjutkan")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .opacity(canProceed ? 1.5 : 0)
+                .animation(.easeIn(duration: 0.3), value: canProceed)
         }
         .navigationBarBackButtonHidden(true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color(.backgroundBlue))
-        .task {
-            try? await Task.sleep(for: .seconds(2))
+        .onTapGesture {
+            guard canProceed else { return }
             router.push(.journeyPage(stations: stations, soundName: soundName))
+        }
+        .task {
+            try? await Task.sleep(for: .seconds(1.5))
+            canProceed = true
         }
     }
 }

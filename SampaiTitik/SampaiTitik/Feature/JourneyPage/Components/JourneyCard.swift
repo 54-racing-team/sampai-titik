@@ -9,6 +9,7 @@ import SwiftUI
 
 struct JourneyCard: View {
     var viewModel: JourneyPageMainVM
+    @State private var isSheetPresented = false
     
     var body: some View {
         VStack(spacing: 16) {
@@ -95,8 +96,8 @@ struct JourneyCard: View {
                 .fill(Color(UIColor.separator))
                 .frame(height: 2)
             
-            NavigationLink {
-                JourneyDetailPageView(viewModel: viewModel.makeDetailViewModel())
+            Button {
+                isSheetPresented.toggle()
             } label: {
                 Text("Lihat detail")
                     .foregroundStyle(.mainBlue)
@@ -107,11 +108,11 @@ struct JourneyCard: View {
         .cornerRadius(20)
         .glassEffect(in: .rect(cornerRadius: 20))
         .padding()
+        .sheet(isPresented: $isSheetPresented) {JourneyDetailPageView(viewModel: viewModel.makeDetailViewModel())
+        }
     }
 }
 
 #Preview {
-    NavigationStack {
-        JourneyCard(viewModel: JourneyPageMainVM(stations: JourneyStation.sampleStations))
-    }
+    JourneyCard(viewModel: JourneyPageMainVM(stations: JourneyStation.sampleStations))
 }

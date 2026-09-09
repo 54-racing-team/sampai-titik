@@ -18,7 +18,6 @@ struct JourneyForm: View {
                 Text("Stasiun Asal")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.subheadline)
                 
                 StationPickerButton(iconName: "tram.fill", selection:  vm.departStation){
                     vm.showDeparture.toggle()
@@ -31,23 +30,13 @@ struct JourneyForm: View {
                         showNearestStation: true
                     )
                 }
-
-                Button {
-                    vm.swapStations()
-                } label: {
-                    Image(systemName: "arrow.up.arrow.down")
-                        .font(.headline)
-                        .rotationEffect(.degrees(vm.isRotating ? 180 : 0))
-                        .foregroundStyle(.mainBlue)
-                }
-                .padding(.vertical, -16)
                 
                 Text("Stasiun Tujuan")
                     .foregroundStyle(.primary)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .font(.subheadline)
+                    .padding(.top)
                                 
-                StationPickerButton(iconName: "location.fill", selection: vm.destStation){
+                StationPickerButton(iconName: "mappin", selection: vm.destStation){
                     vm.showDestination.toggle()
                 }
                 .sheet(isPresented: $vm.showDestination) {
@@ -66,6 +55,7 @@ struct JourneyForm: View {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
                         .font(.headline)
+                        .foregroundStyle(vm.isReadyToProceed ? .white : .primary.opacity(0.8))
                         .padding(10)
                 }
                 .buttonStyle(.glassProminent)
