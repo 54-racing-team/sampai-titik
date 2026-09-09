@@ -63,8 +63,13 @@ struct HomeView: View {
                 
                 VStack(alignment: .leading) {
                     Text("Rute Terakhir")
-                        .font(.body.bold())
+                        .font(.headline)
                         .foregroundStyle(Color.primary)
+                    
+                    if recentJourneys.isEmpty {
+                        Text("Ayo lakukan perjalanan, rute terakhirmu akan muncul di sini.")
+                            .font(.footnote)
+                    }
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         LazyHStack(spacing: 12) {

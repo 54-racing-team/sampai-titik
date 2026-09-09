@@ -13,7 +13,7 @@ struct AlarmToogleCard: View {
     @Binding var soundName: SoundOption
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: 16) {
             AlarmSetupExpandableToggle(
                 title: "Bunyi",
                 isOn: $isSoundEnabled
@@ -22,7 +22,6 @@ struct AlarmToogleCard: View {
                     isSheetPresented.toggle()
                 } label: {
                     HStack {
-                        Spacer().frame(width: 20)
                         Image(systemName: "music.note")
 
                         Text(soundName.displayName)

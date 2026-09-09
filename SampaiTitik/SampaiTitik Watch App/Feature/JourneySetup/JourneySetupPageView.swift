@@ -7,33 +7,6 @@
 
 import SwiftUI
 
-private func dashedLine() -> some View {
-    GeometryReader { proxy in
-        Path { path in
-            path.move(to: CGPoint(x: proxy.size.width / 2, y: 0))
-            path.addLine(to: CGPoint(x: proxy.size.width / 2, y: proxy.size.height))
-        }
-        .stroke(
-            Color.secondary,
-            style: StrokeStyle(lineWidth: 2, dash: [3, 1])
-        )
-    }
-    .frame(width: 2)
-}
-
-struct JourneySymbol: View {
-    var body: some View {
-        VStack(spacing: 0) {
-            Image(systemName: "record.circle.fill")
-            
-            dashedLine()
-            
-            Image(systemName: "record.circle.fill")
-                .foregroundStyle(Color.secondaryBlue)
-        }
-    }
-}
-
 struct JourneySetupPageView: View {
 //    @State var isAlarmOn: Bool = true
     @Environment(Router.self) var route
@@ -49,14 +22,14 @@ struct JourneySetupPageView: View {
                     .fixedSize(horizontal: false, vertical: true)
                 
                 HStack {
-                    JourneySymbol()
+                    RecentJourneySymbol()
                     
                     VStack(alignment: .leading, spacing: 12){
-                        Text(watchManager.selectedJourney!.origin)
+                        Text(watchManager.selectedJourney?.origin ?? "Origin")
                             .font(.caption)
                             .fixedSize(horizontal: false, vertical: true)
                         
-                        Text(watchManager.selectedJourney!.destination)
+                        Text(watchManager.selectedJourney?.destination ?? "Destination")
                             .font(.caption)
                             .fixedSize(horizontal: false, vertical: true)
                     }

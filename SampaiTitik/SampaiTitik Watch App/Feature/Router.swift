@@ -34,6 +34,7 @@ class Router {
 
 struct RouterView: View {
     @State private var router = Router()
+    @State var watchManager = WatchManager.shared
 
     var body: some View {
         NavigationStack(path: $router.path) {
@@ -59,5 +60,6 @@ struct RouterView: View {
                 }
         }
         .environment(router)
+        
     }
 }
