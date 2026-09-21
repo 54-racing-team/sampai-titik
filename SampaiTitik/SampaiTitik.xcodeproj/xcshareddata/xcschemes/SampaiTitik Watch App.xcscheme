@@ -61,7 +61,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D3DFC1F303879EC00B841E1"
             BuildableName = "SampaiTitik Watch App.app"
-            BlueprintName = "SampaiTitik Watch App"
             ReferencedContainer = "container:SampaiTitik.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -78,7 +77,6 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3D3DFC1F303879EC00B841E1"
             BuildableName = "SampaiTitik Watch App.app"
-            BlueprintName = "SampaiTitik Watch App"
             ReferencedContainer = "container:SampaiTitik.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>

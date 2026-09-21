@@ -15,15 +15,15 @@ struct SearchStationView: View {
     @Binding var isPresented: Bool
     var showNearestStation: Bool = false
     var maxDistanceMeters: CLLocationDistance = 10_000
-
+    
     @State var searchStation: String = ""
-    private var locationManager: LocationManager { LocationManager.shared }
+    @State private var locationManager = LocationManager.shared
     private var hasUserLocation: Bool {
         locationManager.userLocation != nil
     }
-
+    
     var nearestStations:
-        [(station: StationModelDTO, distance: CLLocationDistance)]
+    [(station: StationModelDTO, distance: CLLocationDistance)]
     {
         guard let userLoc = locationManager.userLocation else { return [] }
         let mapped = stations.map {
@@ -40,7 +40,7 @@ struct SearchStationView: View {
         let sorted = withinRange.sorted { $0.distance < $1.distance }
         return Array(sorted.prefix(3))
     }
-
+    
     func formattedDistance(_ distance: CLLocationDistance) -> String {
         if distance < 1000 {
             return "\(Int(distance)) m"
@@ -48,20 +48,20 @@ struct SearchStationView: View {
             return String(format: "%.1f km", distance / 1000)
         }
     }
-
+    
     var filteredStations: [StationModelDTO] {
         let list =
-            searchStation.isEmpty
-            ? stations
-            : stations.filter { station in
-                station.name.localizedStandardContains(searchStation)
-                    || station.id.localizedStandardContains(searchStation)
-            }
+        searchStation.isEmpty
+        ? stations
+        : stations.filter { station in
+            station.name.localizedStandardContains(searchStation)
+            || station.id.localizedStandardContains(searchStation)
+        }
         return list.sorted {
             $0.name.localizedStandardCompare($1.name) == .orderedAscending
         }
     }
-
+    
     var body: some View {
         NavigationStack {
             List {
@@ -74,7 +74,7 @@ struct SearchStationView: View {
                                     isPresented = false
                                 } label: {
                                     HStack(spacing: 12) {
-
+                                        
                                         VStack(alignment: .leading, spacing: 2)
                                         {
                                             Text(item.station.name)
@@ -86,9 +86,9 @@ struct SearchStationView: View {
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                         }
-
+                                        
                                         Spacer()
-
+                                        
                                         Text(item.station.id)
                                             .foregroundStyle(.secondary)
                                             .font(.caption)
@@ -120,12 +120,17 @@ struct SearchStationView: View {
             .navigationBarTitleDisplayMode(.inline)
             .onAppear {
                 if showNearestStation {
-                    locationManager.requestCurrentLocation()
+                    locationManager.startBrowsingLocation(distanceFilter: 100)
+                }
+            }
+            .onDisappear {
+                if showNearestStation {
+                    locationManager.stopBrowsingLocation()
                 }
             }
         }
     }
-
+    
     @ViewBuilder
     private func stationRows(_ list: [StationModelDTO]) -> some View {
         ForEach(list) { station in
@@ -134,13 +139,13 @@ struct SearchStationView: View {
                 isPresented = false
             } label: {
                 HStack {
-
+                    
                     Text(station.name)
                     Spacer()
                     
                     ForEach(station.lines, id: \.self) { line in
                         lineBadge(forLineName: line.line_name)
-
+                        
                     }
                     
                     Text(station.id)
@@ -174,7 +179,7 @@ struct SearchStationView: View {
             return "?"
         }
     }
-
+    
     func color(forLineName lineName: String) -> Color {
         switch lineName {
         case "Bogor Line", "Bogor Line (Nambo Branch)":
@@ -191,7 +196,7 @@ struct SearchStationView: View {
             return .gray
         }
     }
-
+    
     func lineBadge(forLineName lineName: String) -> some View {
         Text(letter(forLineName: lineName))
             .frame(width: 24, height: 24)
@@ -199,7 +204,7 @@ struct SearchStationView: View {
                 Circle().stroke(color(forLineName: lineName), lineWidth: 2.5)
             )
     }
-
+    
 }
 
 #Preview {
