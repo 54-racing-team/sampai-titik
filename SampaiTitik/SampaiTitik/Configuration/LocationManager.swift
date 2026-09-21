@@ -53,7 +53,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         manager.delegate = self
         // Power-saving baseline configuration saat idle
         manager.activityType = .other
-        manager.desiredAccuracy = kCLLocationAccuracyKilometer
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
         manager.distanceFilter = 300
         manager.pausesLocationUpdatesAutomatically = true
         manager.allowsBackgroundLocationUpdates = false
@@ -73,15 +73,38 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
         
         if status == .notDetermined {
             manager.requestWhenInUseAuthorization()
+            return true
         }
         
-        if status == .authorizedWhenInUse || status == .authorizedAlways || status == .notDetermined {
+        if status == .authorizedWhenInUse || status == .authorizedAlways {
             manager.requestLocation()
-            
             return true
         }
         
         return false
+    }
+
+    // MARK: - Station Browsing Location Updates
+
+    func startBrowsingLocation(distanceFilter: CLLocationDistance = 100) {
+        guard !isJourneyTrackingActive else { return }
+        
+        let status = manager.authorizationStatus
+        if status == .notDetermined {
+            manager.requestWhenInUseAuthorization()
+        }
+        
+        manager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+        manager.distanceFilter = distanceFilter
+        manager.allowsBackgroundLocationUpdates = false
+        manager.showsBackgroundLocationIndicator = false
+        manager.startUpdatingLocation()
+    }
+
+    func stopBrowsingLocation() {
+        guard !isJourneyTrackingActive else { return }
+        manager.stopUpdatingLocation()
+        manager.distanceFilter = 300
     }
 
     // MARK: - Journey Tracking Lifecycle
@@ -259,6 +282,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, UNUserNotificationCe
                 manager.allowsBackgroundLocationUpdates = true
                 manager.showsBackgroundLocationIndicator = true
                 manager.startUpdatingLocation()
+            } else {
+                manager.requestLocation()
             }
         }
     }

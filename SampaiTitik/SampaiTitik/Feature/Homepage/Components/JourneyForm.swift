@@ -59,10 +59,10 @@ struct JourneyForm: View {
                     Text("Selanjutnya")
                         .frame(maxWidth: .infinity)
                         .font(.headline)
-                        .foregroundStyle(vm.isReadyToProceed ? .white : .primary.opacity(0.8))
+                        .foregroundStyle(vm.isReadyToProceed ? Color.white : Color.primary.opacity(0.5))
                         .padding(10)
                 }
-                .buttonStyle(.glassProminent)
+                .buttonStyle(.borderedProminent)
                 .tint(.mainBlue)
                 .disabled(!vm.isReadyToProceed)
                 .padding(.top, 10)
